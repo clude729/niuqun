@@ -2,20 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.daoyu.niuqun">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:name=".ui.App"
+        android:roundIcon="@mipmap/icon_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.SplashActivity">
+        <activity
+            android:name=".ui.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.user.LoginActivity" />
+        <activity android:name=".ui.user.RegisterActivity" />
+        <activity android:name=".ui.user.AgreementActivity" />
+        <activity android:name=".ui.user.ForgetActivity" />
     </application>
 
 </manifest>

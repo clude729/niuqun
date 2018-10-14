@@ -1,0 +1,19 @@
+package com.daoyu.niuqun.constant;
+
+/**
+ * SharePreference存储字段
+ */
+
+public class SharePreferenceConstant
+{
+
+    public static final String SP_NAME = "com.daoyu.niuqun";
+
+    public static final String IM_TOKEN = "im_token";
+
+    public static final String IMAGE_PATH = "/niuqun/images/";
+
+    //WebView解析编码
+    public static final String WEB_TYPE="text/html; charset=utf-8";
+
+}
