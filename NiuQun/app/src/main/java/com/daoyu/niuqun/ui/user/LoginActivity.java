@@ -13,19 +13,25 @@ import android.widget.TextView;
 
 import com.archie.netlibrary.okhttp.listener.DisposeDataListener;
 import com.archie.netlibrary.okhttp.request.RequestParams;
+import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.AccountInfo;
+import com.daoyu.niuqun.constant.ActivityResultConstant;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.MessageConstant;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
 import com.daoyu.niuqun.response.LoginResponse;
 import com.daoyu.niuqun.request.RequestCenter;
-import com.daoyu.niuqun.ui.BaseActivity;
+import com.daoyu.niuqun.ui.MyBaseActivity;
+import com.daoyu.niuqun.ui.chat.PhoneMainActivity;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.SharePreferenceManager;
 import com.daoyu.niuqun.util.StringUtil;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+
+public class LoginActivity extends MyBaseActivity implements View.OnClickListener
 {
 
     private static final String TAG = "LoginActivity";
@@ -51,6 +57,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setTranslucentStatus(true);
         initView();
         initListener();
     }
@@ -131,17 +138,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener
                 public void onSuccess(Object responseObj)
                 {
                     Logger.d(TAG, "toLogin onSuccess!");
-                    if (null == responseObj)
-                    {
-                        Logger.d(TAG, "toLogin onSuccess, response is null!");
-                        return;
-                    }
-                    if (responseObj instanceof LoginResponse)
+                    if (null != responseObj && responseObj instanceof LoginResponse)
                     {
                         Message msg = handler.obtainMessage();
                         msg.what = MessageConstant.LOGIN;
                         msg.obj = responseObj;
                         handler.sendMessage(msg);
+                    }
+                    else
+                    {
+                        Logger.d(TAG, "Login onSuccess, but error: " + responseObj);
+                        handler.sendEmptyMessage(MessageConstant.LOGIN_SUCCESS_ERROR);
                     }
                 }
 
@@ -187,16 +194,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener
                 String userId = accountInfo.getUser_id();
                 String token = accountInfo.getToken();
                 SharePreferenceManager.setCachedUsername(et_mobile.getText().toString().trim());
+                SharePreferenceManager.setCacheMobile(et_mobile.getText().toString().trim());
                 SharePreferenceManager.setKeyCachedPassword(et_password.getText().toString().trim());
                 SharePreferenceManager.setKeyCachedUserid(userId);
                 SharePreferenceManager.setKeyStringValue(SharePreferenceConstant.IM_TOKEN, token);
-                goToMain();
+                goToMain(token);
+                return;
             }
         }
-        else
-        {
-            showError(loginResponse.getMessage());
-        }
+        showError(loginResponse.getMessage());
     }
 
     @Override
@@ -208,26 +214,77 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener
             case MessageConstant.LOGIN:
                 loginMessage(msg);
                 break;
+            case MessageConstant.LOGIN_SUCCESS_ERROR:
+                showError(getResources().getString(R.string.error_from_service));
+                break;
             default:
                 break;
+        }
+    }
+    
+    private void goToMain(String token)
+    {
+        if (!TextUtils.isEmpty(token))
+        {
+            RongIM.connect(token, new RongIMClient.ConnectCallback()
+            {
+                @Override
+                public void onSuccess(String s)
+                {
+                    SealUserInfoManager.getInstance().openDB();
+                    goToMain();
+                }
+
+                @Override
+                public void onError(RongIMClient.ErrorCode errorCode)
+                {
+                    Logger.e(TAG, "RongIM.connect, onError: " + errorCode);
+                    showToast("请重新登录！");
+                }
+
+                @Override
+                public void onTokenIncorrect()
+                {
+                    Logger.e(TAG, "RongIM.connect, onTokenIncorrect!");
+                    showToast("请重新登录！");
+                }
+            });
+        }
+        else
+        {
+            showToast("请重新登录！");
         }
     }
 
     private void goToMain()
     {
-
+        Intent intent = new Intent(this, PhoneMainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void goToRegister()
     {
         Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ActivityResultConstant.LOGIN);
     }
 
     private void goToForgetActivity()
     {
         Intent intent = new Intent(this, ForgetActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ActivityResultConstant.REGISTER && resultCode == ActivityResultConstant.REGISTER
+            && null != data)
+        {
+            String token = data.getStringExtra("token");
+            goToMain(token);
+        }
     }
 
     @Override

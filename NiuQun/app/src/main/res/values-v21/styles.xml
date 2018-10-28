@@ -8,8 +8,33 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@mipmap/icon_splash</item>
+    <style name="cusomeMainTheme" parent="android:Theme.Holo.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!--启动页-->
+    <style name="MySplashTheme" parent="android:Theme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!--MainActivity-->
+    <style name="PhoneMainTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!--normal-->
+    <style name="moveFinishStyle" parent="android:Theme.Holo.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:colorAccent">@color/color4</item>
+    </style>
+
+    <style name="moveFinishStyleNoTitle" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
 </resources>

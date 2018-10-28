@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color4"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/barview"
+        android:layout_width="match_parent"
+        android:layout_height="24dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/tv_book"
+            android:layout_width="64dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_left_white_empty"
+            android:gravity="center"
+            android:text="@string/address_book"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h2" />
+
+        <TextView
+            android:id="@+id/tv_circle"
+            android:layout_width="64dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="-0.5dp"
+            android:layout_toEndOf="@id/tv_book"
+            android:background="@drawable/bg_right_white_empty"
+            android:gravity="center"
+            android:text="@string/niu_circle"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h2" />
+
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="36dp"
+            android:layout_height="48dp"
+            android:layout_toStartOf="@+id/iv_add"
+            android:contentDescription="@string/app_name"
+            android:paddingBottom="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="12dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_search_tran" />
+
+        <ImageView
+            android:id="@+id/iv_add"
+            android:layout_width="36dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/app_name"
+            android:paddingBottom="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="12dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_add_tran" />
+    </RelativeLayout>
+</LinearLayout>

@@ -2,29 +2,169 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.daoyu.niuqun">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 获取机型信息权限 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 控制振动器 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 防止设备休眠 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <!--获取联系人信息，demo中演示发送通讯录消息-->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- 华为 配置开始 < -->
+    <!--HMS-SDK引导升级HMS功能，访问OTA服务器需要网络权限-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--HMS-SDK引导升级HMS功能，保存下载的升级包需要SD卡写权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--检测网络状态-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--检测wifi状态-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--为了获取用户手机的IMEI，用来唯一的标识用户。-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!--如果是安卓8.0，应用编译配置的targetSdkVersion>=26，请务必添加以下权限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 华为 配置结束 < -->
 
     <application
+        android:name=".ui.App"
         android:allowBackup="false"
         android:icon="@mipmap/icon_launcher"
         android:label="@string/app_name"
-        android:name=".ui.App"
         android:roundIcon="@mipmap/icon_launcher"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/cusomeMainTheme">
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="21ac228435642467d32ad18fc90b03fc" />
+
+        <meta-data
+            android:name="RONG_CLOUD_APP_KEY"
+            android:value="e0x9wycfetjdq" />
+
         <activity
             android:name=".ui.SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/MySplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.user.LoginActivity" />
-        <activity android:name=".ui.user.RegisterActivity" />
-        <activity android:name=".ui.user.AgreementActivity" />
-        <activity android:name=".ui.user.ForgetActivity" />
+        <activity
+            android:name=".ui.user.LoginActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.user.RegisterActivity"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.user.AgreementActivity"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.user.ForgetActivity"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.chat.PhoneMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.daoyu.niuqun"
+                    android:pathPrefix="/conversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.chat.ConversationActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.daoyu.niuqun"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.daoyu.chat.ui.activity.SelectFriendsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.CreateGroupActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+
+        <activity
+            android:name="com.daoyu.chat.ui.activity.SearchFriendActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.NewFriendListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.NoteInformationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.UserDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.daoyu.niuqun.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
+        </provider>
+
+        <service
+            android:name="io.rong.imlib.ipc.RongService"
+            android:process=":ipc" />
+
+
+        <receiver android:name="io.rong.imlib.ConnectChangeReceiver" />
+
+        <receiver
+            android:name="io.rong.imlib.HeartbeatReceiver"
+            android:process=":ipc" />
+
+        <activity
+            android:name="io.rong.imkit.widget.provider.TakingPicturesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

@@ -35,8 +35,16 @@
     <string name="error_password_length">登录密码不能少于六位</string>
     <string name="error_password_no_same">两次输入密码不一致</string>
     <string name="error_verify_code_empty">验证码不能为空</string>
+    <string name="error_from_service">服务器错误</string>
     <string name="base_number">0123456789</string>
     <string name="the_second">秒</string>
     <string name="http_client_false">网络异常，请稍后重试</string>
     <string name="success_get_verify_code">验证码发送成功</string>
+    <string name="address_book">通讯录</string>
+    <string name="niu_circle">牛人圈</string>
+    <string name="scan_it">扫一扫&#160;&#160;&#160;&#160;</string>
+    <string name="receive_payment">收付款&#160;&#160;&#160;&#160;</string>
+
+    <string name="hello_blank_fragment">Hello brand fragment</string>
+    <string name="hello_center_fragment">Hello my center fragment</string>
 </resources>

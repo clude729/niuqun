@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="120dp"
+        android:layout_height="154dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="10dp"
+        android:background="@mipmap/bg_pop_add"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/re_chatroom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:background="#3f3e3f"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_new_chat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/private_chat"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/h6" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:background="@color/color6" />
+
+        <LinearLayout
+            android:id="@+id/re_addfriends"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#3f3e3f"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_add_friend" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/add_contacts"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/h6" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:background="@color/color6" />
+
+        <LinearLayout
+            android:id="@+id/re_scanner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#3e3f3e"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_scan_it" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/scan_it"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/h6" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:background="@color/color6" />
+
+        <LinearLayout
+            android:id="@+id/re_payment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#3e3f3e"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_payment" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/receive_payment"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/h6" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

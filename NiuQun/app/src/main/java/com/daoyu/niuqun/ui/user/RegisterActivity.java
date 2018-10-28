@@ -17,18 +17,19 @@ import com.archie.netlibrary.okhttp.listener.DisposeDataListener;
 import com.archie.netlibrary.okhttp.request.RequestParams;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.AccountInfo;
+import com.daoyu.niuqun.constant.ActivityResultConstant;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.MessageConstant;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
 import com.daoyu.niuqun.request.RequestCenter;
 import com.daoyu.niuqun.response.RegisterRespones;
 import com.daoyu.niuqun.response.VefifyCodeResponse;
-import com.daoyu.niuqun.ui.BaseActivity;
+import com.daoyu.niuqun.ui.MyBaseActivity;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.SharePreferenceManager;
 import com.daoyu.niuqun.util.StringUtil;
 
-public class RegisterActivity extends BaseActivity implements OnClickListener
+public class RegisterActivity extends MyBaseActivity implements OnClickListener
 {
 
     private static final String TAG = "RegisterActivity";
@@ -62,6 +63,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setTranslucentStatus();
         initView();
         initListener();
     }
@@ -144,6 +146,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
             case MessageConstant.REGISTER:
                 registerMessage(msg);
                 break;
+            case MessageConstant.REGISTER_SUCCESS_ERROR:
+                showToast(getResources().getString(R.string.error_from_service));
+                break;
             default:
                 break;
         }
@@ -170,17 +175,17 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
                 public void onSuccess(Object responseObj)
                 {
                     Logger.d(TAG, "getCode onSuccess!");
-                    if (null == responseObj)
-                    {
-                        Logger.d(TAG, "getCode onSuccess, response is null!");
-                        return;
-                    }
-                    if (responseObj instanceof VefifyCodeResponse)
+                    if (null != responseObj && responseObj instanceof VefifyCodeResponse)
                     {
                         Message msg = handler.obtainMessage();
                         msg.what = MessageConstant.VERIFY_CODE;
                         msg.obj = responseObj;
                         handler.sendMessage(msg);
+                    }
+                    else
+                    {
+                        Logger.d(TAG, "getCode onSuccess, but error: " + responseObj);
+                        handler.sendEmptyMessage(MessageConstant.REGISTER_SUCCESS_ERROR);
                     }
                 }
 
@@ -208,17 +213,17 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
             public void onSuccess(Object responseObj)
             {
                 Logger.d(TAG, "toRegister onSuccess!");
-                if (null == responseObj)
-                {
-                    Logger.d(TAG, "toRegister onSuccess, response is null!");
-                    return;
-                }
-                if (responseObj instanceof RegisterRespones)
+                if (null != responseObj && responseObj instanceof RegisterRespones)
                 {
                     Message msg = handler.obtainMessage();
                     msg.what = MessageConstant.REGISTER;
                     msg.obj = responseObj;
                     handler.sendMessage(msg);
+                }
+                else 
+                {
+                    Logger.d(TAG, "Register onSuccess, but error: " + responseObj);
+                    handler.sendEmptyMessage(MessageConstant.REGISTER_SUCCESS_ERROR);
                 }
             }
 
@@ -237,6 +242,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
         String password = etPassword.getText().toString().trim();
         String again = etPasswordAgain.getText().toString().trim();
         String code = etCode.getText().toString().trim();
+        Logger.d(TAG, username + ", " + password + ", " + again + ", " + code);
         if (TextUtils.isEmpty(username))
         {
             showToast(getResources().getString(R.string.error_mobile_empty));
@@ -253,7 +259,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
         {
             showToast(getResources().getString(R.string.error_password_empty));
         }
-        else if (password.equals(again))
+        else if (!password.equals(again))
         {
             showToast(getResources().getString(R.string.error_password_no_same));
         }
@@ -273,7 +279,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
         VefifyCodeResponse vefifyCodeResponse = (VefifyCodeResponse) msg.obj;
         if (HttpConstant.SUCCESS.equals(vefifyCodeResponse.getCode()))
         {
-            new CodeTimeCount(60000, 1000, tvGetCode);
+            new CodeTimeCount(60000, 1000, tvGetCode).start();
         }
         else
         {
@@ -284,6 +290,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
     private void registerMessage(Message msg)
     {
         RegisterRespones registerRespones = (RegisterRespones) msg.obj;
+        Logger.d(TAG, "registerMessage, code: " + registerRespones.getCode());
         if (HttpConstant.SUCCESS.equals(registerRespones.getCode()))
         {
             AccountInfo accountInfo = registerRespones.getData();
@@ -291,10 +298,11 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
             {
                 Logger.d(TAG, "registerMessage, account: " + accountInfo.toString());
                 SharePreferenceManager.setCachedUsername(etMobile.getText().toString().trim());
+                SharePreferenceManager.setCacheMobile(etMobile.getText().toString().trim());
                 SharePreferenceManager.setKeyCachedUserid(accountInfo.getUser_id());
                 SharePreferenceManager.setKeyCachedPassword(etPassword.getText().toString().trim());
                 SharePreferenceManager.setKeyStringValue(SharePreferenceConstant.IM_TOKEN, accountInfo.getToken());
-                goToMain();
+                goToMain(accountInfo.getToken());
             }
         }
         else
@@ -326,9 +334,12 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
         }
     }
 
-    private void goToMain()
+    private void goToMain(String token)
     {
-
+        Intent intent = getIntent();
+        intent.putExtra("token", token);
+        setResult(ActivityResultConstant.REGISTER, intent);
+        onBackPressed();
     }
 
     private void goToAgreementActivity()
@@ -339,8 +350,9 @@ public class RegisterActivity extends BaseActivity implements OnClickListener
 
     private void goToLogin()
     {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        finish();
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
     }
 
     private void goToForgetActivity()

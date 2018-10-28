@@ -17,7 +17,7 @@ public class SharePreferenceManager
     }
 
     /**
-     * 账号
+     * 用户昵称
      */
     private static final String KEY_CACHED_USERNAME = "cached_username";
 
@@ -100,6 +100,28 @@ public class SharePreferenceManager
         if (null != sp)
         {
             return sp.getString(KEY_CACHED_AVATAR_PATH, "");
+        }
+        return "";
+    }
+
+    /**
+     * 用户账号
+     */
+    private static final String KEY_CACHED_MOBILE = "cached_user_mobile";
+
+    public static void setCacheMobile(String path)
+    {
+        if (null != sp)
+        {
+            sp.edit().putString(KEY_CACHED_MOBILE, path).apply();
+        }
+    }
+
+    public static String getCacheMobile()
+    {
+        if (null != sp)
+        {
+            return sp.getString(KEY_CACHED_MOBILE, "");
         }
         return "";
     }
