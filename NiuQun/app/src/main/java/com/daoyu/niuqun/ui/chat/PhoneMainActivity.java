@@ -3,12 +3,14 @@ package com.daoyu.niuqun.ui.chat;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,9 +32,11 @@ import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
+import com.daoyu.chat.ui.fragment.ContactsFragment;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.ui.brand.BrandFragment;
 import com.daoyu.niuqun.ui.center.MyCenterFragment;
+import com.daoyu.niuqun.ui.user.LoginActivity;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.chat.ui.widget.DragPointView;
 import com.daoyu.chat.ui.widget.DragPointView.OnDragListener;
@@ -60,6 +65,8 @@ public class PhoneMainActivity extends FragmentActivity
     private ImageView ivSearch;
 
     public static ViewPager viewParent;
+    
+    private FrameLayout frameLayout;
 
     private RelativeLayout rlChat;
 
@@ -83,6 +90,8 @@ public class PhoneMainActivity extends FragmentActivity
 
     private List<Fragment> mFragment = new ArrayList<>();
 
+    private ContactsFragment contactsFragment = null;
+
     private ConversationListFragment mConversationListFragment = null;
 
     private Conversation.ConversationType[] mConversationsTypes = null;
@@ -101,6 +110,8 @@ public class PhoneMainActivity extends FragmentActivity
     private void initView()
     {
         viewParent = findViewById(R.id.main_viewpager);
+        frameLayout = findViewById(R.id.frameLayout);
+        frameLayout.setVisibility(View.GONE);
         rlChat = findViewById(R.id.rl_chat);
         tvChat = findViewById(R.id.text_chat);
         ivChat = findViewById(R.id.iv_chat);
@@ -231,6 +242,63 @@ public class PhoneMainActivity extends FragmentActivity
         tvMy.setTextColor(getResources().getColor(R.color.color3));
     }
 
+    //是否显示聊天列表
+    private void chatShowOrHide(boolean show)
+    {
+        if (show)
+        {
+            if (viewParent.getVisibility() == View.GONE)
+            {
+                viewParent.setVisibility(View.VISIBLE);
+            }
+        }
+        else
+        {
+            if (viewParent.getVisibility() == View.VISIBLE)
+            {
+                viewParent.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    //是否显示通讯录
+    private void contactShowOrHide(boolean show)
+    {
+        if (show)
+        {
+            if (frameLayout.getVisibility() == View.GONE)
+            {
+                FragmentManager fm = getSupportFragmentManager();
+                if (null == contactsFragment)
+                {
+                    contactsFragment = new ContactsFragment();
+                    fm.beginTransaction().add(R.id.frameLayout, contactsFragment).commit();
+                }
+                else
+                {
+                    fm.beginTransaction().show(contactsFragment).commit();
+                }
+                frameLayout.setVisibility(View.VISIBLE);
+                tvAddress.setBackgroundResource(R.drawable.bg_left_white_full);
+                tvAddress.setTextColor(getResources().getColor(R.color.color4));
+            }
+        }
+        else
+        {
+            if (frameLayout.getVisibility() == View.VISIBLE)
+            {
+                if (null != contactsFragment)
+                {
+                    FragmentManager fm = getSupportFragmentManager();
+                    fm.beginTransaction().hide(contactsFragment).commit();
+                }
+                frameLayout.setVisibility(View.GONE);
+                tvAddress.setBackgroundResource(R.drawable.bg_left_white_empty);
+                tvAddress.setTextColor(getResources().getColor(R.color.colorWhite));
+            }
+        }
+    }
+
     private void changeSelectedTabState(int position)
     {
         switch (position)
@@ -258,18 +326,27 @@ public class PhoneMainActivity extends FragmentActivity
         switch (v.getId())
         {
             case R.id.rl_chat:
-                if (viewParent.getCurrentItem() == 0) {
-                    if (firstClick == 0) {
+                contactShowOrHide(false);
+                chatShowOrHide(true);
+                if (viewParent.getCurrentItem() == 0)
+                {
+                    if (firstClick == 0)
+                    {
                         firstClick = System.currentTimeMillis();
-                    } else {
+                    }
+                    else
+                    {
                         secondClick = System.currentTimeMillis();
                     }
                     Logger.i(TAG, "time = " + (secondClick - firstClick));
-                    if (secondClick - firstClick > 0 && secondClick - firstClick <= 800) {
+                    if (secondClick - firstClick > 0 && secondClick - firstClick <= 800)
+                    {
                         mConversationListFragment.focusUnreadItem();
                         firstClick = 0;
                         secondClick = 0;
-                    } else if (firstClick != 0 && secondClick != 0) {
+                    }
+                    else if (firstClick != 0 && secondClick != 0)
+                    {
                         firstClick = 0;
                         secondClick = 0;
                     }
@@ -277,13 +354,19 @@ public class PhoneMainActivity extends FragmentActivity
                 viewParent.setCurrentItem(0, false);
                 break;
             case R.id.ll_brands:
+                contactShowOrHide(false);
+                chatShowOrHide(true);
                 viewParent.setCurrentItem(1, false);
                 break;
             case R.id.ll_my:
+                contactShowOrHide(false);
+                chatShowOrHide(true);
                 viewParent.setCurrentItem(2, false);
                 break;
             case R.id.tv_book:
-
+                chatShowOrHide(false);
+                contactShowOrHide(true);
+                changeTextViewColor();
                 break;
             case R.id.tv_circle:
 
@@ -363,6 +446,23 @@ public class PhoneMainActivity extends FragmentActivity
             mUnreadNumView.setVisibility(View.VISIBLE);
             mUnreadNumView.setText(R.string.no_read_message);
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent)
+    {
+        super.onNewIntent(intent);
+        if (intent.getBooleanExtra("kickedByOtherClient", false))
+        {
+            goToLogin();
+        }
+    }
+
+    private void goToLogin()
+    {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

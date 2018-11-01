@@ -16,6 +16,8 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.daoyu.niuqun.util.FileHelper;
+
 import io.rong.imlib.model.UserInfo;
 
 public class RongGenerate
@@ -39,7 +41,7 @@ public class RongGenerate
         String color = getColorRGB(userid);
         String string = getAllFirstLetter(username);
         createDir(SAVEADDRESS);
-        File f = new File(SAVEADDRESS, string + "_" + userid);
+        File f = new File(FileHelper.getSDPATH(), string + "_" + userid);
         if (f.exists())
         {
             return SCHEMA + f.getPath();
@@ -88,7 +90,7 @@ public class RongGenerate
 
     private static String saveBitmap(Bitmap bm, String imageUrlName)
     {
-        File f = new File(SAVEADDRESS, imageUrlName);
+        File f = new File(FileHelper.getSDPATH(), imageUrlName);
         try
         {
             FileOutputStream out = new FileOutputStream(f);

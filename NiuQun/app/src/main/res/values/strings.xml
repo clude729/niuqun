@@ -44,6 +44,25 @@
     <string name="niu_circle">牛人圈</string>
     <string name="scan_it">扫一扫&#160;&#160;&#160;&#160;</string>
     <string name="receive_payment">收付款&#160;&#160;&#160;&#160;</string>
+    <string name="my_receive_payment">收付款</string>
+    <string name="my_symbol_app">牛币</string>
+    <string name="my_financial">理财</string>
+    <string name="my_collection">收藏</string>
+    <string name="my_shopping_cart">购物车</string>
+    <string name="my_orders">订单</string>
+    <string name="my_photos">相册</string>
+    <string name="my_setting">设置</string>
+    <string name="my_eat">吃</string>
+    <string name="my_drink">喝</string>
+    <string name="my_play">玩</string>
+    <string name="my_happy">乐</string>
+    <string name="my_clothes">衣</string>
+    <string name="my_live">住</string>
+    <string name="my_travel">行</string>
+    <string name="my_education">教育</string>
+    <string name="my_medical">医疗</string>
+    <string name="niuqun_service">牛群服务</string>
+    <string name="other_services">第三方服务</string>
 
     <string name="hello_blank_fragment">Hello brand fragment</string>
     <string name="hello_center_fragment">Hello my center fragment</string>

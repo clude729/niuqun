@@ -1,111 +1,172 @@
 package com.daoyu.niuqun.ui.center;
 
-import android.content.Context;
-import android.net.Uri;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
+import com.bumptech.glide.request.RequestOptions;
+import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.niuqun.R;
+import com.daoyu.niuqun.bean.ClothesItem;
+import com.daoyu.niuqun.bean.CollectionItem;
+import com.daoyu.niuqun.bean.DrinkItem;
+import com.daoyu.niuqun.bean.EatItem;
+import com.daoyu.niuqun.bean.EducationItem;
+import com.daoyu.niuqun.bean.FinancialItem;
+import com.daoyu.niuqun.bean.HappyItem;
+import com.daoyu.niuqun.bean.LiveItem;
+import com.daoyu.niuqun.bean.MedicalItem;
+import com.daoyu.niuqun.bean.MyBaseItem;
+import com.daoyu.niuqun.bean.MySelfBean;
+import com.daoyu.niuqun.bean.OrdersItem;
+import com.daoyu.niuqun.bean.PaymentItem;
+import com.daoyu.niuqun.bean.PhotosItem;
+import com.daoyu.niuqun.bean.PlayItem;
+import com.daoyu.niuqun.bean.SettingItem;
+import com.daoyu.niuqun.bean.ShoppingCartItem;
+import com.daoyu.niuqun.bean.SymbolItem;
+import com.daoyu.niuqun.bean.TravelItem;
+import com.daoyu.niuqun.ui.adapter.MyItemListAdapter;
+import com.daoyu.niuqun.util.ImageLoad;
 import com.daoyu.niuqun.util.Logger;
+import com.daoyu.niuqun.util.SharePreferenceManager;
+import com.daoyu.niuqun.view.MyGridView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MyCenterFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MyCenterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MyCenterFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class MyCenterFragment extends Fragment
+{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG = "MyCenterFragment";
 
-    private OnFragmentInteractionListener mListener;
+    private MyGridView gridWallet;
 
-    public MyCenterFragment() {
-        // Required empty public constructor
-    }
+    private MyGridView gridApp;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyCenterFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyCenterFragment newInstance(String param1, String param2) {
-        MyCenterFragment fragment = new MyCenterFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private MyGridView gridOther;
+
+    private ImageView iv_avatar;
+
+    private TextView tv_nickname;
+
+    private TextView tv_number;
+
+    private ImageView iv_info;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View mainView = inflater.inflate(R.layout.fragment_my_center, container, false);
+        initView(mainView);
+        initData();
+        updateUI();
+        ScrollView scrollView = mainView.findViewById(R.id.parentView);
+        scrollView.setFocusable(true);
+        return mainView;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_center, container, false);
+    private void initView(View view)
+    {
+        gridWallet = view.findViewById(R.id.grid_wallet);
+        gridApp = view.findViewById(R.id.grid_app);
+        gridOther = view.findViewById(R.id.grid_others);
+        iv_avatar = view.findViewById(R.id.iv_avatar);
+        iv_info = view.findViewById(R.id.iv_info);
+        tv_nickname = view.findViewById(R.id.tv_nickname);
+        tv_number = view.findViewById(R.id.tv_number);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+    private void initData()
+    {
+        List<MyBaseItem> wallets = new ArrayList<>();
+        wallets.add(new PaymentItem(getActivity()));
+        wallets.add(new SymbolItem(getActivity()));
+        wallets.add(new FinancialItem(getActivity()));
+        MyItemListAdapter walletAdapter = new MyItemListAdapter(getActivity(), wallets);
+        gridWallet.setAdapter(walletAdapter);
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else
+        List<MyBaseItem> apps = new ArrayList<>();
+        apps.add(new CollectionItem(getActivity()));
+        apps.add(new ShoppingCartItem(getActivity()));
+        apps.add(new OrdersItem(getActivity()));
+        apps.add(new PhotosItem(getActivity()));
+        apps.add(new SettingItem(getActivity()));
+        apps.add(new MyBaseItem());
+        MyItemListAdapter appAdapter = new MyItemListAdapter(getActivity(), apps);
+        gridApp.setAdapter(appAdapter);
+
+        List<MyBaseItem> others = new ArrayList<>();
+        others.add(new EatItem(getActivity()));
+        others.add(new DrinkItem(getActivity()));
+        others.add(new PlayItem(getActivity()));
+        others.add(new HappyItem(getActivity()));
+        others.add(new ClothesItem(getActivity()));
+        others.add(new LiveItem(getActivity()));
+        others.add(new TravelItem(getActivity()));
+        others.add(new EducationItem(getActivity()));
+        others.add(new MedicalItem(getActivity()));
+        MyItemListAdapter otherAdapter = new MyItemListAdapter(getActivity(), others);
+        gridOther.setAdapter(otherAdapter);
+
+        ImageLoad.getInstance().load(getActivity(), iv_avatar, SharePreferenceManager.getCachedAvatarPath(),
+            new RequestOptions().error(R.mipmap.default__avatar).placeholder(R.mipmap.default__avatar));
+        tv_nickname.setText(SharePreferenceManager.getCachedUsername());
+        tv_number.setText(SharePreferenceManager.getCacheMobile());
+        iv_info.setOnClickListener(new View.OnClickListener()
         {
-            Logger.e("MyCenterFragment", "must implement OnFragmentInteractionListener");
+            @Override
+            public void onClick(View v)
+            {
+
+            }
+        });
+    }
+
+    private void updateUI()
+    {
+        SealUserInfoManager.getInstance().getMyCenter(new SealUserInfoManager.ResultCallback<MySelfBean>()
+        {
+            @Override
+            public void onSuccess(MySelfBean bean)
+            {
+                updataInfo(bean);
+            }
+
+            @Override
+            public void onError(String errString)
+            {
+                Logger.d(TAG, "updateUI, error: " + errString);
+            }
+        });
+    }
+
+    private void updataInfo(MySelfBean bean)
+    {
+        if (null != bean)
+        {
+            Logger.d(TAG, "updataInfo, bean has value!");
+            if (!TextUtils.isEmpty(bean.getAvatar()))
+            {
+                ImageLoad.getInstance().load(getActivity(), iv_avatar, bean.getAvatar(),
+                    new RequestOptions().error(R.mipmap.default__avatar).placeholder(R.mipmap.default__avatar));
+            }
+            if (!TextUtils.isEmpty(bean.getUser_name()))
+            {
+                tv_nickname.setText(bean.getUser_name());
+            }
+            if (!TextUtils.isEmpty(bean.getHerdno()))
+            {
+                tv_number.setText(bean.getHerdno());
+            }
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

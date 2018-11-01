@@ -11,6 +11,8 @@ public class SharePreferenceConstant
 
     public static final String IM_TOKEN = "im_token";
 
+    public static final String ALL_USER_INFO_STATE = "getAllUserInfoState";
+
     public static final String IMAGE_PATH = "/niuqun/images/";
 
     //WebView解析编码

@@ -1,5 +1,12 @@
 package com.daoyu.chat.ui.activity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,19 +18,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import com.daoyu.niuqun.util.SharePreferenceManager;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.daoyu.niuqun.R;
-import com.daoyu.chat.SealConst;
 import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.chat.db.Friend;
 import com.daoyu.chat.db.Groups;
@@ -73,7 +73,7 @@ public class CreateGroupActivity extends BaseActivity implements View.OnClickLis
         initView();
         setPortraitChangeListener();
         if (memberList != null && memberList.size() > 0) {
-            groupIds.add(getSharedPreferences("config", MODE_PRIVATE).getString(SealConst.SEALTALK_LOGIN_ID, ""));
+            groupIds.add(SharePreferenceManager.getKeyCachedUserid());
             for (Friend f : memberList) {
                 groupIds.add(f.getUserId());
             }

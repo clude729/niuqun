@@ -9,8 +9,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.daoyu.niuqun.R;
-import com.daoyu.chat.SealConst;
 import com.daoyu.chat.server.utils.NToast;
+import com.daoyu.niuqun.util.SharePreferenceManager;
 
 /**
  * Created by AMing on 15/11/26. Company RongCloud
@@ -114,8 +114,7 @@ public class DialogWithYesOrNoUtils
                 String old = oldPasswordEdit.getText().toString().trim();
                 String new1 = newPasswrodEdit.getText().toString().trim();
                 String new2 = newPassword2Edit.getText().toString().trim();
-                String cachePassword = context.getSharedPreferences("config", Context.MODE_PRIVATE)
-                    .getString(SealConst.SEALTALK_LOGING_PASSWORD, "");
+                String cachePassword = SharePreferenceManager.getKeyCachedPassword();
                 if (TextUtils.isEmpty(old))
                 {
                     NToast.shortToast(context, R.string.original_password);

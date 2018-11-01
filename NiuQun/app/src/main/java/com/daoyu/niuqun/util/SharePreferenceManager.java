@@ -243,11 +243,23 @@ public class SharePreferenceManager
      */
     public static int getKeyIntValue(String key)
     {
+        return getKeyIntValue(key, -1);
+    }
+
+    /**
+     * 提取
+     *
+     * @param key 键名
+     * @param def 默认值
+     * @return 值
+     */
+    public static int getKeyIntValue(String key, int def)
+    {
         if (null != sp)
         {
-            return sp.getInt(key, -1);
+            return sp.getInt(key, def);
         }
-        return -1;
+        return def;
     }
 
     /**

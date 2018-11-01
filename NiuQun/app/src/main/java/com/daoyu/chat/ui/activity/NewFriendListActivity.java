@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,10 +23,13 @@ import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.chat.server.widget.LoadDialog;
 import com.daoyu.chat.ui.adapter.NewFriendListAdapter;
 import com.daoyu.niuqun.constant.HttpConstant;
+import com.daoyu.niuqun.util.Logger;
 
 public class NewFriendListActivity extends BaseActivity
-    implements NewFriendListAdapter.OnItemButtonClick, View.OnClickListener
+    implements NewFriendListAdapter.OnItemButtonClick, OnClickListener
 {
+
+    private static final String TAG = "NewFriendListActivity";
 
     private static final int GET_ALL = 11;
 
@@ -84,7 +88,6 @@ public class NewFriendListActivity extends BaseActivity
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onSuccess(int requestCode, Object result)
     {
         if (result != null)
@@ -117,7 +120,6 @@ public class NewFriendListActivity extends BaseActivity
 
                     adapter.removeAll();
                     adapter.addData(userRelationshipResponse.getResult());
-
                     adapter.notifyDataSetChanged();
                     adapter.setOnItemButtonClick(this);
                     LoadDialog.dismiss(mContext);
@@ -171,6 +173,7 @@ public class NewFriendListActivity extends BaseActivity
     public boolean onButtonClick(int position, View view, int status)
     {
         index = position;
+        Logger.d(TAG, "onButtonClick, position: " + position + " ,status: " + status);
         switch (status)
         {
             case 11: //收到了好友邀请
@@ -180,7 +183,6 @@ public class NewFriendListActivity extends BaseActivity
                     break;
                 }
                 LoadDialog.show(mContext);
-                //                friendId = null;
                 friendId = userRelationshipResponse.getResult().get(position).getUser().getId();
                 request(AGREE_FRIENDS);
                 break;

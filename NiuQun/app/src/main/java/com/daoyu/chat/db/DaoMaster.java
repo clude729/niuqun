@@ -1,10 +1,12 @@
 package com.daoyu.chat.db;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.daoyu.niuqun.constant.SharePreferenceConstant;
+import com.daoyu.niuqun.util.SharePreferenceManager;
 
 import de.greenrobot.dao.AbstractDaoMaster;
 import de.greenrobot.dao.identityscope.IdentityScopeType;
@@ -68,8 +70,7 @@ public class DaoMaster extends AbstractDaoMaster {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             RLog.i("greenDAO", "Upgrading schema from version " + oldVersion + " to " + newVersion + " by dropping all tables");
             dropAllTables(db, true);
-            SharedPreferences sp = mContext.getSharedPreferences("config", Context.MODE_PRIVATE);
-            sp.edit().putInt("getAllUserInfoState", 0).commit();
+            SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, 0);
             onCreate(db);
         }
     }

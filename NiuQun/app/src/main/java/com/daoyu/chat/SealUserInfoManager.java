@@ -1,7 +1,11 @@
 package com.daoyu.chat;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -12,11 +16,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONException;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 import com.daoyu.chat.db.BlackList;
 import com.daoyu.chat.db.BlackListDao;
@@ -38,11 +37,15 @@ import com.daoyu.chat.server.response.GetGroupInfoResponse;
 import com.daoyu.chat.server.response.GetGroupMemberResponse;
 import com.daoyu.chat.server.response.GetGroupResponse;
 import com.daoyu.chat.server.response.GetTokenResponse;
+import com.daoyu.chat.server.response.MyCenterResponse;
 import com.daoyu.chat.server.response.UserFriendsResponse;
-import com.daoyu.chat.server.response.UserRelationshipResponse;
 import com.daoyu.chat.server.utils.NLog;
 import com.daoyu.chat.server.utils.RongGenerate;
+import com.daoyu.niuqun.bean.MySelfBean;
 import com.daoyu.niuqun.constant.HttpConstant;
+import com.daoyu.niuqun.constant.SharePreferenceConstant;
+import com.daoyu.niuqun.util.Logger;
+import com.daoyu.niuqun.util.SharePreferenceManager;
 
 import io.rong.common.RLog;
 import io.rong.imkit.RongIM;
@@ -65,6 +68,7 @@ import io.rong.imlib.model.UserInfo;
 public class SealUserInfoManager implements OnDataListener {
 
     private final static String TAG = "SealUserInfoManager";
+
     private static final int GET_TOKEN = 800;
 
     /**
@@ -104,7 +108,6 @@ public class SealUserInfoManager implements OnDataListener {
     private Handler mWorkHandler;
     private HandlerThread mWorkThread;
     static Handler mHandler;
-    private SharedPreferences sp;
     private List<Groups> mGroupsList;//同步群组成员信息时需要这个数据
     private int mGetAllUserInfoState;
     private boolean doingGetAllUserInfo = false;
@@ -121,7 +124,6 @@ public class SealUserInfoManager implements OnDataListener {
     public SealUserInfoManager(Context context) {
         mContext = context;
         mAsyncTaskManager = AsyncTaskManager.getInstance(mContext);
-        sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
         action = new SealAction(mContext);
         mHandler = new Handler(Looper.getMainLooper());
         mGroupsList = null;
@@ -150,7 +152,7 @@ public class SealUserInfoManager implements OnDataListener {
             mUserInfoCache = new LinkedHashMap<>();
             setUserInfoEngineListener();
         }
-        mGetAllUserInfoState = sp.getInt("getAllUserInfoState", 0);
+        mGetAllUserInfoState = SharePreferenceManager.getKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, 0);
         RLog.d(TAG, "SealUserInfoManager mGetAllUserInfoState = " + mGetAllUserInfoState);
     }
 
@@ -359,7 +361,7 @@ public class SealUserInfoManager implements OnDataListener {
     private void setGetAllUserInfoDone() {
         RLog.d(TAG, "SealUserInfoManager setGetAllUserInfoDone = " + mGetAllUserInfoState);
         doingGetAllUserInfo = false;
-        sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
     }
 
     private boolean fetchFriends() throws HttpException {
@@ -407,6 +409,31 @@ public class SealUserInfoManager implements OnDataListener {
             mGetAllUserInfoState |= FRIEND;
         }
         return friendsList;
+    }
+
+    /**
+     * 获取个人中心数据
+     * @return bean
+     * @throws HttpException exception
+     */
+    private MySelfBean getMyCenterInfo() throws HttpException
+    {
+        MySelfBean bean = null;
+        MyCenterResponse response = null;
+        try
+        {
+            response = action.getMySelfInfo();
+        }
+        catch (JSONException e)
+        {
+            NLog.d(TAG, "getMyCenterInfo occurs JSONException e=" + e.toString());
+            return null;
+        }
+        if (null != response && HttpConstant.SUCCESS.equals(response.getCode()))
+        {
+            bean = response.getData();
+        }
+        return bean;
     }
 
     private boolean fetchGroups() throws HttpException {
@@ -468,7 +495,7 @@ public class SealUserInfoManager implements OnDataListener {
                     e.printStackTrace();
                     NLog.d(TAG, "fetchGroups occurs JSONException e=" + e.toString() + "groupID=" + groupID);
                 }
-                sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
             }
         });
     }
@@ -581,7 +608,7 @@ public class SealUserInfoManager implements OnDataListener {
                     } catch (HttpException e) {
                         e.printStackTrace();
                         setGetAllUserInfoWithPartGroupMembersState();
-                        sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
                         NLog.d(TAG, "getGroupMember occurs HttpException e=" + e.toString() + "groupID=" + groupID);
                         return;
                     } catch (JSONException e) {
@@ -597,7 +624,7 @@ public class SealUserInfoManager implements OnDataListener {
                         }
                     } else {
                         setGetAllUserInfoWithPartGroupMembersState();
-                        sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
                     }
                 } else {
                     if (hasGetPartGroupMembers()) {
@@ -608,10 +635,10 @@ public class SealUserInfoManager implements OnDataListener {
                     }
                     try {
                         fetchGroupMembers();
-                        sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
                     } catch (HttpException e) {
                         setGetAllUserInfoWithPartGroupMembersState();
-                        sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
                         NLog.d(TAG, "getGroupMember occurs HttpException e=" + e.toString() + "groupID=" + groupID);
                         return;
                     }
@@ -950,10 +977,14 @@ public class SealUserInfoManager implements OnDataListener {
      *
      * @return List<Friend> 好友列表
      */
-    public List<Friend> getFriends() {
-        if (mFriendDao != null) {
+    public List<Friend> getFriends()
+    {
+        if (mFriendDao != null)
+        {
             return mFriendDao.loadAll();
-        } else {
+        }
+        else
+        {
             return null;
         }
     }
@@ -963,29 +994,100 @@ public class SealUserInfoManager implements OnDataListener {
      *
      * @param callback 获取好友信息的回调
      */
-    public void getFriends(final ResultCallback<List<Friend>> callback) {
-        mWorkHandler.post(new Runnable() {
+    public void getFriends(final ResultCallback<List<Friend>> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 List<Friend> friendsList;
-                if (!doingGetAllUserInfo && !hasGetFriends()) {
-                    if (!isNetworkConnected()) {
+                if (!doingGetAllUserInfo && !hasGetFriends())
+                {
+                    Logger.d(TAG, "hasGetFriends!");
+                    if (!isNetworkConnected())
+                    {
                         onCallBackFail(callback);
                         return;
                     }
-                    try {
+                    try
+                    {
                         friendsList = pullFriends();
-                        sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
-                    } catch (HttpException e) {
+                        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE,
+                            mGetAllUserInfoState);
+                    }
+                    catch (HttpException e)
+                    {
                         onCallBackFail(callback);
-                        NLog.d(TAG, "getFriends occurs HttpException e=" + e.toString() + "mGetAllUserInfoState=" + mGetAllUserInfoState);
+                        NLog.d(TAG, "getFriends occurs HttpException e=" + e.toString() + "mGetAllUserInfoState="
+                            + mGetAllUserInfoState);
                         return;
                     }
-                } else {
-                    friendsList = getFriends();
                 }
-                if (callback != null) {
+                else
+                {
+                    Logger.d(TAG, "getFriends.");
+                    if (!isNetworkConnected())
+                    {
+                        onCallBackFail(callback);
+                        return;
+                    }
+                    try
+                    {
+                        friendsList = pullFriends();
+                        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE,
+                                mGetAllUserInfoState);
+                    }
+                    catch (HttpException e)
+                    {
+                        onCallBackFail(callback);
+                        NLog.d(TAG, "getFriends occurs HttpException e=" + e.toString() + "mGetAllUserInfoState="
+                                + mGetAllUserInfoState);
+                        return;
+                    }
+//                    friendsList = getFriends();
+                }
+                Logger.d(TAG, "getFriends, friends: " + friendsList);
+                if (callback != null)
+                {
                     callback.onCallback(friendsList);
+                }
+            }
+        });
+    }
+
+    public void getMyCenter(final ResultCallback<MySelfBean> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                MySelfBean bean;
+                try
+                {
+                    bean = getMyCenterInfo();
+                    if (null != bean)
+                    {
+                        SharePreferenceManager.setCachedUsername(bean.getUser_name());
+                        SharePreferenceManager.setCachedAvatarPath(bean.getAvatar());
+                    }
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "getMyCenter occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "getMyCenter, mySelf: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
                 }
             }
         });
@@ -999,7 +1101,7 @@ public class SealUserInfoManager implements OnDataListener {
             }
             try {
                 friendsList = pullFriends();
-                sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
             } catch (HttpException e) {
                 NLog.d(TAG, "getFriends occurs HttpException e=" + e.toString() + "mGetAllUserInfoState=" + mGetAllUserInfoState);
             }
@@ -1038,7 +1140,7 @@ public class SealUserInfoManager implements OnDataListener {
                     }
                     try {
                         groupsList = pullGroups();
-                        sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
                     } catch (HttpException e) {
                         onCallBackFail(callback);
                         NLog.d(TAG, "getGroups occurs HttpException e=" + e.toString() + "mGetAllUserInfoState=" + mGetAllUserInfoState);
@@ -1125,7 +1227,7 @@ public class SealUserInfoManager implements OnDataListener {
                         try
                         {
                             groupMembersList = pullGroupMembers(groupID);
-                            sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                            SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
                         }
                         catch (HttpException e)
                         {
@@ -1180,7 +1282,7 @@ public class SealUserInfoManager implements OnDataListener {
                     }
                     try {
                         blackList = pullBlackList();
-                        sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
                     } catch (HttpException e) {
                         onCallBackFail(callback);
                         NLog.d(TAG, "getBlackList occurs HttpException e=" + e.toString() + "mGetAllUserInfoState=" + mGetAllUserInfoState);
@@ -1483,7 +1585,7 @@ public class SealUserInfoManager implements OnDataListener {
                         if (isNetworkConnected()) {
                             try {
                                 group = pullGroups(groupID);
-                                sp.edit().putInt("getAllUserInfoState", mGetAllUserInfoState).commit();
+                                SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, mGetAllUserInfoState);
                             } catch (HttpException e) {
                                 onCallBackFail(callback);
                                 NLog.d(TAG, "getGroupsByID occurs HttpException e=" + e.toString() + "mGetAllUserInfoState=" + mGetAllUserInfoState);
@@ -1552,8 +1654,7 @@ public class SealUserInfoManager implements OnDataListener {
                 GetTokenResponse tokenResponse = (GetTokenResponse) result;
                 if (tokenResponse.getCode() == 200) {
                     String token = tokenResponse.getResult().getToken();
-                    SharedPreferences sp = mContext.getSharedPreferences("config", Context.MODE_PRIVATE);
-                    sp.edit().putString("loginToken", token).commit();
+                    SharePreferenceManager.setKeyStringValue(SharePreferenceConstant.IM_TOKEN, token);
                     if (!TextUtils.isEmpty(token)) {
                         RongIM.connect(token, new RongIMClient.ConnectCallback() {
                             @Override
@@ -1563,8 +1664,7 @@ public class SealUserInfoManager implements OnDataListener {
 
                             @Override
                             public void onSuccess(String s) {
-                                SharedPreferences sp = mContext.getSharedPreferences("config", Context.MODE_PRIVATE);
-                                sp.edit().putString(SealConst.SEALTALK_LOGIN_ID, s).commit();
+                                SharePreferenceManager.setKeyCachedUserid(s);
                             }
 
                             @Override

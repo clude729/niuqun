@@ -26,7 +26,6 @@ import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.R;
 import com.daoyu.chat.SealAppContext;
-import com.daoyu.chat.SealConst;
 import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.chat.db.Friend;
 import com.daoyu.chat.server.broadcast.BroadcastManager;
@@ -367,13 +366,11 @@ public class UserDetailActivity extends BaseActivity implements OnClickListener
                             {
                                 if (mGroupName != null && !TextUtils.isEmpty(mGroupName))
                                 {
-                                    addMessage = "我是" + mGroupName + "群的" + getSharedPreferences("config", MODE_PRIVATE)
-                                        .getString(SealConst.SEALTALK_LOGIN_NAME, "");
+                                    addMessage = "我是" + mGroupName + "群的" + SharePreferenceManager.getCachedUsername();
                                 }
                                 else
                                 {
-                                    addMessage = "我是" + getSharedPreferences("config", MODE_PRIVATE)
-                                        .getString(SealConst.SEALTALK_LOGIN_NAME, "");
+                                    addMessage = "我是" + SharePreferenceManager.getCachedUsername();
                                 }
                             }
                             else

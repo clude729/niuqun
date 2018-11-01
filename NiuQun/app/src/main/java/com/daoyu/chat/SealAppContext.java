@@ -1,21 +1,20 @@
 package com.daoyu.chat;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.util.Log;
-import android.view.View;
-
-import com.alibaba.fastjson.JSONException;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
+import android.view.View;
+
+import com.alibaba.fastjson.JSONException;
 
 import com.daoyu.chat.db.Friend;
 import com.daoyu.chat.db.GroupMember;
@@ -504,18 +503,25 @@ public class SealAppContext implements RongIM.ConversationListBehaviorListener,
         }
     }
 
-    public void popAllActivity() {
-        try {
-            if (PhoneMainActivity.viewParent != null) {
+    public void popAllActivity()
+    {
+        try
+        {
+            if (PhoneMainActivity.viewParent != null)
+            {
                 PhoneMainActivity.viewParent.setCurrentItem(0);
             }
-            for (Activity activity : mActivities) {
-                if (activity != null) {
+            for (Activity activity : mActivities)
+            {
+                if (activity != null)
+                {
                     activity.finish();
                 }
             }
             mActivities.clear();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -586,28 +592,27 @@ public class SealAppContext implements RongIM.ConversationListBehaviorListener,
         return dataEntity;
     }
 
-    private void quit(boolean isKicked) {
+    private void quit(boolean isKicked)
+    {
         Log.d(TAG, "quit isKicked " + isKicked);
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("config", Context.MODE_PRIVATE).edit();
-        if (!isKicked) {
+        if (!isKicked)
+        {
             SharePreferenceManager.setKeyBooleanValue("exit", true);
         }
         SharePreferenceManager.setKeyCachedUserid("");
         SharePreferenceManager.setKeyStringValue(SharePreferenceConstant.IM_TOKEN, "");
-        SharePreferenceManager.setKeyIntValue("getAllUserInfoState", 0);
-        editor.putString("loginToken", "");
-        editor.putString(SealConst.SEALTALK_LOGIN_ID, "");
-        editor.putInt("getAllUserInfoState", 0);
-        editor.commit();
-        /*//这些数据清除操作之前一直是在login界面,因为app的数据库改为按照userID存储,退出登录时先直接删除
+        SharePreferenceManager.setKeyIntValue(SharePreferenceConstant.ALL_USER_INFO_STATE, 0);
+        //这些数据清除操作之前一直是在login界面,因为app的数据库改为按照userID存储,退出登录时先直接删除
         //这种方式是很不友好的方式,未来需要修改同app server的数据同步方式
-        //SealUserInfoManager.getInstance().deleteAllUserInfo();*/
+        //SealUserInfoManager.getInstance().deleteAllUserInfo();
+
         SealUserInfoManager.getInstance().closeDB();
         RongIM.getInstance().logout();
         Intent loginActivityIntent = new Intent();
         loginActivityIntent.setClass(mContext, LoginActivity.class);
         loginActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (isKicked) {
+        if (isKicked)
+        {
             loginActivityIntent.putExtra("kickedByOtherClient", true);
         }
         mContext.startActivity(loginActivityIntent);

@@ -51,7 +51,7 @@ public class UserFriendsResponse
 
         private UserEntity user;
 
-        private String user_id;
+        private String mid;
 
         private String user_name;
 
@@ -72,25 +72,25 @@ public class UserFriendsResponse
 
         }
 
-        public ResultEntity(String user_name, String message, String user_id, String token, String avatar,
-            String status)
+        public ResultEntity(String user_name, String message, String mid, String token, String avatar,
+                            String status)
         {
             this.user_name = user_name;
             this.message = message;
-            this.user_id = user_id;
+            this.mid = mid;
             this.token = token;
             this.avatar = avatar;
             this.status = status;
         }
 
-        public String getUser_id()
+        public String getMid()
         {
-            return user_id;
+            return mid;
         }
 
-        public void setUser_id(String user_id)
+        public void setMid(String mid)
         {
-            this.user_id = user_id;
+            this.mid = mid;
         }
 
         public String getUser_name()
@@ -178,7 +178,7 @@ public class UserFriendsResponse
             if (null == user)
             {
                 user = new UserEntity();
-                user.setId(user_id);
+                user.setId(mid);
                 user.setNickname(user_name);
                 user.setPortraitUri(avatar);
             }
@@ -191,7 +191,7 @@ public class UserFriendsResponse
             if (another instanceof ResultEntity)
             {
                 ResultEntity other = (ResultEntity) another;
-                return this.user_id.equals(other.getUser_id()) ? 1 : 0;
+                return this.mid.equals(other.getMid()) ? 1 : 0;
             }
             return 0;
         }

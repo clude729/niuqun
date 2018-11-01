@@ -56,6 +56,32 @@
             android:name="RONG_CLOUD_APP_KEY"
             android:value="e0x9wycfetjdq" />
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.daoyu.niuqun.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
+        </provider>
+
+        <service
+            android:name="io.rong.imlib.ipc.RongService"
+            android:process=":ipc" />
+
+
+        <receiver android:name="io.rong.imlib.ConnectChangeReceiver" />
+
+        <receiver
+            android:name="io.rong.imlib.HeartbeatReceiver"
+            android:process=":ipc" />
+
+        <activity
+            android:name="io.rong.imkit.widget.provider.TakingPicturesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.SplashActivity"
             android:theme="@style/MySplashTheme">
@@ -65,6 +91,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.user.LoginActivity"
             android:launchMode="singleTop"
@@ -97,7 +124,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.chat.ConversationActivity"
+            android:name="com.daoyu.chat.ui.activity.ConversationActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/moveFinishStyle"
@@ -139,30 +166,38 @@
             android:screenOrientation="portrait"
             android:theme="@style/moveFinishStyle" />
 
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.daoyu.niuqun.FileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/rc_file_path" />
-        </provider>
-
-        <service
-            android:name="io.rong.imlib.ipc.RongService"
-            android:process=":ipc" />
-
-
-        <receiver android:name="io.rong.imlib.ConnectChangeReceiver" />
-
-        <receiver
-            android:name="io.rong.imlib.HeartbeatReceiver"
-            android:process=":ipc" />
-
         <activity
-            android:name="io.rong.imkit.widget.provider.TakingPicturesActivity"
-            android:configChanges="orientation|keyboardHidden"
+            android:name="com.daoyu.chat.ui.activity.SealSearchChattingDetailActivity"
+            android:configChanges="orientation|keyboardHidden|locale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.TotalGroupMemberActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.GroupDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.PrivateChatDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.DiscussionDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.MembersOnlineStatusActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.ReadReceiptDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.GroupListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.PublicServiceActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.daoyu.chat.ui.activity.PublicServiceSearchActivity"
             android:screenOrientation="portrait" />
 
     </application>

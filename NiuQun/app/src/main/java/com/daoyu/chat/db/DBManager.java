@@ -1,17 +1,16 @@
 package com.daoyu.chat.db;
 
+import java.io.File;
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
-import java.io.File;
+import com.daoyu.niuqun.util.SharePreferenceManager;
 
-import com.daoyu.chat.SealConst;
 import io.rong.common.RLog;
 import io.rong.imkit.userInfoCache.RongDatabaseContext;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -111,7 +110,7 @@ public class DBManager {
     }
 
     private static String getDbPath () {
-        String currentUserId = mContext.getSharedPreferences("config", MODE_PRIVATE).getString(SealConst.SEALTALK_LOGIN_ID, null);
+        String currentUserId = SharePreferenceManager.getKeyCachedUserid();
         String dbPath = mContext.getFilesDir().getAbsolutePath();
         dbPath = dbPath + File.separator + getAppKey() + File.separator + currentUserId;
         RLog.d(TAG, "DBManager dbPath = " + dbPath);

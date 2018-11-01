@@ -55,6 +55,7 @@ import com.daoyu.chat.server.response.GetUserInfoByPhoneResponse;
 import com.daoyu.chat.server.response.GetUserInfosResponse;
 import com.daoyu.chat.server.response.JoinGroupResponse;
 import com.daoyu.chat.server.response.LoginResponse;
+import com.daoyu.chat.server.response.MyCenterResponse;
 import com.daoyu.chat.server.response.QiNiuTokenResponse;
 import com.daoyu.chat.server.response.QuitGroupResponse;
 import com.daoyu.chat.server.response.RegisterResponse;
@@ -457,7 +458,7 @@ public class SealAction extends BaseAction
         params.add("to_user_id", userid);
         params.add("message", addFriendMessage);
         String result = httpManager.post(url, params);
-        Logger.d(TAG, "sendFriendInvitation, result: " + result);
+        Logger.d(TAG, "sendFriendInvitation, result: " + result + " ,url: " + url);
         FriendInvitationResponse response = null;
         if (!TextUtils.isEmpty(result))
         {
@@ -477,6 +478,7 @@ public class SealAction extends BaseAction
         RequestParams params = new RequestParams();
         params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
         String result = httpManager.post(url, params);
+        Logger.d(TAG, "getAllUserRelationship, result: " + result);
         UserRelationshipResponse response = null;
         if (!TextUtils.isEmpty(result))
         {
@@ -496,10 +498,32 @@ public class SealAction extends BaseAction
         RequestParams params = new RequestParams();
         params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
         String result = httpManager.post(url, params);
+        Logger.d(TAG, "getAllUserFriends, result: " + result);
         UserFriendsResponse response = null;
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, UserFriendsResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 根据用户id获取个人中心信息
+     * 
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public MyCenterResponse getMySelfInfo() throws HttpException
+    {
+        String url = HttpConstant.USER_CENTER;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getMySelfInfo, result: " + result);
+        MyCenterResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, MyCenterResponse.class);
         }
         return response;
     }

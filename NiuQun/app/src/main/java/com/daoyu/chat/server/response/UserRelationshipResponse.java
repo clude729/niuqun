@@ -32,6 +32,26 @@ public class UserRelationshipResponse {
 
     private List<ResultEntity> data;
 
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
+
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public void setMessage(String message)
+    {
+        this.message = message;
+    }
+
     public void setData(List<ResultEntity> data) {
         this.data = data;
     }
@@ -175,7 +195,7 @@ public class UserRelationshipResponse {
 
         public String toString()
         {
-            return  "ResultEntity{user_name = " + user_name + "}";
+            return  "ResultEntity{user_name = " + user_name + " ,status = " + status + "}";
         }
 
         public static class UserEntity {

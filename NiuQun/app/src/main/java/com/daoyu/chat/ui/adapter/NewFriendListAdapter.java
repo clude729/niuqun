@@ -11,6 +11,8 @@ import com.daoyu.niuqun.R;
 import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.chat.server.response.UserRelationshipResponse;
 import com.daoyu.chat.server.widget.SelectableRoundedImageView;
+import com.daoyu.niuqun.util.Logger;
+
 import io.rong.imageloader.core.ImageLoader;
 import io.rong.imlib.model.UserInfo;
 
@@ -19,6 +21,8 @@ import io.rong.imlib.model.UserInfo;
  */
 public class NewFriendListAdapter extends BaseAdapters
 {
+
+    private static final String TAG = "NewFriendListAdapter";
 
     public NewFriendListAdapter(Context context)
     {
@@ -45,6 +49,7 @@ public class NewFriendListAdapter extends BaseAdapters
         }
         final UserRelationshipResponse.ResultEntity bean = (UserRelationshipResponse.ResultEntity) dataSet
             .get(position);
+        Logger.d(TAG, "getView, bean: " + bean.toString());
         holder.mName.setText(bean.getUser().getNickname());
         String portraitUri = null;
         if (bean != null && bean.getUser() != null)
@@ -62,13 +67,12 @@ public class NewFriendListAdapter extends BaseAdapters
             {
                 if (mOnItemButtonClick != null)
                 {
-                    int status = Integer.getInteger(bean.getStatus(), 11);
+                    int status = Integer.valueOf(bean.getStatus(), 11);
                     mOnItemButtonClick.onButtonClick(position, v, status);
                 }
             }
         });
-
-        switch (Integer.getInteger(bean.getStatus(), 11))
+        switch (Integer.valueOf(bean.getStatus(), 11))
         {
             case 11: //收到了好友邀请
                 holder.mState.setText(R.string.agree);
