@@ -41,7 +41,8 @@ public class SplashActivity extends MyBaseActivity
     {
         String mobile = SharePreferenceManager.getCacheMobile();
         String password = SharePreferenceManager.getKeyCachedPassword();
-        if (TextUtils.isEmpty(mobile) || TextUtils.isEmpty(password))
+        String userId = SharePreferenceManager.getKeyCachedUserid();
+        if (TextUtils.isEmpty(mobile) || TextUtils.isEmpty(password) || TextUtils.isEmpty(userId))
         {
             Logger.d(TAG, "need go to LoginActivity!");
             goToLogin();

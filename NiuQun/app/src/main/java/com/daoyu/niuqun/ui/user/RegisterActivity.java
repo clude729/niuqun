@@ -71,6 +71,7 @@ public class RegisterActivity extends MyBaseActivity implements OnClickListener
     private void initView()
     {
         updataTitle(getResources().getString(R.string.the_register));
+        updataStartImageView(R.mipmap.icon_back);
         etMobile = findViewById(R.id.et_mobile);
         etCode = findViewById(R.id.et_code);
         tvGetCode = findViewById(R.id.text_getcode);

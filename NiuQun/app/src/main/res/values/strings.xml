@@ -63,6 +63,10 @@
     <string name="my_medical">医疗</string>
     <string name="niuqun_service">牛群服务</string>
     <string name="other_services">第三方服务</string>
+    <string name="account_and_safe">账户与安全</string>
+    <string name="new_notify">新消息通知</string>
+    <string name="help_and_feedback">帮助与反馈</string>
+    <string name="app_about">关于牛群</string>
 
     <string name="hello_blank_fragment">Hello brand fragment</string>
     <string name="hello_center_fragment">Hello my center fragment</string>
