@@ -1,13 +1,52 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color8"
+    android:orientation="vertical"
     tools:context="com.daoyu.niuqun.ui.brand.BrandFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/sl_ly"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp">
 
-</FrameLayout>
+        <GridView
+            android:id="@+id/gridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:horizontalSpacing="8dp"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="2"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:scrollbars="none"
+            android:verticalSpacing="8dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/footview"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="28dp"
+            android:layout_height="28dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/load_more"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h6" />
+    </LinearLayout>
+
+</LinearLayout>

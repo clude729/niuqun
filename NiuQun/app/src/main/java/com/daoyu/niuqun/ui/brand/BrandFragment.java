@@ -1,111 +1,175 @@
 package com.daoyu.niuqun.ui.brand;
 
-import android.content.Context;
-import android.net.Uri;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.Toast;
 
+import com.daoyu.chat.SealUserInfoManager;
+import com.daoyu.chat.SealUserInfoManager.ResultCallback;
 import com.daoyu.niuqun.R;
+import com.daoyu.niuqun.bean.BrandInfo;
+import com.daoyu.niuqun.bean.BrandsData;
+import com.daoyu.niuqun.ui.adapter.BrandsListAdapter;
 import com.daoyu.niuqun.util.Logger;
+import com.daoyu.niuqun.view.AutoLoadListener;
+import com.daoyu.niuqun.view.AutoLoadListener.AutoLoadCallBack;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BrandFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BrandFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class BrandFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class BrandFragment extends Fragment implements OnRefreshListener
+{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String TAG = "BrandFragment";
 
-    private OnFragmentInteractionListener mListener;
+    private Toast mToast;
 
-    public BrandFragment() {
-        // Required empty public constructor
-    }
+    private GridView gridView;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BrandFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BrandFragment newInstance(String param1, String param2) {
-        BrandFragment fragment = new BrandFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private View footView;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private List<BrandInfo> brandInfos = new ArrayList<>();
+
+    private BrandsListAdapter brandsListAdapter;
+
+    //加载是否完成，默认已完成
+    private boolean finishLoad = true;
+
+    //数据是否已全部显示
+    private boolean isAll = false;
+
+    //下一次加载的页码
+    private int page = 1;
+
+    //新品1，品牌0
+    protected int cateType = 0;
+
+    private AutoLoadCallBack callBack = new AutoLoadCallBack()
+    {
+        @Override
+        public void execute()
+        {
+            if (isAll)
+            {
+                showToast(getActivity().getResources().getString(R.string.has_load_all));
+                return;
+            }
+            if (finishLoad)
+            {
+                footView.setVisibility(View.VISIBLE);
+                getBrandsList(page + 1);
+            }
+        }
+    };
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View mainView = inflater.inflate(R.layout.fragment_brand, container, false);
+        swipeRefreshLayout = mainView.findViewById(R.id.sl_ly);
+        gridView = mainView.findViewById(R.id.gridView);
+        footView = mainView.findViewById(R.id.footview);
+        return mainView;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_green_light, android.R.color.holo_red_light,
+            android.R.color.holo_orange_light, android.R.color.holo_blue_light);
+        brandsListAdapter = new BrandsListAdapter(getActivity(), brandInfos);
+        gridView.setAdapter(brandsListAdapter);
+        AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);
+        gridView.setOnScrollListener(autoLoadListener);
+        getBrandsList(1);
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        swipeRefreshLayout.setRefreshing(false);
+        if (finishLoad)
+        {
+            getBrandsList(1);
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_brand, container, false);
+    private void getBrandsList(int nextpage)
+    {
+        finishLoad = false;
+        SealUserInfoManager.getInstance().getBrandsList(cateType, nextpage, new ResultCallback<BrandsData>()
+        {
+            @Override
+            public void onSuccess(BrandsData brandsData)
+            {
+                Logger.d(TAG, "getBrandsList successful!");
+                updataList(brandsData);
+                loadFinish();
+            }
+
+            @Override
+            public void onError(String errString)
+            {
+                Logger.d(TAG, "getBrandsList, error: " + errString);
+                loadFinish();
+            }
+        });
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void loadFinish()
+    {
+        finishLoad = true;
+        footView.setVisibility(View.GONE);
+    }
+
+    private void updataList(BrandsData brandsData)
+    {
+        if (null == brandsData)
+        {
+            Logger.d(TAG, "updataList, brandsData is null, return!");
+            return;
         }
+        page = brandsData.getNowpage();
+        if (page == brandsData.getCountpage())
+        {
+            isAll = true;
+        }
+        if (1 == page)
+        {
+            brandsListAdapter.clear();
+        }
+        if (null != brandsData.getList())
+        {
+            brandsListAdapter.addAllItem(brandsData.getList());
+        }
+        brandsListAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+    protected void showToast(String msg)
+    {
+        if (mToast == null)
+        {
+            mToast = Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT);
+            mToast.setGravity(Gravity.CENTER, 0, 0);
         }
         else
         {
-            Logger.e("BrandFragment", "must implement OnFragmentInteractionListener");
+            mToast.setText(msg);
         }
+        mToast.show();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

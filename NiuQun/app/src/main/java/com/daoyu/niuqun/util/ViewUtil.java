@@ -9,12 +9,13 @@ import android.view.WindowManager;
  * View工具类
  */
 
-public class ViewUtil {
+public class ViewUtil
+{
 
     private static final String TAG = "ViewUtil";
 
     private static ViewUtil intance;
-    
+
     private ViewUtil()
     {
 
@@ -80,6 +81,32 @@ public class ViewUtil {
         Point size = new Point();
         windowManager.getDefaultDisplay().getSize(size);
         return size;
+    }
+
+    /**
+     * 根据手机分辨率把dp值转换成px值
+     * 
+     * @param context 上下文
+     * @param dpvalue dp值
+     * @return px值
+     */
+    public int dip2px(Context context, float dpvalue)
+    {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpvalue * scale + 0.5f);
+    }
+
+    /**
+     * 根据手机分辨率把px值转换成dp值
+     * 
+     * @param context 上下文
+     * @param pxvalue px值
+     * @return dp值
+     */
+    public int px2dip(Context context, float pxvalue)
+    {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxvalue / scale + 0.5f);
     }
 
 }

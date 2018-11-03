@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.daoyu.chat.SealUserInfoManager;
+import com.daoyu.chat.SealUserInfoManager.ResultCallback;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.ClothesItem;
 import com.daoyu.niuqun.bean.CollectionItem;
@@ -132,11 +133,12 @@ public class MyCenterFragment extends Fragment
 
     private void updateUI()
     {
-        SealUserInfoManager.getInstance().getMyCenter(new SealUserInfoManager.ResultCallback<MySelfBean>()
+        SealUserInfoManager.getInstance().getMyCenter(new ResultCallback<MySelfBean>()
         {
             @Override
             public void onSuccess(MySelfBean bean)
             {
+                Logger.d(TAG, "updateUI successful!");
                 updataInfo(bean);
             }
 

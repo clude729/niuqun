@@ -32,6 +32,7 @@ import com.daoyu.chat.server.network.async.AsyncTaskManager;
 import com.daoyu.chat.server.network.async.OnDataListener;
 import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.pinyin.CharacterParser;
+import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.GetBlackListResponse;
 import com.daoyu.chat.server.response.GetGroupInfoResponse;
 import com.daoyu.chat.server.response.GetGroupMemberResponse;
@@ -41,6 +42,7 @@ import com.daoyu.chat.server.response.MyCenterResponse;
 import com.daoyu.chat.server.response.UserFriendsResponse;
 import com.daoyu.chat.server.utils.NLog;
 import com.daoyu.chat.server.utils.RongGenerate;
+import com.daoyu.niuqun.bean.BrandsData;
 import com.daoyu.niuqun.bean.MySelfBean;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
@@ -419,7 +421,7 @@ public class SealUserInfoManager implements OnDataListener {
     private MySelfBean getMyCenterInfo() throws HttpException
     {
         MySelfBean bean = null;
-        MyCenterResponse response = null;
+        MyCenterResponse response;
         try
         {
             response = action.getMySelfInfo();
@@ -427,6 +429,33 @@ public class SealUserInfoManager implements OnDataListener {
         catch (JSONException e)
         {
             NLog.d(TAG, "getMyCenterInfo occurs JSONException e=" + e.toString());
+            return null;
+        }
+        if (null != response && HttpConstant.SUCCESS.equals(response.getCode()))
+        {
+            bean = response.getData();
+        }
+        return bean;
+    }
+
+    /**
+     * 获取品牌/新品列表数据
+     * @param cateId 新品1，品牌0
+     * @param page  当前页码
+     * @return bean
+     * @throws HttpException exception
+     */
+    private BrandsData getBrandsList(int cateId, int page) throws HttpException
+    {
+        BrandsData bean = null;
+        BrandsListResponse response;
+        try
+        {
+            response = action.getBrandsList(cateId, page);
+        }
+        catch (JSONException e)
+        {
+            NLog.d(TAG, "getBrandsList occurs JSONException e=" + e.toString());
             return null;
         }
         if (null != response && HttpConstant.SUCCESS.equals(response.getCode()))
@@ -1085,6 +1114,38 @@ public class SealUserInfoManager implements OnDataListener {
                     return;
                 }
                 Logger.d(TAG, "getMyCenter, mySelf: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    public void getBrandsList(final int cateId, final int page, final ResultCallback<BrandsData> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                BrandsData bean;
+                try
+                {
+                    bean = getBrandsList(cateId, page);
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "getBrandsList occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "getBrandsList, BrandsData: " + bean);
                 if (null != callback)
                 {
                     callback.onCallback(bean);

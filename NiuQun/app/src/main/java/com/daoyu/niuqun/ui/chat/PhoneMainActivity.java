@@ -65,7 +65,7 @@ public class PhoneMainActivity extends FragmentActivity
     private ImageView ivSearch;
 
     public static ViewPager viewParent;
-    
+
     private FrameLayout frameLayout;
 
     private RelativeLayout rlChat;

@@ -34,4 +34,6 @@ public class HttpConstant
     public static final String CHAT_AGREE_OR_REFUSE_FRIEND_LIST = URL + "user/gettomyfriends";
 
     public static final String CHAT_MY_FRIEND_LIST = URL + "user/myfriends";
+
+    public static final String BRANDS_LIST = URL + "goods/index";
 }

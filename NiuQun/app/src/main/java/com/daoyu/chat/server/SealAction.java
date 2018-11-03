@@ -36,6 +36,7 @@ import com.daoyu.chat.server.request.VerifyCodeRequest;
 import com.daoyu.chat.server.response.AddGroupMemberResponse;
 import com.daoyu.chat.server.response.AddToBlackListResponse;
 import com.daoyu.chat.server.response.AgreeFriendsResponse;
+import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.ChangePasswordResponse;
 import com.daoyu.chat.server.response.CheckPhoneResponse;
 import com.daoyu.chat.server.response.CreateGroupResponse;
@@ -524,6 +525,27 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, MyCenterResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 获取品牌/新品列表数据
+     *
+     * @param cateId 新品1，品牌0
+     * @param page 当前页码
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BrandsListResponse getBrandsList(int cateId, int page) throws HttpException
+    {
+        String url = HttpConstant.BRANDS_LIST + "/cate_id/" + cateId + "/page/" + page;
+        String result = httpManager.get(url);
+        Logger.d(TAG, "getBrandsList, result: " + result);
+        BrandsListResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BrandsListResponse.class);
         }
         return response;
     }
