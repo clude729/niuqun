@@ -44,7 +44,7 @@ import com.daoyu.chat.ui.widget.MorePopWindow;
 import com.daoyu.niuqun.util.ViewUtil;
 
 public class PhoneMainActivity extends FragmentActivity
-    implements OnClickListener, OnPageChangeListener, OnDragListener, IUnReadMessageObserver
+    implements OnClickListener , OnPageChangeListener , OnDragListener , IUnReadMessageObserver
 {
 
     private static final String TAG = "PhoneMainActivity";
@@ -63,6 +63,10 @@ public class PhoneMainActivity extends FragmentActivity
     private ImageView ivAdd;
 
     private ImageView ivSearch;
+
+    private TextView tvBrandsGoods;
+
+    private TextView tvNewGoods;
 
     public static ViewPager viewParent;
 
@@ -95,6 +99,8 @@ public class PhoneMainActivity extends FragmentActivity
     private ConversationListFragment mConversationListFragment = null;
 
     private Conversation.ConversationType[] mConversationsTypes = null;
+    
+    private BrandsOrNewGoodsCallBack callBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -126,6 +132,8 @@ public class PhoneMainActivity extends FragmentActivity
         tvCircle = findViewById(R.id.tv_circle);
         ivAdd = findViewById(R.id.iv_add);
         ivSearch = findViewById(R.id.iv_search);
+        tvBrandsGoods = findViewById(R.id.tv_brands_goods);
+        tvNewGoods = findViewById(R.id.tv_new_goods);
     }
 
     private void initListener()
@@ -138,6 +146,8 @@ public class PhoneMainActivity extends FragmentActivity
         tvCircle.setOnClickListener(this);
         ivSearch.setOnClickListener(this);
         ivAdd.setOnClickListener(this);
+        tvNewGoods.setOnClickListener(this);
+        tvBrandsGoods.setOnClickListener(this);
     }
 
     private void initMainViewPager()
@@ -203,7 +213,7 @@ public class PhoneMainActivity extends FragmentActivity
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.getDecorView()
-                    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
             params.width = ViewUtil.getIntance().getDisplayWidth(this);
@@ -232,6 +242,7 @@ public class PhoneMainActivity extends FragmentActivity
         barView.setLayoutParams(params);
     }
 
+    //所有按钮状态初始化
     private void changeTextViewColor()
     {
         ivChat.setImageResource(R.mipmap.liaotian);
@@ -240,9 +251,21 @@ public class PhoneMainActivity extends FragmentActivity
         tvBrands.setTextColor(getResources().getColor(R.color.color3));
         ivMy.setImageResource(R.mipmap.my);
         tvMy.setTextColor(getResources().getColor(R.color.color3));
+        tvAddress.setVisibility(View.GONE);
+        tvCircle.setVisibility(View.GONE);
+        tvNewGoods.setVisibility(View.GONE);
+        tvBrandsGoods.setVisibility(View.GONE);
+        tvAddress.setBackgroundResource(R.drawable.bg_left_white_empty);
+        tvAddress.setTextColor(getResources().getColor(R.color.colorWhite));
+        tvCircle.setBackgroundResource(R.drawable.bg_right_white_empty);
+        tvCircle.setTextColor(getResources().getColor(R.color.colorWhite));
+        tvNewGoods.setBackgroundResource(R.drawable.bg_right_white_empty);
+        tvNewGoods.setTextColor(getResources().getColor(R.color.colorWhite));
+        tvBrandsGoods.setBackgroundResource(R.drawable.bg_left_white_full);
+        tvBrandsGoods.setTextColor(getResources().getColor(R.color.color4));
     }
 
-    //是否显示聊天列表
+    //是否显示聊天列表（必须作为左后一个false赋值）
     private void chatShowOrHide(boolean show)
     {
         if (show)
@@ -250,6 +273,24 @@ public class PhoneMainActivity extends FragmentActivity
             if (viewParent.getVisibility() == View.GONE)
             {
                 viewParent.setVisibility(View.VISIBLE);
+                switch (viewParent.getCurrentItem())
+                {
+                    case 0:
+                        tvAddress.setVisibility(View.VISIBLE);
+                        tvCircle.setVisibility(View.VISIBLE);
+                        tvChat.setTextColor(getResources().getColor(R.color.color1));
+                        ivChat.setImageResource(R.mipmap.liaotian_press);
+                        break;
+                    case 1:
+                        tvNewGoods.setVisibility(View.VISIBLE);
+                        tvBrandsGoods.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         else
@@ -279,9 +320,11 @@ public class PhoneMainActivity extends FragmentActivity
                     fm.beginTransaction().show(contactsFragment).commit();
                 }
                 frameLayout.setVisibility(View.VISIBLE);
-                tvAddress.setBackgroundResource(R.drawable.bg_left_white_full);
-                tvAddress.setTextColor(getResources().getColor(R.color.color4));
             }
+            tvAddress.setVisibility(View.VISIBLE);
+            tvCircle.setVisibility(View.VISIBLE);
+            tvAddress.setBackgroundResource(R.drawable.bg_left_white_full);
+            tvAddress.setTextColor(getResources().getColor(R.color.color4));
         }
         else
         {
@@ -293,9 +336,49 @@ public class PhoneMainActivity extends FragmentActivity
                     fm.beginTransaction().hide(contactsFragment).commit();
                 }
                 frameLayout.setVisibility(View.GONE);
-                tvAddress.setBackgroundResource(R.drawable.bg_left_white_empty);
-                tvAddress.setTextColor(getResources().getColor(R.color.colorWhite));
             }
+            tvAddress.setBackgroundResource(R.drawable.bg_left_white_empty);
+            tvAddress.setTextColor(getResources().getColor(R.color.colorWhite));
+        }
+    }
+
+    private void newGoodsShowOrHide(boolean show)
+    {
+        if (show)
+        {
+            tvBrandsGoods.setVisibility(View.VISIBLE);
+            tvNewGoods.setVisibility(View.VISIBLE);
+            tvNewGoods.setBackgroundResource(R.drawable.bg_right_white_full);
+            tvNewGoods.setTextColor(getResources().getColor(R.color.color4));
+            if (null != callBack && callBack.getCateType() != 1)
+            {
+                callBack.toLoad(1);
+            }
+        }
+        else
+        {
+            tvNewGoods.setBackgroundResource(R.drawable.bg_right_white_empty);
+            tvNewGoods.setTextColor(getResources().getColor(R.color.colorWhite));
+        }
+    }
+
+    private void brandsGoodsShowOrHide(boolean show)
+    {
+        if (show)
+        {
+            tvBrandsGoods.setVisibility(View.VISIBLE);
+            tvNewGoods.setVisibility(View.VISIBLE);
+            tvBrandsGoods.setBackgroundResource(R.drawable.bg_left_white_full);
+            tvBrandsGoods.setTextColor(getResources().getColor(R.color.color4));
+            if (null != callBack && callBack.getCateType() != 0)
+            {
+                callBack.toLoad(0);
+            }
+        }
+        else
+        {
+            tvBrandsGoods.setBackgroundResource(R.drawable.bg_left_white_empty);
+            tvBrandsGoods.setTextColor(getResources().getColor(R.color.colorWhite));
         }
     }
 
@@ -306,10 +389,14 @@ public class PhoneMainActivity extends FragmentActivity
             case 0:
                 tvChat.setTextColor(getResources().getColor(R.color.color1));
                 ivChat.setImageResource(R.mipmap.liaotian_press);
+                tvAddress.setVisibility(View.VISIBLE);
+                tvCircle.setVisibility(View.VISIBLE);
                 break;
             case 1:
                 tvBrands.setTextColor(getResources().getColor(R.color.color1));
                 ivBrands.setImageResource(R.mipmap.pinpai_press);
+                tvBrandsGoods.setVisibility(View.VISIBLE);
+                tvNewGoods.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 tvMy.setTextColor(getResources().getColor(R.color.color1));
@@ -326,8 +413,6 @@ public class PhoneMainActivity extends FragmentActivity
         switch (v.getId())
         {
             case R.id.rl_chat:
-                contactShowOrHide(false);
-                chatShowOrHide(true);
                 if (viewParent.getCurrentItem() == 0)
                 {
                     if (firstClick == 0)
@@ -352,24 +437,47 @@ public class PhoneMainActivity extends FragmentActivity
                     }
                 }
                 viewParent.setCurrentItem(0, false);
+                contactShowOrHide(false);
+                brandsGoodsShowOrHide(false);
+                newGoodsShowOrHide(false);
+                chatShowOrHide(true);
                 break;
             case R.id.ll_brands:
-                contactShowOrHide(false);
-                chatShowOrHide(true);
                 viewParent.setCurrentItem(1, false);
+                contactShowOrHide(false);
+                newGoodsShowOrHide(false);
+                chatShowOrHide(true);
+                brandsGoodsShowOrHide(true);
                 break;
             case R.id.ll_my:
-                contactShowOrHide(false);
-                chatShowOrHide(true);
                 viewParent.setCurrentItem(2, false);
+                contactShowOrHide(false);
+                brandsGoodsShowOrHide(false);
+                newGoodsShowOrHide(false);
+                chatShowOrHide(true);
                 break;
             case R.id.tv_book:
+                changeTextViewColor();
+                brandsGoodsShowOrHide(false);
+                newGoodsShowOrHide(false);
                 chatShowOrHide(false);
                 contactShowOrHide(true);
-                changeTextViewColor();
                 break;
             case R.id.tv_circle:
 
+                break;
+            case R.id.tv_new_goods:
+                contactShowOrHide(false);
+                brandsGoodsShowOrHide(false);
+                chatShowOrHide(true);
+                newGoodsShowOrHide(true);
+                break;
+            case R.id.tv_brands_goods:
+                viewParent.setCurrentItem(1, false);
+                contactShowOrHide(false);
+                newGoodsShowOrHide(false);
+                chatShowOrHide(true);
+                brandsGoodsShowOrHide(true);
                 break;
             case R.id.iv_add:
                 MorePopWindow morePopWindow = new MorePopWindow(PhoneMainActivity.this);
@@ -484,6 +592,20 @@ public class PhoneMainActivity extends FragmentActivity
             mToast.setText(msg);
         }
         mToast.show();
+    }
+
+    public void setCallBack(BrandsOrNewGoodsCallBack callBack)
+    {
+        this.callBack = callBack;
+    }
+
+    public interface BrandsOrNewGoodsCallBack
+    {
+        //新品1，品牌0
+        void toLoad(int cateId);
+
+        //新品1，品牌0
+        int getCateType();
     }
 
 }

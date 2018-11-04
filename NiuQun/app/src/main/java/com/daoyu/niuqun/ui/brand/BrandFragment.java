@@ -3,6 +3,7 @@ package com.daoyu.niuqun.ui.brand;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +23,8 @@ import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.BrandInfo;
 import com.daoyu.niuqun.bean.BrandsData;
 import com.daoyu.niuqun.ui.adapter.BrandsListAdapter;
+import com.daoyu.niuqun.ui.chat.PhoneMainActivity;
+import com.daoyu.niuqun.ui.chat.PhoneMainActivity.BrandsOrNewGoodsCallBack;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.view.AutoLoadListener;
 import com.daoyu.niuqun.view.AutoLoadListener.AutoLoadCallBack;
@@ -53,7 +56,7 @@ public class BrandFragment extends Fragment implements OnRefreshListener
     private int page = 1;
 
     //新品1，品牌0
-    protected int cateType = 0;
+    private int cateType = 0;
 
     private AutoLoadCallBack callBack = new AutoLoadCallBack()
     {
@@ -70,6 +73,22 @@ public class BrandFragment extends Fragment implements OnRefreshListener
                 footView.setVisibility(View.VISIBLE);
                 getBrandsList(page + 1);
             }
+        }
+    };
+    
+    private BrandsOrNewGoodsCallBack brandsOrNewGoodsCallBack = new BrandsOrNewGoodsCallBack()
+    {
+        @Override
+        public void toLoad(int cateId)
+        {
+            cateType = cateId;
+            getBrandsList(1);
+        }
+
+        @Override
+        public int getCateType()
+        {
+            return cateType;
         }
     };
 
@@ -95,6 +114,16 @@ public class BrandFragment extends Fragment implements OnRefreshListener
         AutoLoadListener autoLoadListener = new AutoLoadListener(callBack);
         gridView.setOnScrollListener(autoLoadListener);
         getBrandsList(1);
+    }
+
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+        if (context instanceof PhoneMainActivity)
+        {
+            ((PhoneMainActivity) context).setCallBack(brandsOrNewGoodsCallBack);
+        }
     }
 
     @Override

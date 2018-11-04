@@ -106,7 +106,8 @@
         android:layout_height="52dp"
         android:background="@drawable/btn_list_item_bg"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:visibility="gone">
 
         <com.daoyu.chat.server.widget.SelectableRoundedImageView
             android:id="@+id/iv_avatar4"
@@ -146,15 +147,17 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="@drawable/btn_list_item_bg"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
 
         <com.daoyu.chat.server.widget.SelectableRoundedImageView
             android:id="@+id/contact_me_img"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:scaleType="centerCrop"
             app:sriv_left_bottom_corner_radius="3dip"
             app:sriv_left_top_corner_radius="3dip"
@@ -166,8 +169,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
-            android:layout_toRightOf="@id/contact_me_img"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@id/contact_me_img"
             android:ellipsize="end"
             android:lines="1"
             android:maxLength="32"

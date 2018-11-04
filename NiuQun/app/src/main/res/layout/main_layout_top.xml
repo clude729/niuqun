@@ -39,6 +39,33 @@
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/h2" />
 
+        <TextView
+            android:id="@+id/tv_brands_goods"
+            android:layout_width="64dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_left_white_empty"
+            android:gravity="center"
+            android:text="@string/the_brands"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h2"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_new_goods"
+            android:layout_width="64dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="-0.5dp"
+            android:layout_toEndOf="@id/tv_brands_goods"
+            android:background="@drawable/bg_right_white_empty"
+            android:gravity="center"
+            android:text="@string/new_goods"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h2"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/iv_search"
             android:layout_width="36dp"

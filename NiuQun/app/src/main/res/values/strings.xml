@@ -69,6 +69,7 @@
     <string name="app_about">关于牛群</string>
     <string name="load_more">正在加载…</string>
     <string name="has_load_all">已经到底啦！</string>
+    <string name="new_goods">新品</string>
 
     <string name="hello_blank_fragment">Hello brand fragment</string>
     <string name="hello_center_fragment">Hello my center fragment</string>
