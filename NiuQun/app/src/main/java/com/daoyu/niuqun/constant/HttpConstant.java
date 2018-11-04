@@ -9,6 +9,9 @@ public class HttpConstant
 
     public static final String SUCCESS = "000";
 
+    //WebView解析编码
+    public static final String WEB_TYPE="text/html; charset=utf-8";
+
     public static final String USER_LOGIN = URL + "user/login";
 
     public static final String USER_REGISTER = URL + "user/reg";

@@ -40,6 +40,7 @@ import com.daoyu.chat.server.response.GetGroupResponse;
 import com.daoyu.chat.server.response.GetTokenResponse;
 import com.daoyu.chat.server.response.MyCenterResponse;
 import com.daoyu.chat.server.response.UserFriendsResponse;
+import com.daoyu.chat.server.response.WebContentResponse;
 import com.daoyu.chat.server.utils.NLog;
 import com.daoyu.chat.server.utils.RongGenerate;
 import com.daoyu.niuqun.bean.BrandsData;
@@ -456,6 +457,26 @@ public class SealUserInfoManager implements OnDataListener {
         catch (JSONException e)
         {
             NLog.d(TAG, "getBrandsList occurs JSONException e=" + e.toString());
+            return null;
+        }
+        if (null != response && HttpConstant.SUCCESS.equals(response.getCode()))
+        {
+            bean = response.getData();
+        }
+        return bean;
+    }
+
+    private String getWebContent(String url) throws HttpException
+    {
+        String bean = null;
+        WebContentResponse response;
+        try
+        {
+            response = action.getWebContent(url);
+        }
+        catch (JSONException e)
+        {
+            NLog.d(TAG, "getWebContent occurs JSONException e=" + e.toString());
             return null;
         }
         if (null != response && HttpConstant.SUCCESS.equals(response.getCode()))
@@ -1146,6 +1167,44 @@ public class SealUserInfoManager implements OnDataListener {
                     return;
                 }
                 Logger.d(TAG, "getBrandsList, BrandsData: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取webview加载数据
+     *
+     * @param url 连接
+     * @param callback 回调
+     */
+    public void getWebContent(final String url, final ResultCallback<String> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                String bean;
+                try
+                {
+                    bean = getWebContent(url);
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "getWebContent occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "getWebContent, content: " + bean);
                 if (null != callback)
                 {
                     callback.onCallback(bean);

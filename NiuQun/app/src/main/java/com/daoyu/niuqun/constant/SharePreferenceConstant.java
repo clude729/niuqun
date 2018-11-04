@@ -15,7 +15,4 @@ public class SharePreferenceConstant
 
     public static final String IMAGE_PATH = "/niuqun/images/";
 
-    //WebView解析编码
-    public static final String WEB_TYPE="text/html; charset=utf-8";
-
 }

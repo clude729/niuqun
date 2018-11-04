@@ -1,5 +1,6 @@
 package com.daoyu.niuqun.ui.center;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +12,7 @@ import com.daoyu.chat.server.broadcast.BroadcastManager;
 import com.daoyu.chat.server.widget.DialogWithYesOrNoUtils;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.ui.MyBaseActivity;
+import com.daoyu.niuqun.ui.user.AgreementActivity;
 
 public class SettingActivity extends MyBaseActivity implements OnClickListener
 {
@@ -59,7 +61,7 @@ public class SettingActivity extends MyBaseActivity implements OnClickListener
 
                 break;
             case R.id.ll_privacy:
-
+                goToPrivacy();
                 break;
             case R.id.ll_feedback:
 
@@ -93,6 +95,13 @@ public class SettingActivity extends MyBaseActivity implements OnClickListener
             default:
                 break;
         }
+    }
+
+    private void goToPrivacy()
+    {
+        Intent intent = new Intent(this, AgreementActivity.class);
+        intent.putExtra(AgreementActivity.WEB_TYPE, 0);
+        startActivity(intent);
     }
 
     @Override

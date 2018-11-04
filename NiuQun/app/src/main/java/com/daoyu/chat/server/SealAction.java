@@ -74,6 +74,7 @@ import com.daoyu.chat.server.response.UserRelationshipResponse;
 import com.daoyu.chat.server.response.VerifyCodeResponse;
 import com.daoyu.chat.server.response.SetGroupNameResponse;
 import com.daoyu.chat.server.response.VersionResponse;
+import com.daoyu.chat.server.response.WebContentResponse;
 import com.daoyu.chat.server.utils.NLog;
 import com.daoyu.chat.server.utils.json.JsonMananger;
 import com.daoyu.niuqun.constant.HttpConstant;
@@ -160,13 +161,7 @@ public class SealAction extends BaseAction
     }
 
     /*
-     * 200: 验证成功
-     * 1000: 验证码错误
-     * 2000: 验证码过期
-     *
-     * 异常返回，返回的 HTTP Status Code 如下：
-     * 400: 错误的请求
-     * 500: 应用服务器内部错误
+     * 200: 验证成功 1000: 验证码错误 2000: 验证码过期 异常返回，返回的 HTTP Status Code 如下： 400: 错误的请求 500: 应用服务器内部错误
      */
 
     /**
@@ -546,6 +541,30 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, BrandsListResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 获取webview显示的内容
+     * 
+     * @param url 连接
+     * @return 内容
+     * @throws HttpException exception
+     */
+    public WebContentResponse getWebContent(String url) throws HttpException
+    {
+        if (TextUtils.isEmpty(url))
+        {
+            Logger.d(TAG, "getWebContent, url is null, return!");
+            return null;
+        }
+        String result = httpManager.get(url);
+        Logger.d(TAG, "getWebContent, result: " + result);
+        WebContentResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, WebContentResponse.class);
         }
         return response;
     }

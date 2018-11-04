@@ -346,6 +346,7 @@ public class RegisterActivity extends MyBaseActivity implements OnClickListener
     private void goToAgreementActivity()
     {
         Intent intent = new Intent(this, AgreementActivity.class);
+        intent.putExtra(AgreementActivity.WEB_TYPE, 0);
         startActivity(intent);
     }
 
