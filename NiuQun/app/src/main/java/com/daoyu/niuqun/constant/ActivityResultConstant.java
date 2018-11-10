@@ -14,4 +14,9 @@ public class ActivityResultConstant {
     //登录
     public static final int LOGIN = BASE + 2;
 
+    //名字
+    public static final int USER_NAME = BASE + 3;
+    //牛群号
+    public static final int NIUQUN_NUMBER = BASE + 4;
+
 }

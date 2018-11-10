@@ -67,7 +67,7 @@ public class SettingActivity extends MyBaseActivity implements OnClickListener
 
                 break;
             case R.id.ll_about:
-
+                goToAbout();
                 break;
             case R.id.btn_logout:
                 DialogWithYesOrNoUtils.getInstance().showDialog(this, "是否退出登录?",
@@ -95,6 +95,12 @@ public class SettingActivity extends MyBaseActivity implements OnClickListener
             default:
                 break;
         }
+    }
+
+    private void goToAbout()
+    {
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
     }
 
     private void goToPrivacy()

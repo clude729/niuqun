@@ -5,7 +5,7 @@ package com.daoyu.niuqun.constant;
  */
 public class HttpConstant
 {
-    private static final String URL = "http://api.niu.lianbida.com/";
+    public static final String URL = "http://api.niu.lianbida.com/";
 
     public static final String SUCCESS = "000";
 
@@ -39,4 +39,10 @@ public class HttpConstant
     public static final String CHAT_MY_FRIEND_LIST = URL + "user/myfriends";
 
     public static final String BRANDS_LIST = URL + "goods/index";
+
+    public static final String BRANDS_DETAIL = URL + "goods/detail";
+
+    public static final String BRANDS_GET_SCORE_BY_ADS = URL + "goods/userclick";
+
+    public static final String GOODS_ADD_SHOPPING_CART = URL + "goods/addcart";
 }

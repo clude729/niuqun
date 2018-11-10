@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.request.RequestOptions;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.BrandInfo;
+import com.daoyu.niuqun.constant.IntentConstant;
+import com.daoyu.niuqun.ui.brand.GoodsDetailActivity;
 import com.daoyu.niuqun.util.ImageLoad;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.ViewUtil;
@@ -104,6 +107,9 @@ public class BrandsListAdapter extends BaseAdapter
                 public void onClick(View view)
                 {
                     Logger.d(TAG, "getView, onClick at: " + baseItem.getGoods_id());
+                    Intent intent = new Intent(context, GoodsDetailActivity.class);
+                    intent.putExtra(IntentConstant.GOODS_ID, baseItem.getGoods_id());
+                    context.startActivity(intent);
                 }
             });
         }

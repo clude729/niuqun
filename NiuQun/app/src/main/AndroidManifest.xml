@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.daoyu.niuqun">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -44,6 +45,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_launcher"
         android:supportsRtl="true"
+        tools:replace="android:allowBackup"
         android:theme="@style/cusomeMainTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -189,7 +191,11 @@
         <activity
             android:name="com.daoyu.chat.ui.activity.PublicServiceSearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.center.SettingActivity"></activity>
+        <activity android:name=".ui.center.SettingActivity" />
+        <activity android:name=".ui.center.PersonInfoActivity" />
+        <activity android:name=".ui.center.AboutActivity" />
+        <activity android:name=".ui.center.FeedbackActivity" />
+        <activity android:name=".ui.brand.GoodsDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -2,6 +2,8 @@ package com.daoyu.chat.server;
 
 import org.apache.http.entity.StringEntity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
@@ -30,13 +32,13 @@ import com.daoyu.chat.server.request.SetFriendDisplayNameRequest;
 import com.daoyu.chat.server.request.SetGroupDisplayNameRequest;
 import com.daoyu.chat.server.request.SetGroupNameRequest;
 import com.daoyu.chat.server.request.SetGroupPortraitRequest;
-import com.daoyu.chat.server.request.SetNameRequest;
-import com.daoyu.chat.server.request.SetPortraitRequest;
 import com.daoyu.chat.server.request.VerifyCodeRequest;
 import com.daoyu.chat.server.response.AddGroupMemberResponse;
 import com.daoyu.chat.server.response.AddToBlackListResponse;
 import com.daoyu.chat.server.response.AgreeFriendsResponse;
+import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
+import com.daoyu.chat.server.response.CartGoodsResponse;
 import com.daoyu.chat.server.response.ChangePasswordResponse;
 import com.daoyu.chat.server.response.CheckPhoneResponse;
 import com.daoyu.chat.server.response.CreateGroupResponse;
@@ -54,6 +56,7 @@ import com.daoyu.chat.server.response.GetTokenResponse;
 import com.daoyu.chat.server.response.GetUserInfoByIdResponse;
 import com.daoyu.chat.server.response.GetUserInfoByPhoneResponse;
 import com.daoyu.chat.server.response.GetUserInfosResponse;
+import com.daoyu.chat.server.response.GoodsDetailResponse;
 import com.daoyu.chat.server.response.JoinGroupResponse;
 import com.daoyu.chat.server.response.LoginResponse;
 import com.daoyu.chat.server.response.MyCenterResponse;
@@ -284,20 +287,13 @@ public class SealAction extends BaseAction
      */
     public SetNameResponse setName(String nickname) throws HttpException
     {
-        String url = getURL("user/set_nickname");
-        String json = JsonMananger.beanToJson(new SetNameRequest(nickname));
-        StringEntity entity = null;
-        try
-        {
-            entity = new StringEntity(json, ENCODING);
-            entity.setContentType(CONTENT_TYPE);
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
+        String url = HttpConstant.USER_UPDATE_USERNAME;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("user_name", nickname);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "setName, result: " + result);
         SetNameResponse response = null;
-        String result = httpManager.post(mContext, url, entity, CONTENT_TYPE);
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, SetNameResponse.class);
@@ -313,20 +309,22 @@ public class SealAction extends BaseAction
      */
     public SetPortraitResponse setPortrait(String portraitUri) throws HttpException
     {
-        String url = getURL("user/set_portrait_uri");
-        String json = JsonMananger.beanToJson(new SetPortraitRequest(portraitUri));
-        StringEntity entity = null;
+        String url = HttpConstant.USER_UPDATE_AVATAR;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
         try
         {
-            entity = new StringEntity(json, ENCODING);
-            entity.setContentType(CONTENT_TYPE);
+            File file = new File(portraitUri);
+            params.put("avatar", file);
         }
-        catch (UnsupportedEncodingException e)
+        catch (FileNotFoundException e)
         {
-            e.printStackTrace();
+            Logger.d(TAG, "setPortrait, FileNotFoundException: " + e);
+            return null;
         }
         SetPortraitResponse response = null;
-        String result = httpManager.post(mContext, url, entity, CONTENT_TYPE);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "setPortrait, result: " + result);
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, SetPortraitResponse.class);
@@ -504,6 +502,28 @@ public class SealAction extends BaseAction
     }
 
     /**
+     * 更新用户名
+     *
+     * @param userName 新用户名
+     * @throws HttpException exception
+     */
+    public BaseSealResponse updataUserName(String userName) throws HttpException
+    {
+        String url = HttpConstant.USER_UPDATE_USERNAME;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("user_name", userName);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "updataUserName, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
      * 根据用户id获取个人中心信息
      * 
      * @return 响应
@@ -541,6 +561,98 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, BrandsListResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 获取品牌/新品详情
+     *
+     * @param goodsId 商品id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public GoodsDetailResponse getGoodsDetail(String goodsId) throws HttpException
+    {
+        String url = HttpConstant.BRANDS_DETAIL;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("goods_id", goodsId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getGoodsDetail, result: " + result);
+        GoodsDetailResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, GoodsDetailResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 获取品牌广告积分
+     *
+     * @param goodsId 商品id
+     * @param goodsPrice 品牌牛币
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse getBrandsScore(String goodsId, String goodsPrice) throws HttpException
+    {
+        String url = HttpConstant.BRANDS_GET_SCORE_BY_ADS;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("goods_id", goodsId);
+        params.add("goods_price", goodsPrice);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getBrandsScore, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 加入购物车
+     *
+     * @param goodsId 商品id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse addGoodsToCart(String goodsId) throws HttpException
+    {
+        String url = HttpConstant.GOODS_ADD_SHOPPING_CART;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("goods_id", goodsId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "addGoodsToCart, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 获取购物车数据
+     *
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public CartGoodsResponse getCartGoods() throws HttpException
+    {
+        String url = HttpConstant.GOODS_ADD_SHOPPING_CART;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getCartGoods, result: " + result);
+        CartGoodsResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, CartGoodsResponse.class);
         }
         return response;
     }

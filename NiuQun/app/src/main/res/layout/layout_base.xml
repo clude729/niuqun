@@ -43,11 +43,11 @@
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:gravity="center_vertical|start"
+            android:gravity="center"
             android:maxLength="20"
             android:maxLines="1"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp" />
+            android:textSize="@dimen/h8" />
 
         <Button
             android:id="@+id/btn_right"

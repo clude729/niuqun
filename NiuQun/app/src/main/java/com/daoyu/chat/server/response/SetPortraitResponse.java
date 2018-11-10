@@ -1,22 +1,51 @@
 package com.daoyu.chat.server.response;
 
 /**
- * Created by AMing on 16/1/13.
- * Company RongCloud
+ * 上传头像响应
  */
-public class SetPortraitResponse {
+public class SetPortraitResponse
+{
 
-    /**
-     * code : 200
-     */
+    private static final String TAG = "SetPortraitResponse";
 
-    private int code;
+    private String code;
 
-    public void setCode(int code) {
+    private String message;
+    
+    private String data;
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
         this.code = code;
     }
 
-    public int getCode() {
-        return code;
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public void setMessage(String message)
+    {
+        this.message = message;
+    }
+
+    public String getData()
+    {
+        return data;
+    }
+
+    public void setData(String data)
+    {
+        this.data = data;
+    }
+
+    public String toString()
+    {
+        return TAG + "{code = " + code + " ,message " + message + "}";
     }
 }

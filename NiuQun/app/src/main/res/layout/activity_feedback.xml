@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color8"
+    android:orientation="vertical"
+    tools:context="com.daoyu.niuqun.ui.center.FeedbackActivity">
+
+    <EditText
+        android:id="@+id/et_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:background="@color/colorWhite"
+        android:gravity="start"
+        android:hint="@string/feedback_submit_hint"
+        android:inputType="text"
+        android:maxLength="500"
+        android:padding="12dp"
+        android:textColor="@color/color4"
+        android:textColorHint="@color/color9"
+        android:textSize="@dimen/h4" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_btn_red"
+        android:text="@string/to_submit"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/h6" />
+</LinearLayout>

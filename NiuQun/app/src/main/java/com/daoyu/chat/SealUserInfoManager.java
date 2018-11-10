@@ -32,6 +32,7 @@ import com.daoyu.chat.server.network.async.AsyncTaskManager;
 import com.daoyu.chat.server.network.async.OnDataListener;
 import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.pinyin.CharacterParser;
+import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.GetBlackListResponse;
 import com.daoyu.chat.server.response.GetGroupInfoResponse;
@@ -1106,6 +1107,11 @@ public class SealUserInfoManager implements OnDataListener {
         });
     }
 
+    /**
+     * 获取个人中心数据
+     * 
+     * @param callback 回调
+     */
     public void getMyCenter(final ResultCallback<MySelfBean> callback)
     {
         mWorkHandler.post(new Runnable()
@@ -1135,6 +1141,44 @@ public class SealUserInfoManager implements OnDataListener {
                     return;
                 }
                 Logger.d(TAG, "getMyCenter, mySelf: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    /**
+     * 更新用户名
+     * 
+     * @param userName 新用户名
+     * @param callback 回调
+     */
+    public void updataUserName(final String userName, final ResultCallback<BaseSealResponse> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                BaseSealResponse bean;
+                try
+                {
+                    bean = action.updataUserName(userName);
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "getMyCenter occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "updataUserName, respone: " + bean);
                 if (null != callback)
                 {
                     callback.onCallback(bean);

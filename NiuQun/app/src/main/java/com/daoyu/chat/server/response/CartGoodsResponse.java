@@ -1,15 +1,32 @@
 package com.daoyu.chat.server.response;
 
+import java.util.List;
+
+import com.daoyu.niuqun.bean.CartGoodsInfo;
+
 /**
- * 更新用户名
+ * 获取购物车内商品响应类
  */
-public class SetNameResponse
+public class CartGoodsResponse
 {
-    private static final String TAG = "SetNameResponse";
+
+    private static final String TAG = "CartGoodsResponse";
 
     private String code;
 
     private String message;
+
+    private List<CartGoodsInfo> data;
+
+    public List<CartGoodsInfo> getData()
+    {
+        return data;
+    }
+
+    public void setData(List<CartGoodsInfo> data)
+    {
+        this.data = data;
+    }
 
     public String getCode()
     {
@@ -35,4 +52,5 @@ public class SetNameResponse
     {
         return TAG + "{code = " + code + " ,message " + message + "}";
     }
+
 }

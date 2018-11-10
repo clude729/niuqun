@@ -3,6 +3,7 @@ package com.daoyu.niuqun.ui.center;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -118,7 +119,7 @@ public class MyCenterFragment extends Fragment
         gridOther.setAdapter(otherAdapter);
 
         ImageLoad.getInstance().load(getActivity(), iv_avatar, SharePreferenceManager.getCachedAvatarPath(),
-            new RequestOptions().error(R.mipmap.default__avatar).placeholder(R.mipmap.default__avatar));
+            new RequestOptions().error(R.drawable.default_useravatar).placeholder(R.drawable.default_useravatar));
         tv_nickname.setText(SharePreferenceManager.getCachedUsername());
         tv_number.setText(SharePreferenceManager.getCacheMobile());
         iv_info.setOnClickListener(new View.OnClickListener()
@@ -126,7 +127,9 @@ public class MyCenterFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-
+                Logger.d(TAG, "go to Info!");
+                Intent intent = new Intent(getActivity(), PersonInfoActivity.class);
+                startActivity(intent);
             }
         });
     }

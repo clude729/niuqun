@@ -1,15 +1,30 @@
 package com.daoyu.chat.server.response;
 
+import com.daoyu.niuqun.bean.GoodsInfo;
+
 /**
- * 更新用户名
+ * 品牌/新品详情响应类
  */
-public class SetNameResponse
+public class GoodsDetailResponse
 {
-    private static final String TAG = "SetNameResponse";
+
+    private static final String TAG = "GoodsDetailResponse";
 
     private String code;
 
     private String message;
+
+    private GoodsInfo data;
+
+    public GoodsInfo getData()
+    {
+        return data;
+    }
+
+    public void setData(GoodsInfo data)
+    {
+        this.data = data;
+    }
 
     public String getCode()
     {
@@ -35,4 +50,5 @@ public class SetNameResponse
     {
         return TAG + "{code = " + code + " ,message " + message + "}";
     }
+
 }

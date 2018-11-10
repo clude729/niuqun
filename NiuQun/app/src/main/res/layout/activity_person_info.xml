@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color8"
+    android:orientation="vertical"
+    tools:context="com.daoyu.niuqun.ui.center.PersonInfoActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:text="@string/person_avatar"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h6" />
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/person_avatar"
+            android:scaleType="fitCenter"
+            android:src="@drawable/default_useravatar" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/person_avatar"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_to_next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_name"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical|start"
+            android:text="@string/person_name"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h6" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:hint="@string/person_name"
+            android:singleLine="true"
+            android:textColor="@color/color4"
+            android:textColorHint="@color/color3"
+            android:textSize="@dimen/h6" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/person_avatar"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_to_next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_number"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:gravity="center_vertical|start"
+            android:text="@string/niuqun_number"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h6" />
+
+        <TextView
+            android:id="@+id/tv_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:hint="@string/niuqun_number"
+            android:singleLine="true"
+            android:textColor="@color/color4"
+            android:textColorHint="@color/color3"
+            android:textSize="@dimen/h6" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/person_avatar"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_to_next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_code"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:text="@string/person_code"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h6" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/person_avatar"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_to_next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_sign"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:text="@string/person_sign"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h6" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/person_avatar"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_to_next" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_address"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorWhite"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:text="@string/person_address"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h6" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:contentDescription="@string/person_avatar"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_to_next" />
+    </LinearLayout>
+
+</LinearLayout>
