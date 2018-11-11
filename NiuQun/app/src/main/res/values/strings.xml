@@ -91,6 +91,11 @@
     <string name="to_settlement">结算</string>
     <string name="no_less">不能再少啦</string>
     <string name="cart_is_full">太多了，购物车放不下了</string>
+    <string name="to_del_from_cart">删除</string>
+    <string name="get_total_from_cart">合计：</string>
+    <string name="to_edit_cart">编辑</string>
+    <string name="edit_cart_over">完成</string>
+    <string name="has_no_goods_in_cart">您没有选择任何商品</string>
 
     <string name="hello_blank_fragment">Hello brand fragment</string>
     <string name="hello_center_fragment">Hello my center fragment</string>

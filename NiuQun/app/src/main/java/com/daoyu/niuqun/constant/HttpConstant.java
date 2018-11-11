@@ -45,4 +45,12 @@ public class HttpConstant
     public static final String BRANDS_GET_SCORE_BY_ADS = URL + "goods/userclick";
 
     public static final String GOODS_ADD_SHOPPING_CART = URL + "goods/addcart";
+
+    public static final String BARNDS_GET_CART_LIST = URL + "goods/cartlist";
+
+    public static final String BARNDS_CHOOSE_GOODS_OVER_FROM_CART = URL + "goods/toovercart";
+
+    public static final String BARNDS_SEND_ORDER_BY_GOODS = URL + "goods/tocomfirm";
+
+    public static final String BARNDS_DEL_GOODS_FROM_CART = URL + "goods/";
 }

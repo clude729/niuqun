@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color8"
+    tools:context="com.daoyu.niuqun.ui.brand.ShoppingCartActivity">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <ListView
+            android:id="@+id/goodsList"
+            android:scrollbars="none"
+            android:dividerHeight="1dp"
+            android:listSelector="@color/transparent"
+            android:divider="@color/color8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+        <LinearLayout
+            android:id="@+id/ll_total"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:background="@color/colorWhite"
+            android:layout_height="match_parent">
+            <ImageButton
+                android:id="@+id/ibtn_check"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@null"
+                android:contentDescription="@string/app_name"
+                android:focusable="false"
+                android:padding="10dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/icon_cart_unselect" />
+            <TextView
+                android:id="@+id/tv_total"
+                android:textColor="@color/color2"
+                android:textSize="@dimen/h4"
+                android:singleLine="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h4"
+            android:background="@color/color1"
+            android:text="@string/to_settlement"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_del"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h4"
+            android:background="@color/color1"
+            android:visibility="gone"
+            android:text="@string/to_del_from_cart"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</LinearLayout>

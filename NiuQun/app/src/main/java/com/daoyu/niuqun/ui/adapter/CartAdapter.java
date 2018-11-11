@@ -1,11 +1,11 @@
 package com.daoyu.niuqun.ui.adapter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +16,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.CartGoodsInfo;
 import com.daoyu.niuqun.util.ImageLoad;
@@ -36,7 +36,7 @@ public class CartAdapter extends BaseAdapter
 
     private Context context;
 
-    private List<CartGoodsInfo> listItems;
+    private List<CartGoodsInfo> listItems = new ArrayList<>();
 
     private LayoutInflater sInflater;
 
@@ -50,8 +50,6 @@ public class CartAdapter extends BaseAdapter
     private ImageButton btn;
 
     private TextView tv_total;
-
-    private Toast mToast;
 
     private String unit;
 
@@ -67,10 +65,9 @@ public class CartAdapter extends BaseAdapter
         ImageButton ibtn_check;
     }
 
-    public CartAdapter(Context con, List<CartGoodsInfo> listItems, ImageButton btn, TextView tv)
+    public CartAdapter(Context con, ImageButton btn, TextView tv)
     {
         this.context = con;
-        this.listItems = listItems;
         sInflater = LayoutInflater.from(context);
         this.btn = btn;
         this.tv_total = tv;
@@ -79,9 +76,27 @@ public class CartAdapter extends BaseAdapter
         unit = context.getResources().getString(R.string.my_symbol_app);
     }
 
+    /**
+     * 添加数据
+     *
+     * @param cartGoodsInfos 购物车商品
+     */
+    public void addAll(List<CartGoodsInfo> cartGoodsInfos)
+    {
+        if (null == cartGoodsInfos || cartGoodsInfos.size() == 0)
+        {
+            listItems.clear();
+        }
+        else
+        {
+            listItems.addAll(cartGoodsInfos);
+        }
+        notifyDataSetChanged();
+    }
+
     public List<CartGoodsInfo> getList()
     {
-        return this.listItems;
+        return listItems;
     }
 
     /**
@@ -326,7 +341,7 @@ public class CartAdapter extends BaseAdapter
                 int be = Integer.parseInt(before);
                 if (be < 2)
                 {
-                    showToast(context.getResources().getString(R.string.no_less));
+                    NToast.shortToast(context, context.getResources().getString(R.string.no_less));
                 }
                 else
                 {
@@ -373,7 +388,7 @@ public class CartAdapter extends BaseAdapter
                 int be = Integer.parseInt(before);
                 if (be > 98)
                 {
-                    showToast(context.getResources().getString(R.string.cart_is_full));
+                    NToast.shortToast(context, context.getResources().getString(R.string.cart_is_full));
                 }
                 else
                 {
@@ -491,20 +506,6 @@ public class CartAdapter extends BaseAdapter
         });
 
         return convertView;
-    }
-
-    private void showToast(String msg)
-    {
-        if (mToast == null)
-        {
-            mToast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
-            mToast.setGravity(Gravity.CENTER, 0, 0);
-        }
-        else
-        {
-            mToast.setText(msg);
-        }
-        mToast.show();
     }
 
 }

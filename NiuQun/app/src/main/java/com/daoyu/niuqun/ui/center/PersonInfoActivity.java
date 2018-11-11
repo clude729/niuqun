@@ -123,7 +123,7 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
                 {
                     selectUri = uri;
                     LoadDialog.show(mContext);
-                    request(ResponseConstant.UPDATA_AVATAR);
+                    request(ResponseConstant.UPDATA_AVATAR, true);
                 }
             }
 

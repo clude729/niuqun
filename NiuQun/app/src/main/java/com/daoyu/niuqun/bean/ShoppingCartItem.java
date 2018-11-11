@@ -1,9 +1,11 @@
 package com.daoyu.niuqun.bean;
 
 import com.daoyu.niuqun.R;
+import com.daoyu.niuqun.ui.brand.ShoppingCartActivity;
 import com.daoyu.niuqun.util.Logger;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 /**
@@ -23,6 +25,8 @@ public class ShoppingCartItem extends MyBaseItem
             @Override
             public void onClick(View v) {
                 Logger.d(TAG, "onClick!");
+                Intent intent = new Intent(mContext, ShoppingCartActivity.class);
+                mContext.startActivity(intent);
             }
         };
     }

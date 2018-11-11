@@ -45,8 +45,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_launcher"
         android:supportsRtl="true"
-        tools:replace="android:allowBackup"
-        android:theme="@style/cusomeMainTheme">
+        android:theme="@style/cusomeMainTheme"
+        tools:replace="android:allowBackup">
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="21ac228435642467d32ad18fc90b03fc" />
@@ -195,7 +195,8 @@
         <activity android:name=".ui.center.PersonInfoActivity" />
         <activity android:name=".ui.center.AboutActivity" />
         <activity android:name=".ui.center.FeedbackActivity" />
-        <activity android:name=".ui.brand.GoodsDetailActivity"></activity>
+        <activity android:name=".ui.brand.GoodsDetailActivity" />
+        <activity android:name=".ui.brand.ShoppingCartActivity"></activity>
     </application>
 
 </manifest>

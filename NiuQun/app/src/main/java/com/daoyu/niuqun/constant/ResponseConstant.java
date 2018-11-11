@@ -24,4 +24,12 @@ public class ResponseConstant {
 
     public static final int GOODS_ADD_CART = BASE + 8;
 
+    public static final int GET_CART_LIST = BASE + 9;
+
+    public static final int DEL_GOODS_FROM_CART = BASE + 10;
+
+    public static final int BUY_GOODS_FROM_CART = BASE + 11;
+
+    public static final int SEND_ORDER_FROM_CART = BASE + 11;
+
 }

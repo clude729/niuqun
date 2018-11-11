@@ -39,6 +39,7 @@ import com.daoyu.chat.server.response.AgreeFriendsResponse;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.CartGoodsResponse;
+import com.daoyu.chat.server.response.CartToOrderResponse;
 import com.daoyu.chat.server.response.ChangePasswordResponse;
 import com.daoyu.chat.server.response.CheckPhoneResponse;
 import com.daoyu.chat.server.response.CreateGroupResponse;
@@ -644,7 +645,7 @@ public class SealAction extends BaseAction
      */
     public CartGoodsResponse getCartGoods() throws HttpException
     {
-        String url = HttpConstant.GOODS_ADD_SHOPPING_CART;
+        String url = HttpConstant.BARNDS_GET_CART_LIST;
         RequestParams params = new RequestParams();
         params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
         String result = httpManager.post(url, params);
@@ -653,6 +654,56 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, CartGoodsResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 购物数据结算
+     *
+     * @param value 购物数据
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse overCartGoods(String value) throws HttpException
+    {
+        String url = HttpConstant.BARNDS_CHOOSE_GOODS_OVER_FROM_CART;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("value", value);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "overCartGoods, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 生成订单
+     *
+     * @param address 收货地址
+     * @param remark 备注
+     * @param dType 运输方式
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public CartToOrderResponse sendOrderFromCart(String address, String remark, String dType) throws HttpException
+    {
+        String url = HttpConstant.BARNDS_SEND_ORDER_BY_GOODS;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("add_id", address);
+        params.add("remark", remark);
+        params.add("dtype", dType);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "sendOrderFromCart, result: " + result);
+        CartToOrderResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, CartToOrderResponse.class);
         }
         return response;
     }
