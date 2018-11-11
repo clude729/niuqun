@@ -30,7 +30,7 @@ public class BaseSealResponse
 
     public String toString()
     {
-        return TAG + "{code = " + code + " ,message " + message + "}";
+        return TAG + "{code = " + code + " ,message = " + message + "}";
     }
 
 }

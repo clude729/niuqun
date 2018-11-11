@@ -53,4 +53,8 @@ public class HttpConstant
     public static final String BARNDS_SEND_ORDER_BY_GOODS = URL + "goods/tocomfirm";
 
     public static final String BARNDS_DEL_GOODS_FROM_CART = URL + "goods/";
+
+    public static final String GET_ADDRESS_LIST = URL + "user/addaddress";
+
+    public static final String CREAT_NEW_ADDRESS = URL + "user/myaddress";
 }

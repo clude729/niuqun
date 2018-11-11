@@ -196,7 +196,8 @@
         <activity android:name=".ui.center.AboutActivity" />
         <activity android:name=".ui.center.FeedbackActivity" />
         <activity android:name=".ui.brand.GoodsDetailActivity" />
-        <activity android:name=".ui.brand.ShoppingCartActivity"></activity>
+        <activity android:name=".ui.brand.ShoppingCartActivity" />
+        <activity android:name=".ui.brand.AddressListActivity"></activity>
     </application>
 
 </manifest>
