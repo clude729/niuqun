@@ -57,4 +57,8 @@ public class HttpConstant
     public static final String GET_ADDRESS_LIST = URL + "user/addaddress";
 
     public static final String CREAT_NEW_ADDRESS = URL + "user/myaddress";
+
+    public static final String SET_DEFAULT_ADDRESS = URL + "user/setdefault";
+
+    public static final String GET_ADDREDD_DETAIL = URL + "user/getaddress";
 }

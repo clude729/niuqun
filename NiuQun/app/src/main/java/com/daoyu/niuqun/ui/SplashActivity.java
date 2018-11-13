@@ -1,5 +1,7 @@
 package com.daoyu.niuqun.ui;
 
+import java.io.IOException;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -17,6 +19,7 @@ import com.daoyu.niuqun.request.RequestCenter;
 import com.daoyu.niuqun.response.LoginResponse;
 import com.daoyu.niuqun.ui.chat.PhoneMainActivity;
 import com.daoyu.niuqun.ui.user.LoginActivity;
+import com.daoyu.niuqun.util.DataBaseHelper;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.SharePreferenceManager;
 
@@ -34,7 +37,22 @@ public class SplashActivity extends MyBaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         setTranslucentStatus(true);
+        startDataBase();
         toLogin();
+    }
+
+    //初始化数据库
+    private void startDataBase()
+    {
+        DataBaseHelper myDbHelper = new DataBaseHelper(this);
+        try
+        {
+            myDbHelper.createDataBase();
+        }
+        catch (IOException ioe)
+        {
+            Logger.d(TAG, "getQ, IOException: " + ioe);
+        }
     }
 
     private void toLogin()

@@ -27,6 +27,7 @@ import com.daoyu.chat.server.widget.LoadDialog;
 import com.daoyu.chat.ui.activity.BaseActivity;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.constant.HttpConstant;
+import com.daoyu.niuqun.constant.IntentConstant;
 import com.daoyu.niuqun.constant.ResponseConstant;
 import com.daoyu.niuqun.util.ImageLoad;
 import com.daoyu.niuqun.util.Logger;
@@ -216,7 +217,7 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
 
                 break;
             case R.id.ll_address:
-
+                goToAddressList();
                 break;
             case R.id.ll_avatar:
                 showPhotoDialog();
@@ -240,6 +241,13 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
+    }
+
+    private void goToAddressList()
+    {
+        Intent intent = new Intent(this, AddressListActivity.class);
+        intent.putExtra(IntentConstant.ADDRESS_FROM, 0);
+        startActivity(intent);
     }
 
     /**

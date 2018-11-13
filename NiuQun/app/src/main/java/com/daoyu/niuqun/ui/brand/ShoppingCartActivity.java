@@ -32,7 +32,7 @@ import com.daoyu.niuqun.util.Logger;
 /**
  * 购物车
  */
-public class ShoppingCartActivity extends BaseActivity implements OnClickListener , OnRefreshListener
+public class ShoppingCartActivity extends BaseActivity implements OnClickListener, OnRefreshListener
 {
 
     private static final String TAG = "ShoppingCartActivity";

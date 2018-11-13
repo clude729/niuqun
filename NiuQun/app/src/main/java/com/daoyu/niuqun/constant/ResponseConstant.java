@@ -6,7 +6,7 @@ package com.daoyu.niuqun.constant;
 
 public class ResponseConstant {
 
-    private static final int BASE = 10000;
+    private static final int BASE = 30000;
 
     public static final int FEED_BACK = BASE + 1;
 
@@ -31,5 +31,17 @@ public class ResponseConstant {
     public static final int BUY_GOODS_FROM_CART = BASE + 11;
 
     public static final int SEND_ORDER_FROM_CART = BASE + 11;
+
+    public static final int GET_ADDRESS_LIST = BASE + 12;
+
+    public static final int SET_DEFAULT_ADDRESS = BASE + 13;
+
+    public static final int DEL_ADDRESS = BASE + 14;
+
+    public static final int EDIT_ADDRESS = BASE + 15;
+
+    public static final int CREAT_NEW_ADDRESS = BASE + 16;
+
+    public static final int GET_ADDRESS_DETAIL = BASE + 17;
 
 }

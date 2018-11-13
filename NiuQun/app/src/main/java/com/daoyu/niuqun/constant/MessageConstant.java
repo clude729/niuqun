@@ -19,4 +19,10 @@ public class MessageConstant {
     public static final int LOGIN_SUCCESS_ERROR = USER + 5;
 
     public static final int REGISTER_SUCCESS_ERROR = USER + 6;
+
+    public static final int ADDRESS_DEFAULT = USER + 7;
+
+    public static final int ADDRESS_DEL = USER + 8;
+
+    public static final int ADDRESS_ITEM_CLICK = USER + 9;
 }

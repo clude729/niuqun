@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color8"
+    android:orientation="vertical"
+    tools:context="com.daoyu.niuqun.ui.center.AddressDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/address_person"
+            android:textColor="@color/color2"
+            android:textSize="@dimen/h4" />
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/transparent"
+            android:gravity="center_vertical|start"
+            android:hint="@string/address_person_hint"
+            android:inputType="text"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:singleLine="true"
+            android:textColor="@color/color2"
+            android:textColorHint="@color/color6"
+            android:textSize="@dimen/h4" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/address_mobile"
+            android:textColor="@color/color2"
+            android:textSize="@dimen/h4" />
+
+        <EditText
+            android:id="@+id/et_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/transparent"
+            android:gravity="center_vertical|start"
+            android:hint="@string/address_mobile_hint"
+            android:inputType="phone"
+            android:maxLength="16"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
+            android:singleLine="true"
+            android:textColor="@color/color2"
+            android:textColorHint="@color/color6"
+            android:textSize="@dimen/h4" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/address_area"
+            android:textColor="@color/color2"
+            android:textSize="@dimen/h4" />
+
+        <TextView
+            android:id="@+id/tv_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/address_area_hint"
+            android:paddingEnd="4dp"
+            android:paddingStart="12dp"
+            android:singleLine="true"
+            android:textColor="@color/color2"
+            android:textColorHint="@color/color6"
+            android:textSize="@dimen/h4" />
+
+        <ImageView
+            android:id="@+id/iv_area"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/address_area"
+            android:padding="12dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/icon_address_drop" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/colorWhite"
+        android:paddingBottom="0dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:text="@string/address_detail_by_one"
+        android:textColor="@color/color2"
+        android:textSize="@dimen/h4" />
+
+    <EditText
+        android:id="@+id/et_detail"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@color/colorWhite"
+        android:gravity="start"
+        android:hint="@string/address_detail_by_one_hint"
+        android:paddingBottom="12dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:textColor="@color/color2"
+        android:textColorHint="@color/color6"
+        android:textSize="@dimen/h4" />
+</LinearLayout>

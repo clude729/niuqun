@@ -35,6 +35,7 @@ import com.daoyu.chat.server.request.SetGroupPortraitRequest;
 import com.daoyu.chat.server.request.VerifyCodeRequest;
 import com.daoyu.chat.server.response.AddGroupMemberResponse;
 import com.daoyu.chat.server.response.AddToBlackListResponse;
+import com.daoyu.chat.server.response.AddressDetailResponse;
 import com.daoyu.chat.server.response.AgreeFriendsResponse;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
@@ -60,6 +61,7 @@ import com.daoyu.chat.server.response.GetUserInfosResponse;
 import com.daoyu.chat.server.response.GoodsDetailResponse;
 import com.daoyu.chat.server.response.JoinGroupResponse;
 import com.daoyu.chat.server.response.LoginResponse;
+import com.daoyu.chat.server.response.MyAddressListResponse;
 import com.daoyu.chat.server.response.MyCenterResponse;
 import com.daoyu.chat.server.response.QiNiuTokenResponse;
 import com.daoyu.chat.server.response.QuitGroupResponse;
@@ -81,6 +83,7 @@ import com.daoyu.chat.server.response.VersionResponse;
 import com.daoyu.chat.server.response.WebContentResponse;
 import com.daoyu.chat.server.utils.NLog;
 import com.daoyu.chat.server.utils.json.JsonMananger;
+import com.daoyu.niuqun.bean.AddressBean;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.SharePreferenceManager;
@@ -704,6 +707,130 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, CartToOrderResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 获得我的收货地址
+     *
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public MyAddressListResponse getMyAddressList() throws HttpException
+    {
+        String url = HttpConstant.GET_ADDRESS_LIST;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getMyAddressList, result: " + result);
+        MyAddressListResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, MyAddressListResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 增加新地址
+     *
+     * @param bean 新地址
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse addNewAddress(AddressBean bean) throws HttpException
+    {
+        String url = HttpConstant.CREAT_NEW_ADDRESS;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("mobile", bean.getMobile());
+        params.add("real_name", bean.getReal_name());
+        params.add("address", bean.getAddress());
+        params.add("province", bean.getProvince());
+        params.add("city", bean.getCity());
+        params.add("district", bean.getDistrict());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "addNewAddress, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 编辑地址
+     *
+     * @param bean 编辑后的地址
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse editAddress(AddressBean bean) throws HttpException
+    {
+        String url = HttpConstant.CREAT_NEW_ADDRESS;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("add_id", bean.getAdd_id());
+        params.add("mobile", bean.getMobile());
+        params.add("real_name", bean.getReal_name());
+        params.add("address", bean.getAddress());
+        params.add("province", bean.getProvince());
+        params.add("city", bean.getCity());
+        params.add("district", bean.getDistrict());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "editAddress, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 设置默认地址
+     *
+     * @param addressId 地址Id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse setDefalutAddress(String addressId) throws HttpException
+    {
+        String url = HttpConstant.SET_DEFAULT_ADDRESS;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("add_id", addressId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "setDefalutAddress, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 获取地址详情
+     *
+     * @param addressId 地址Id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public AddressDetailResponse getAddressDetail(String addressId) throws HttpException
+    {
+        String url = HttpConstant.GET_ADDREDD_DETAIL;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("add_id", addressId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getAddressDetail, result: " + result);
+        AddressDetailResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, AddressDetailResponse.class);
         }
         return response;
     }
