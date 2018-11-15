@@ -9,6 +9,9 @@ public class HttpConstant
 
     public static final String SUCCESS = "000";
 
+    //结算余额不足
+    public static final String MONEY_NOT_ENOUGH = "003";
+
     //WebView解析编码
     public static final String WEB_TYPE="text/html; charset=utf-8";
 
@@ -52,11 +55,19 @@ public class HttpConstant
 
     public static final String BARNDS_SEND_ORDER_BY_GOODS = URL + "goods/tocomfirm";
 
+    public static final String BARNDS_TO_PAY_BY_ORDER = URL + "goods/topay";
+
     public static final String BARNDS_DEL_GOODS_FROM_CART = URL + "goods/";
 
-    public static final String GET_ADDRESS_LIST = URL + "user/addaddress";
+    public static final String ORDER_TO_RECHARGE = URL + "user/torecharge";
 
-    public static final String CREAT_NEW_ADDRESS = URL + "user/myaddress";
+    public static final String RECHARGE_BY_ALIPAY = URL + "pay/alipay";
+
+    public static final String RECHARGE_RESULT_BY_PAY = URL + "pay/payresult";
+
+    public static final String GET_ADDRESS_LIST = URL + "user/myaddress";
+
+    public static final String CREAT_NEW_ADDRESS = URL + "user/addaddress";
 
     public static final String SET_DEFAULT_ADDRESS = URL + "user/setdefault";
 

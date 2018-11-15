@@ -30,8 +30,6 @@ public class ResponseConstant {
 
     public static final int BUY_GOODS_FROM_CART = BASE + 11;
 
-    public static final int SEND_ORDER_FROM_CART = BASE + 11;
-
     public static final int GET_ADDRESS_LIST = BASE + 12;
 
     public static final int SET_DEFAULT_ADDRESS = BASE + 13;
@@ -43,5 +41,15 @@ public class ResponseConstant {
     public static final int CREAT_NEW_ADDRESS = BASE + 16;
 
     public static final int GET_ADDRESS_DETAIL = BASE + 17;
+
+    public static final int SEND_ORDER_FROM_CART = BASE + 18;
+
+    public static final int ORDER_TO_PAY = BASE + 19;
+
+    public static final int RECHARGE_TO_PAY = BASE + 20;
+
+    public static final int GET_ALIPAY = BASE + 21;
+
+    public static final int GET_PAY_RESULT = BASE + 22;
 
 }

@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -38,7 +39,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnDataLis
 
     private ViewFlipper mContentView;
 
-    protected LinearLayout mHeadLayout;
+    protected RelativeLayout mHeadLayout;
 
     protected Button mBtnLeft;
 
@@ -61,7 +62,7 @@ public abstract class BaseActivity extends FragmentActivity implements OnDataLis
 
         // 初始化公共头部
         mContentView = (ViewFlipper) super.findViewById(R.id.layout_container);
-        mHeadLayout = (LinearLayout) super.findViewById(R.id.layout_head);
+        mHeadLayout = (RelativeLayout) super.findViewById(R.id.layout_head);
         mHeadRightText = (TextView) findViewById(R.id.text_right);
         mBtnLeft = (Button) super.findViewById(R.id.btn_left);
         mBtnRight = (Button) super.findViewById(R.id.btn_right);
@@ -217,6 +218,16 @@ public abstract class BaseActivity extends FragmentActivity implements OnDataLis
 
     }
 
+    /**
+     * 点击右边textview
+     * 
+     * @param view view
+     */
+    public void onHeadRightTextViewClick(View view)
+    {
+
+    }
+
     public Button getHeadLeftButton()
     {
         return mBtnLeft;
@@ -230,6 +241,11 @@ public abstract class BaseActivity extends FragmentActivity implements OnDataLis
     public Button getHeadRightButton()
     {
         return mBtnRight;
+    }
+
+    public TextView getHeadRightTextView()
+    {
+        return mHeadRightText;
     }
 
     public void setHeadRightButton(Button rightButton)

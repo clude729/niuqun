@@ -1189,6 +1189,11 @@ public class SealUserInfoManager implements OnDataListener {
 
     public void getBrandsList(final int cateId, final int page, final ResultCallback<BrandsData> callback)
     {
+        if (null == mWorkHandler)
+        {
+            Logger.d(TAG, "mWorkHandler is null!");
+            mWorkHandler = new Handler(mWorkThread.getLooper());
+        }
         mWorkHandler.post(new Runnable()
         {
             @Override

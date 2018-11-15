@@ -165,40 +165,78 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name="com.daoyu.chat.ui.activity.TotalGroupMemberActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
         <activity
             android:name="com.daoyu.chat.ui.activity.GroupDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
         <activity
             android:name="com.daoyu.chat.ui.activity.PrivateChatDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
         <activity
             android:name="com.daoyu.chat.ui.activity.DiscussionDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
         <activity
             android:name="com.daoyu.chat.ui.activity.MembersOnlineStatusActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
         <activity
             android:name="com.daoyu.chat.ui.activity.ReadReceiptDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
         <activity
             android:name="com.daoyu.chat.ui.activity.GroupListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
         <activity
             android:name="com.daoyu.chat.ui.activity.PublicServiceActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
         <activity
             android:name="com.daoyu.chat.ui.activity.PublicServiceSearchActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.center.SettingActivity" />
-        <activity android:name=".ui.center.PersonInfoActivity" />
-        <activity android:name=".ui.center.AboutActivity" />
-        <activity android:name=".ui.center.FeedbackActivity" />
-        <activity android:name=".ui.brand.GoodsDetailActivity" />
-        <activity android:name=".ui.brand.ShoppingCartActivity" />
-        <activity android:name=".ui.center.AddressListActivity" />
-        <activity android:name=".ui.center.AddressDetailActivity"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.SettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.PersonInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.AboutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.FeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.brand.GoodsDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.brand.ShoppingCartActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.AddressListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.AddressDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.brand.SettlementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity android:name=".ui.center.RechargeActivity"></activity>
     </application>
 
 </manifest>

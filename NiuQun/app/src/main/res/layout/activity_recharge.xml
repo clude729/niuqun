@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color8"
+    android:orientation="vertical"
+    tools:context="com.daoyu.niuqun.ui.center.RechargeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@drawable/bg_dialog_white"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amount_recharge"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h4" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:paddingEnd="0dp"
+                android:paddingStart="8dp"
+                android:text="@string/unit_rmb"
+                android:textColor="@color/color4"
+                android:textSize="@dimen/h18"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_amount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:gravity="bottom"
+                android:hint="@string/change_recharge"
+                android:inputType="number"
+                android:paddingEnd="8dp"
+                android:paddingStart="8dp"
+                android:singleLine="true"
+                android:textColor="@color/color4"
+                android:textColorHint="@color/transparent"
+                android:textSize="@dimen/h14" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color8" />
+
+        <LinearLayout
+            android:id="@+id/ll_alipay"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginEnd="-8dp"
+            android:layout_marginStart="-8dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/recharge_by_alipay"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_pay_ali" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:text="@string/recharge_by_alipay"
+                android:textColor="@color/color4"
+                android:textSize="@dimen/h4" />
+
+            <ImageView
+                android:id="@+id/iv_alipay"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/recharge_by_alipay"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_cart_select" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_weixin"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginEnd="-8dp"
+            android:layout_marginStart="-8dp"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/recharge_by_weixin"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_pay_weixin" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:text="@string/recharge_by_weixin"
+                android:textColor="@color/color4"
+                android:textSize="@dimen/h4" />
+
+            <ImageView
+                android:id="@+id/iv_weixin"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/recharge_by_alipay"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/icon_cart_unselect" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_btn_red"
+            android:text="@string/confirm_recharge"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/h4" />
+
+    </LinearLayout>
+</LinearLayout>

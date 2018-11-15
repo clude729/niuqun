@@ -1,5 +1,6 @@
 package com.daoyu.niuqun.ui;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ public class MyBaseActivity extends FragmentActivity implements IBaseTitle
         }
     };
 
+    @SuppressLint("HandlerLeak")
     protected Handler handler = new Handler()
     {
         @Override

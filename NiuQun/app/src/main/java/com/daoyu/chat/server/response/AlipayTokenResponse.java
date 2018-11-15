@@ -1,18 +1,17 @@
 package com.daoyu.chat.server.response;
 
 /**
- * 结算后生成订单响应类
+ * 支付宝支付获取token响应基类
  */
-public class CartToOrderResponse
+public class AlipayTokenResponse
 {
 
-    private static final String TAG = "CartToOrderResponse";
+    private static final String TAG = "AlipayTokenResponse";
 
     private String code;
 
     private String message;
 
-    //订单
     private String data;
 
     public String getCode()
@@ -47,7 +46,7 @@ public class CartToOrderResponse
 
     public String toString()
     {
-        return TAG + "{code = " + code + " ,message " + message + "}";
+        return TAG + "{code = " + code + " ,message = " + message + "}";
     }
 
 }

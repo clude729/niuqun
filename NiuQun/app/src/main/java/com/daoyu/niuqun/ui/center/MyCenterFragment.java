@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -69,10 +70,16 @@ public class MyCenterFragment extends Fragment
         View mainView = inflater.inflate(R.layout.fragment_my_center, container, false);
         initView(mainView);
         initData();
-        updateUI();
         ScrollView scrollView = mainView.findViewById(R.id.parentView);
         scrollView.setFocusable(true);
         return mainView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        updateUI();
     }
 
     private void initView(View view)

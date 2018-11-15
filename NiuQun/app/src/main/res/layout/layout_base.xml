@@ -8,16 +8,15 @@
 
     <View
         android:id="@+id/barview"
-        android:background="@color/color4"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="0dp"
+        android:background="@color/color4" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/layout_head"
         android:layout_width="match_parent"
-        android:layout_height="48dip"
-        android:background="@color/color4"
-        android:orientation="horizontal">
+        android:layout_height="48dp"
+        android:background="@color/color4">
 
         <Button
             android:id="@+id/btn_left"
@@ -26,51 +25,52 @@
             android:background="@drawable/selector_btn_back"
             android:drawableStart="@mipmap/icon_back"
             android:gravity="center"
-            android:padding="12dp"
             android:onClick="onHeadLeftButtonClick"
+            android:padding="12dp"
             android:textColor="@drawable/selector_btn_top" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="24dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="12dp"
-            android:background="@color/color4" />
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:layout_marginStart="12dp"
-            android:layout_weight="1"
             android:gravity="center"
             android:maxLength="20"
             android:maxLines="1"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/h8" />
+            android:textSize="@dimen/h6" />
 
         <Button
             android:id="@+id/btn_right"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginEnd="15dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
             android:background="@null"
             android:maxLines="1"
             android:onClick="onHeadRightButtonClick"
-            android:textColor="@drawable/selector_btn_top" />
+            android:textColor="@drawable/selector_btn_top"
+            android:textSize="@dimen/h4" />
 
         <TextView
             android:id="@+id/text_right"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:clickable="true"
             android:focusable="true"
+            android:gravity="center"
             android:maxLines="1"
+            android:onClick="onHeadRightTextViewClick"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp"
+            android:textSize="@dimen/h4"
             android:visibility="gone" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <ViewFlipper
         android:id="@+id/layout_container"

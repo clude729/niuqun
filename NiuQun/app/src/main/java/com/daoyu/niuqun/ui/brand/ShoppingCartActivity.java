@@ -4,8 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -25,14 +27,19 @@ import com.daoyu.chat.ui.activity.BaseActivity;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.CartGoodsInfo;
 import com.daoyu.niuqun.constant.HttpConstant;
+import com.daoyu.niuqun.constant.IntentConstant;
 import com.daoyu.niuqun.constant.ResponseConstant;
+import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.ui.adapter.CartAdapter;
+import com.daoyu.niuqun.util.EventManager;
 import com.daoyu.niuqun.util.Logger;
+
+import io.rong.eventbus.EventBus;
 
 /**
  * 购物车
  */
-public class ShoppingCartActivity extends BaseActivity implements OnClickListener, OnRefreshListener
+public class ShoppingCartActivity extends BaseActivity implements OnClickListener , OnRefreshListener
 {
 
     private static final String TAG = "ShoppingCartActivity";
@@ -55,6 +62,8 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
 
     private String orderValue;
 
+    private List<CartGoodsInfo> settlementGoods;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -68,8 +77,8 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
     private void initView()
     {
         setTitle(R.string.my_shopping_cart);
-        getHeadRightButton().setText(R.string.to_edit_cart);
-        setHeadRightButtonVisibility(View.VISIBLE);
+        mHeadRightText.setText(R.string.to_edit_cart);
+        mHeadRightText.setVisibility(View.VISIBLE);
         goodsList = findViewById(R.id.goodsList);
         swipeRefreshLayout = findViewById(R.id.srl);
         ivAll = findViewById(R.id.ibtn_check);
@@ -90,6 +99,7 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
 
     private void initData()
     {
+        EventBus.getDefault().register(this);
         cartAdapter = new CartAdapter(this, ivAll, tvTotal);
         goodsList.setAdapter(cartAdapter);
         LoadDialog.show(mContext);
@@ -103,16 +113,21 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
         int size = cartGoodsInfos.size();
         if (size > 0)
         {
+            settlementGoods = new ArrayList<>();
             for (CartGoodsInfo cartGoodsInfo : cartGoodsInfos)
             {
                 if (cartGoodsInfo.isHasCheck())
                 {
+                    settlementGoods.add(cartGoodsInfo);
                     JSONObject js = new JSONObject();
-                    try {
+                    try
+                    {
                         js.put("cart_Id", cartGoodsInfo.getCart_id());
                         js.put("quantity", cartGoodsInfo.getQuantity());
                         array.put(js);
-                    } catch (JSONException e) {
+                    }
+                    catch (JSONException e)
+                    {
                         Logger.e(TAG, "toOverCart, JSONException: " + e.getMessage());
                     }
                 }
@@ -144,8 +159,21 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
             if (!TextUtils.isEmpty(str))
             {
                 // TODO 调用删除接口
+                Logger.d(TAG, "toDelGoods, goodsIds: " + str);
             }
         }
+    }
+
+    /**
+     * 去结算
+     */
+    private void goToSettlement()
+    {
+        App app = (App) getApplication();
+        app.setCartGoodsInfos(settlementGoods);
+        Intent intent = new Intent(this, SettlementActivity.class);
+        intent.putExtra(IntentConstant.CART_TO_SETTLEMENT_TOTAL, tvTotal.getText().toString().trim());
+        startActivity(intent);
     }
 
     @Override
@@ -182,12 +210,14 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
                     {
                         Logger.d(TAG, "get cart List success!");
                         cartAdapter.addAll(response.getData());
+                        cartAdapter.selectAll(false);
                     }
                     else
                     {
                         NToast.shortToast(mContext, response.getMessage());
                     }
                 }
+                LoadDialog.dismiss(mContext);
                 break;
             case ResponseConstant.DEL_GOODS_FROM_CART:
                 loadFinish = true;
@@ -199,7 +229,7 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
                         Logger.d(TAG, "del goods from cart success!");
                         if (cartAdapter.toDelete())
                         {
-                            getHeadRightButton().setText(R.string.to_edit_cart);
+                            mHeadRightText.setText(R.string.to_edit_cart);
                             tvTotal.setVisibility(View.VISIBLE);
                             tvDel.setVisibility(View.GONE);
                             tvConfirm.setVisibility(View.VISIBLE);
@@ -210,6 +240,7 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
                         NToast.shortToast(mContext, response.getMessage());
                     }
                 }
+                LoadDialog.dismiss(mContext);
                 break;
             case ResponseConstant.BUY_GOODS_FROM_CART:
                 loadFinish = true;
@@ -219,12 +250,14 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
                     if (HttpConstant.SUCCESS.equals(response.getCode()))
                     {
                         Logger.d(TAG, "over goods from cart success!");
+                        goToSettlement();
                     }
                     else
                     {
                         NToast.shortToast(mContext, response.getMessage());
                     }
                 }
+                LoadDialog.dismiss(mContext);
                 break;
             default:
                 break;
@@ -238,14 +271,17 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
         {
             case ResponseConstant.GET_CART_LIST:
                 loadFinish = true;
+                LoadDialog.dismiss(mContext);
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;
             case ResponseConstant.DEL_GOODS_FROM_CART:
                 loadFinish = true;
+                LoadDialog.dismiss(mContext);
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;
             case ResponseConstant.BUY_GOODS_FROM_CART:
                 loadFinish = true;
+                LoadDialog.dismiss(mContext);
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;
             default:
@@ -254,14 +290,14 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
     }
 
     @Override
-    public void onHeadRightButtonClick(View v)
+    public void onHeadRightTextViewClick(View v)
     {
         String str = getResources().getString(R.string.to_edit_cart);
-        String btnStr = getHeadRightButton().getText().toString();
+        String btnStr = mHeadRightText.getText().toString();
         if (str.equals(btnStr))
         {
             //编辑
-            getHeadRightButton().setText(R.string.edit_cart_over);
+            mHeadRightText.setText(R.string.edit_cart_over);
             tvTotal.setVisibility(View.INVISIBLE);
             tvConfirm.setVisibility(View.GONE);
             tvDel.setVisibility(View.VISIBLE);
@@ -272,7 +308,7 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
             if (str.equals(btnStr))
             {
                 //编辑完成
-                getHeadRightButton().setText(R.string.to_edit_cart);
+                mHeadRightText.setText(R.string.to_edit_cart);
                 tvTotal.setVisibility(View.VISIBLE);
                 tvDel.setVisibility(View.GONE);
                 tvConfirm.setVisibility(View.VISIBLE);
@@ -342,4 +378,18 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
                 break;
         }
     }
+
+    @Override
+    protected void onDestroy()
+    {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    public void onEventMainThread(EventManager.CartListFinish cartListFinish)
+    {
+        Logger.d(TAG, "onEventMainThread, cartListFinish!");
+        finish();
+    }
+
 }

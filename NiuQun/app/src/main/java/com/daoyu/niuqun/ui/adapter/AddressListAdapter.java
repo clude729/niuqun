@@ -164,7 +164,8 @@ public class AddressListAdapter extends BaseAdapter
             }
             viewHolder.tvContact.setText(name);
 
-            viewHolder.tvAddress.setText(baseItem.getAddress());
+            String address = baseItem.getProvince() + baseItem.getCity() + baseItem.getCity() + baseItem.getAddress();
+            viewHolder.tvAddress.setText(address);
 
             if ("1".equals(baseItem.getStatus()))
             {

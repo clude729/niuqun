@@ -10,4 +10,7 @@
     <dimen name="h7">17sp</dimen>
     <dimen name="h8">18sp</dimen>
     <dimen name="h9">19sp</dimen>
+    <dimen name="h12">22sp</dimen>
+    <dimen name="h14">24sp</dimen>
+    <dimen name="h18">28sp</dimen>
 </resources>

@@ -1,5 +1,7 @@
 package com.daoyu.niuqun.ui;
 
+import java.util.List;
+
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
@@ -9,6 +11,7 @@ import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.niuqun.BuildConfig;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.AddressBean;
+import com.daoyu.niuqun.bean.CartGoodsInfo;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
 import com.daoyu.niuqun.util.FileHelper;
 import com.daoyu.niuqun.util.Logger;
@@ -26,6 +29,8 @@ public class App extends Application
     private Context context;
 
     private AddressBean addressBean;
+
+    private List<CartGoodsInfo> cartGoodsInfos;
 
     @Override
     public void onCreate()
@@ -87,5 +92,15 @@ public class App extends Application
     public void setAddressBean(AddressBean addressBean)
     {
         this.addressBean = addressBean;
+    }
+
+    public List<CartGoodsInfo> getCartGoodsInfos()
+    {
+        return cartGoodsInfos;
+    }
+
+    public void setCartGoodsInfos(List<CartGoodsInfo> cartGoodsInfos)
+    {
+        this.cartGoodsInfos = cartGoodsInfos;
     }
 }

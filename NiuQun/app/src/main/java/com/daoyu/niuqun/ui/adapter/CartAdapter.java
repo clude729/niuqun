@@ -34,7 +34,7 @@ public class CartAdapter extends BaseAdapter
 {
     private static final String TAG = "CartAdapter";
 
-    private Context context;
+    private Context mContext;
 
     private List<CartGoodsInfo> listItems = new ArrayList<>();
 
@@ -65,15 +65,15 @@ public class CartAdapter extends BaseAdapter
         ImageButton ibtn_check;
     }
 
-    public CartAdapter(Context con, ImageButton btn, TextView tv)
+    public CartAdapter(Context context, ImageButton btn, TextView tv)
     {
-        this.context = con;
-        sInflater = LayoutInflater.from(context);
+        this.mContext = context;
+        sInflater = LayoutInflater.from(mContext);
         this.btn = btn;
         this.tv_total = tv;
-        width = (ViewUtil.getIntance().getDisplayWidth(context) - ViewUtil.getIntance().dip2px(context, 40)) * 2 / 7;
+        width = (ViewUtil.getIntance().getDisplayWidth(mContext) - ViewUtil.getIntance().dip2px(mContext, 40)) * 2 / 7;
         options = new RequestOptions().error(R.drawable.default_useravatar).placeholder(R.drawable.default_useravatar);
-        unit = context.getResources().getString(R.string.my_symbol_app);
+        unit = mContext.getResources().getString(R.string.my_symbol_app);
     }
 
     /**
@@ -83,11 +83,8 @@ public class CartAdapter extends BaseAdapter
      */
     public void addAll(List<CartGoodsInfo> cartGoodsInfos)
     {
-        if (null == cartGoodsInfos || cartGoodsInfos.size() == 0)
-        {
-            listItems.clear();
-        }
-        else
+        listItems.clear();
+        if (null != cartGoodsInfos && cartGoodsInfos.size() > 0)
         {
             listItems.addAll(cartGoodsInfos);
         }
@@ -135,7 +132,8 @@ public class CartAdapter extends BaseAdapter
                     Double total = t.add(p.multiply(n)).doubleValue();
                     att = Double.toString(total);
                 }
-                tv_total.setText(att);
+                String totalString = att + unit;
+                tv_total.setText(totalString);
             }
             else
             {
@@ -160,7 +158,8 @@ public class CartAdapter extends BaseAdapter
             }
             if (tv_total != null)
             {
-                tv_total.setText("0.00");
+                String totalString = "0.00" + unit;
+                tv_total.setText(totalString);
             }
         }
         this.notifyDataSetChanged();
@@ -217,7 +216,8 @@ public class CartAdapter extends BaseAdapter
                 listItems.remove(i);
             }
         }
-        tv_total.setText("0.00");
+        String totalString = "0.00" + unit;
+        tv_total.setText(totalString);
         int size = listItems.size();
         if (size > 0)
         {
@@ -307,7 +307,7 @@ public class CartAdapter extends BaseAdapter
         String url = goodsInfo.getThumb_image();
         if (!TextUtils.isEmpty(url) && !"null".equals(url))
         {
-            ImageLoad.getInstance().load(context, listItemView.image, url, options);
+            ImageLoad.getInstance().load(mContext, listItemView.image, url, options);
         }
         else
         {
@@ -341,7 +341,7 @@ public class CartAdapter extends BaseAdapter
                 int be = Integer.parseInt(before);
                 if (be < 2)
                 {
-                    NToast.shortToast(context, context.getResources().getString(R.string.no_less));
+                    NToast.shortToast(mContext, mContext.getResources().getString(R.string.no_less));
                 }
                 else
                 {
@@ -367,7 +367,8 @@ public class CartAdapter extends BaseAdapter
                         BigDecimal t = new BigDecimal(att);
                         BigDecimal p = new BigDecimal(pr);
                         double total = t.subtract(p).doubleValue();
-                        tv_total.setText(Double.toString(total));
+                        String totalString = Double.toString(total) + unit;
+                        tv_total.setText(totalString);
                     }
                 }
             }
@@ -388,7 +389,7 @@ public class CartAdapter extends BaseAdapter
                 int be = Integer.parseInt(before);
                 if (be > 98)
                 {
-                    NToast.shortToast(context, context.getResources().getString(R.string.cart_is_full));
+                    NToast.shortToast(mContext, mContext.getResources().getString(R.string.cart_is_full));
                 }
                 else
                 {
@@ -414,7 +415,8 @@ public class CartAdapter extends BaseAdapter
                         BigDecimal t = new BigDecimal(att);
                         BigDecimal p = new BigDecimal(pr);
                         double total = t.add(p).doubleValue();
-                        tv_total.setText(Double.toString(total));
+                        String totalString = Double.toString(total) + unit;
+                        tv_total.setText(totalString);
                     }
                 }
             }
@@ -459,7 +461,8 @@ public class CartAdapter extends BaseAdapter
                         BigDecimal p = new BigDecimal(pr);
                         BigDecimal n = new BigDecimal(num);
                         double total = t.subtract(p.multiply(n)).doubleValue();
-                        tv_total.setText(Double.toString(total));
+                        String totalString = Double.toString(total) + unit;
+                        tv_total.setText(totalString);
                     }
                 }
                 else
@@ -489,7 +492,8 @@ public class CartAdapter extends BaseAdapter
                         BigDecimal p = new BigDecimal(pr);
                         BigDecimal n = new BigDecimal(num);
                         double total = t.add(p.multiply(n)).doubleValue();
-                        tv_total.setText(Double.toString(total));
+                        String totalString = Double.toString(total) + unit;
+                        tv_total.setText(totalString);
                     }
                 }
                 boolean all = getAll();

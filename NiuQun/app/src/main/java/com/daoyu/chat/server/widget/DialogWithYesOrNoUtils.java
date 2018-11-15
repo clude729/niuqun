@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.daoyu.niuqun.R;
 import com.daoyu.chat.server.utils.NToast;
@@ -56,6 +58,48 @@ public class DialogWithYesOrNoUtils
             }
         });
         alterDialog.show();
+    }
+
+    public void showOnlyDialog(Context context, String titleInfo, String cancel, String ok, final DialogWithYesOrNoUtils.DialogCallBack callBack)
+    {
+        AlertDialog.Builder alterDialog = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.dialog_small_layout, null);
+        alterDialog.setView(layout);
+        TextView tvTitle = layout.findViewById(R.id.text_title);
+        TextView tvCancel = layout.findViewById(R.id.tv_cancel);
+        TextView tvOk = layout.findViewById(R.id.tv_ok);
+        if (!TextUtils.isEmpty(titleInfo))
+        {
+            tvTitle.setText(titleInfo);
+        }
+        if (!TextUtils.isEmpty(cancel))
+        {
+            tvCancel.setText(cancel);
+        }
+        if (!TextUtils.isEmpty(ok))
+        {
+            tvOk.setText(ok);
+        }
+        final AlertDialog dialog = alterDialog.create();
+        tvCancel.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        tvOk.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+                callBack.executeEvent();
+            }
+        });
+        dialog.show();
     }
 
     public interface DialogCallBack

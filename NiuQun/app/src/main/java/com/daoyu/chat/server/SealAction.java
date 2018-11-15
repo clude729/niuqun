@@ -37,6 +37,7 @@ import com.daoyu.chat.server.response.AddGroupMemberResponse;
 import com.daoyu.chat.server.response.AddToBlackListResponse;
 import com.daoyu.chat.server.response.AddressDetailResponse;
 import com.daoyu.chat.server.response.AgreeFriendsResponse;
+import com.daoyu.chat.server.response.AlipayTokenResponse;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.CartGoodsResponse;
@@ -65,6 +66,7 @@ import com.daoyu.chat.server.response.MyAddressListResponse;
 import com.daoyu.chat.server.response.MyCenterResponse;
 import com.daoyu.chat.server.response.QiNiuTokenResponse;
 import com.daoyu.chat.server.response.QuitGroupResponse;
+import com.daoyu.chat.server.response.RechargeResponse;
 import com.daoyu.chat.server.response.RegisterResponse;
 import com.daoyu.chat.server.response.RemoveFromBlackListResponse;
 import com.daoyu.chat.server.response.RestPasswordResponse;
@@ -712,6 +714,29 @@ public class SealAction extends BaseAction
     }
 
     /**
+     * 支付订单
+     *
+     * @param orderId 订单Id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse toPayOrder(String orderId) throws HttpException
+    {
+        String url = HttpConstant.BARNDS_TO_PAY_BY_ORDER;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("order_id", orderId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "toPayOrder, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
      * 获得我的收货地址
      *
      * @return 响应
@@ -831,6 +856,75 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, AddressDetailResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 查询支付结果
+     *
+     * @param logId 充值订单id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse getPayResult(String logId) throws HttpException
+    {
+        String url = HttpConstant.RECHARGE_RESULT_BY_PAY;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("log_id", logId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getPayResult, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 充值生产订单
+     *
+     * @param money 充值金额
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public RechargeResponse rechargeToPay(String money) throws HttpException
+    {
+        String url = HttpConstant.ORDER_TO_RECHARGE;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("money", money);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "rechargeToPay, result: " + result);
+        RechargeResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, RechargeResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 通过充值订单号获取支付宝充值token
+     *
+     * @param logId 充值订单id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public AlipayTokenResponse getAliPay(String logId) throws HttpException
+    {
+        String url = HttpConstant.RECHARGE_BY_ALIPAY;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("log_id", logId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getAliPay, result: " + result);
+        AlipayTokenResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, AlipayTokenResponse.class);
         }
         return response;
     }

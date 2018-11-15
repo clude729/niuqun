@@ -70,7 +70,7 @@ public class SettingActivity extends MyBaseActivity implements OnClickListener
                 goToAbout();
                 break;
             case R.id.btn_logout:
-                DialogWithYesOrNoUtils.getInstance().showDialog(this, "是否退出登录?",
+                DialogWithYesOrNoUtils.getInstance().showOnlyDialog(this, "是否退出登录?","取消", "确定",
                     new DialogWithYesOrNoUtils.DialogCallBack()
                     {
                         @Override

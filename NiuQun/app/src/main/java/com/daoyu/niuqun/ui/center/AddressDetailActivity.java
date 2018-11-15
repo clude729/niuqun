@@ -95,7 +95,7 @@ public class AddressDetailActivity extends BaseActivity implements OnClickListen
                 etMobile.setEnabled(false);
                 ivArea.setVisibility(View.INVISIBLE);
                 etDetail.setEnabled(false);
-                setHeadRightButtonVisibility(View.GONE);
+                mHeadRightText.setVisibility(View.GONE);
                 App app0 = (App) getApplication();
                 addressBean = app0.getAddressBean();
                 break;
@@ -106,8 +106,8 @@ public class AddressDetailActivity extends BaseActivity implements OnClickListen
                 etMobile.setEnabled(true);
                 ivArea.setVisibility(View.VISIBLE);
                 etDetail.setEnabled(true);
-                getHeadRightButton().setText(R.string.to_save);
-                setHeadRightButtonVisibility(View.VISIBLE);
+                mHeadRightText.setText(R.string.to_save);
+                mHeadRightText.setVisibility(View.VISIBLE);
                 App app1 = (App) getApplication();
                 addressBean = app1.getAddressBean();
                 break;
@@ -118,8 +118,8 @@ public class AddressDetailActivity extends BaseActivity implements OnClickListen
                 etMobile.setEnabled(true);
                 ivArea.setVisibility(View.VISIBLE);
                 etDetail.setEnabled(true);
-                getHeadRightButton().setText(R.string.to_save);
-                setHeadRightButtonVisibility(View.VISIBLE);
+                mHeadRightText.setText(R.string.to_save);
+                mHeadRightText.setVisibility(View.VISIBLE);
                 break;
             default:
                 break;
@@ -138,7 +138,7 @@ public class AddressDetailActivity extends BaseActivity implements OnClickListen
     {
         String name = etName.getText().toString().trim();
         String mobile = etMobile.getText().toString().trim();
-        String area = tvArea.getText().toString().trim();
+        String areaAll = tvArea.getText().toString().trim();
         String address = etDetail.getText().toString().trim();
         if (TextUtils.isEmpty(name))
         {
@@ -152,7 +152,7 @@ public class AddressDetailActivity extends BaseActivity implements OnClickListen
         {
             NToast.shortToast(mContext, getResources().getString(R.string.address_mobile_error_hint));
         }
-        else if (TextUtils.isEmpty(area))
+        else if (TextUtils.isEmpty(areaAll))
         {
             NToast.shortToast(mContext, getResources().getString(R.string.address_area_empty_hint));
         }
@@ -178,7 +178,7 @@ public class AddressDetailActivity extends BaseActivity implements OnClickListen
     {
         String name = etName.getText().toString().trim();
         String mobile = etMobile.getText().toString().trim();
-        String area = tvArea.getText().toString().trim();
+        String areaAll = tvArea.getText().toString().trim();
         String address = etDetail.getText().toString().trim();
         if (TextUtils.isEmpty(name))
         {
@@ -192,7 +192,7 @@ public class AddressDetailActivity extends BaseActivity implements OnClickListen
         {
             NToast.shortToast(mContext, getResources().getString(R.string.address_mobile_error_hint));
         }
-        else if (TextUtils.isEmpty(area))
+        else if (TextUtils.isEmpty(areaAll))
         {
             NToast.shortToast(mContext, getResources().getString(R.string.address_area_empty_hint));
         }
@@ -223,7 +223,7 @@ public class AddressDetailActivity extends BaseActivity implements OnClickListen
     }
 
     @Override
-    public void onHeadRightButtonClick(View v)
+    public void onHeadRightTextViewClick(View v)
     {
         switch (addType)
         {

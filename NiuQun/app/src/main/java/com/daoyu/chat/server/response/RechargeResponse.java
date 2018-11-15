@@ -1,18 +1,17 @@
 package com.daoyu.chat.server.response;
 
 /**
- * 结算后生成订单响应类
+ * 充值响应基类
  */
-public class CartToOrderResponse
+public class RechargeResponse
 {
 
-    private static final String TAG = "CartToOrderResponse";
+    private static final String TAG = "RechargeResponse";
 
     private String code;
 
     private String message;
 
-    //订单
     private String data;
 
     public String getCode()
@@ -47,7 +46,7 @@ public class CartToOrderResponse
 
     public String toString()
     {
-        return TAG + "{code = " + code + " ,message " + message + "}";
+        return TAG + "{code = " + code + " ,message = " + message + "}";
     }
 
 }

@@ -17,4 +17,7 @@ public class IntentConstant
     //来源：0 个人中心， 1 下单结算
     public static final String ADDRESS_FROM = "addressFrom";
 
+    //购物车去结算时总价格
+    public static final String CART_TO_SETTLEMENT_TOTAL = "settlement_total";
+
 }

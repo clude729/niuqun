@@ -89,6 +89,12 @@
     <string name="get_score_success">您成功获得</string>
     <string name="goods_add_cart_success">成功加入购物车</string>
     <string name="to_settlement">结算</string>
+    <string name="submit_settlement">提交结算</string>
+    <string name="delivery_method">配送方式</string>
+    <string name="express_free_post">快递免邮</string>
+    <string name="remark_by_buyer">买家留言</string>
+    <string name="remark_by_buyer_hint">对本次交易的留言</string>
+    <string name="please_select_address">请选择收货地址</string>
     <string name="no_less">不能再少啦</string>
     <string name="cart_is_full">太多了，购物车放不下了</string>
     <string name="to_del_from_cart">删除</string>
@@ -105,6 +111,8 @@
     <string name="address_detail">地址详情</string>
     <string name="to_save">保存</string>
     <string name="to_save_success">保存成功</string>
+    <string name="address_person_comfirm">收货人：</string>
+    <string name="address_person_address_comfirm">收货地址：</string>
     <string name="address_person">收货人&#160;&#160;&#160;&#160;</string>
     <string name="address_person_hint">收货人姓名</string>
     <string name="address_person_empty_hint">请输入收货人姓名</string>
@@ -118,6 +126,15 @@
     <string name="address_detail_by_one">详细地址</string>
     <string name="address_detail_by_one_hint">请填写详细地址</string>
     <string name="address_detail_by_one_empty_hint">请填写详细地址</string>
+    <string name="to_cancel">取消</string>
+    <string name="to_recharge">充值</string>
+    <string name="not_enough_money_to_order">您的牛币余额不足，请点击充值</string>
+    <string name="change_recharge">零钱充值</string>
+    <string name="unit_rmb">¥</string>
+    <string name="amount_recharge">充值金额</string>
+    <string name="confirm_recharge">确定充值</string>
+    <string name="recharge_by_alipay">支付宝充值</string>
+    <string name="recharge_by_weixin">微信充值</string>
 
     <string name="hello_blank_fragment">Hello brand fragment</string>
     <string name="hello_center_fragment">Hello my center fragment</string>

@@ -183,6 +183,7 @@ public class AddressListActivity extends BaseActivity implements OnClickListener
                         NToast.shortToast(mContext, response.getMessage());
                     }
                 }
+                LoadDialog.dismiss(mContext);
                 break;
             case ResponseConstant.SET_DEFAULT_ADDRESS:
                 loadFinish = true;
@@ -202,6 +203,7 @@ public class AddressListActivity extends BaseActivity implements OnClickListener
                         NToast.shortToast(mContext, response.getMessage());
                     }
                 }
+                LoadDialog.dismiss(mContext);
                 break;
             case ResponseConstant.DEL_ADDRESS:
                 loadFinish = true;
@@ -221,6 +223,7 @@ public class AddressListActivity extends BaseActivity implements OnClickListener
                         NToast.shortToast(mContext, response.getMessage());
                     }
                 }
+                LoadDialog.dismiss(mContext);
                 break;
             default:
                 break;
@@ -234,14 +237,17 @@ public class AddressListActivity extends BaseActivity implements OnClickListener
         {
             case ResponseConstant.GET_ADDRESS_LIST:
                 loadFinish = true;
+                LoadDialog.dismiss(mContext);
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;
             case ResponseConstant.SET_DEFAULT_ADDRESS:
                 loadFinish = true;
+                LoadDialog.dismiss(mContext);
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;
             case ResponseConstant.DEL_ADDRESS:
                 loadFinish = true;
+                LoadDialog.dismiss(mContext);
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;
             default:
