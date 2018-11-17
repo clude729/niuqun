@@ -35,6 +35,35 @@ public class DialogWithYesOrNoUtils
     {
     }
 
+    public void showOneButtonDialog(Context context, String titleInfo, String btnStr,
+        final DialogWithYesOrNoUtils.DialogCallBack callBack)
+    {
+        AlertDialog.Builder alterDialog = new AlertDialog.Builder(context);
+        alterDialog.setMessage(titleInfo);
+        alterDialog.setCancelable(true);
+        String str = context.getString(R.string.ac_select_friend_sure);
+        if (!TextUtils.isEmpty(btnStr))
+        {
+            str = btnStr;
+        }
+        alterDialog.setPositiveButton(str, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                if (null != callBack)
+                {
+                    callBack.executeEvent();
+                }
+                else
+                {
+                    dialog.cancel();
+                }
+            }
+        });
+        alterDialog.show();
+    }
+
     public void showDialog(Context context, String titleInfo, final DialogWithYesOrNoUtils.DialogCallBack callBack)
     {
         AlertDialog.Builder alterDialog = new AlertDialog.Builder(context);

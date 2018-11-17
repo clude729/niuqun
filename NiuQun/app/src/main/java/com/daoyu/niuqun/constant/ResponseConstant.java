@@ -52,4 +52,6 @@ public class ResponseConstant {
 
     public static final int GET_PAY_RESULT = BASE + 22;
 
+    public static final int GOODS_BUY_SINGLE = BASE + 23;
+
 }

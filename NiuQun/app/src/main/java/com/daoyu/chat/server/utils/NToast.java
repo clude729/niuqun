@@ -1,8 +1,3 @@
-/*
-    ShengDao Android Client, NToast
-    Copyright (c) 2014 ShengDao Tech Company Limited
- */
-
 package com.daoyu.chat.server.utils;
 
 import android.app.Activity;
@@ -39,13 +34,13 @@ public class NToast
         }
     }
 
-    public static void showToast(Context context, int resId, int duration)
+    private static void showToast(Context context, int resId, int duration)
     {
         if (context == null)
         {
             return;
         }
-        if (context != null && context instanceof Activity)
+        if (context instanceof Activity)
         {
             if (((Activity) context).isFinishing())
             {
@@ -56,13 +51,13 @@ public class NToast
         showToast(context, text, duration);
     }
 
-    public static void showToast(Context context, String text, int duration)
+    private static void showToast(Context context, String text, int duration)
     {
         if (context == null)
         {
             return;
         }
-        if (context != null && context instanceof Activity)
+        if (context instanceof Activity)
         {
             if (((Activity) context).isFinishing())
             {

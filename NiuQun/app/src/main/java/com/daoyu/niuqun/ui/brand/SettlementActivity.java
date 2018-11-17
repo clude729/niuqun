@@ -1,5 +1,7 @@
 package com.daoyu.niuqun.ui.brand;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -29,8 +31,6 @@ import com.daoyu.niuqun.ui.center.RechargeActivity;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.view.MyListView;
 
-import java.util.List;
-
 /**
  * 结算
  */
@@ -57,6 +57,7 @@ public class SettlementActivity extends BaseActivity implements View.OnClickList
 
     private String remark;
 
+    //结算订单id（如果未支付，当又生成新的结算订单时，前一个结算订单失效）
     private String orderId;
 
     @Override
@@ -102,6 +103,11 @@ public class SettlementActivity extends BaseActivity implements View.OnClickList
         if (null != total)
         {
             tvTotal.setText(total);
+        }
+        bean = app.getAddressBean();
+        if (null != bean)
+        {
+            getAddressToView();
         }
     }
 
@@ -265,6 +271,28 @@ public class SettlementActivity extends BaseActivity implements View.OnClickList
         startActivity(intent);
     }
 
+    private void getAddressToView()
+    {
+        if (null != bean)
+        {
+            String address = getResources().getString(R.string.address_person_address_comfirm) + bean.getProvince()
+                    + bean.getCity() + bean.getDistrict() + bean.getAddress();
+            tvAddress.setText(address);
+            String name = bean.getReal_name();
+            String mobile = bean.getMobile();
+            if (!TextUtils.isEmpty(name))
+            {
+                name = name + "\t\t\t\t" + mobile;
+            }
+            else
+            {
+                name = mobile;
+            }
+            name = getResources().getString(R.string.address_person_comfirm) + name;
+            tvPerson.setText(name);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -274,24 +302,7 @@ public class SettlementActivity extends BaseActivity implements View.OnClickList
         {
             App app = (App) getApplication();
             bean = app.getAddressBean();
-            if (null != bean)
-            {
-                String address = getResources().getString(R.string.address_person_comfirm) + bean.getProvince()
-                    + bean.getCity() + bean.getDistrict() + bean.getAddress();
-                tvAddress.setText(address);
-                String name = bean.getReal_name();
-                String mobile = bean.getMobile();
-                if (!TextUtils.isEmpty(name))
-                {
-                    name = name + "\t\t\t\t" + mobile;
-                }
-                else
-                {
-                    name = mobile;
-                }
-                name = getResources().getString(R.string.address_person_address_comfirm) + name;
-                tvPerson.setText(name);
-            }
+            getAddressToView();
         }
     }
 }

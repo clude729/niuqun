@@ -4,13 +4,11 @@ import java.util.Map;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -24,9 +22,9 @@ import com.alipay.sdk.app.EnvUtils;
 import com.alipay.sdk.app.PayTask;
 import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.response.AlipayTokenResponse;
-import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.RechargeResponse;
 import com.daoyu.chat.server.utils.NToast;
+import com.daoyu.chat.server.widget.DialogWithYesOrNoUtils;
 import com.daoyu.chat.server.widget.LoadDialog;
 import com.daoyu.chat.ui.activity.BaseActivity;
 import com.daoyu.niuqun.R;
@@ -35,6 +33,9 @@ import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.ResponseConstant;
 import com.daoyu.niuqun.util.Logger;
 
+/**
+ * 充值
+ */
 public class RechargeActivity extends BaseActivity implements View.OnClickListener
 {
 
@@ -42,7 +43,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
 
     private static final int ALI_PAY = 1;
 
-    private static final int WEIXIN_PAY = 2;
+    private static final int WX_PAY = 2;
 
     /**
      * 获取权限使用的 RequestCode
@@ -85,20 +86,22 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                     PayResult payResult = new PayResult((Map<String, String>) msg.obj);
                     Logger.d(TAG, "payResult: " + payResult);
                     //对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultInfo = payResult.getResult();
+                    // 同步返回需要验证的信息
                     String resultStatus = payResult.getResultStatus();
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000"))
                     {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        showAlert(RechargeActivity.this, "支付成功: " + payResult);
+                        DialogWithYesOrNoUtils.getInstance().showOneButtonDialog(RechargeActivity.this, getString(R.string.recharge_success), null, null);
+                        etAmount.setText(null);
                         request(ResponseConstant.GET_PAY_RESULT, true);
                     }
                     else
                     {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        showAlert(RechargeActivity.this, "支付失败: " + payResult);
-                    }
+                        DialogWithYesOrNoUtils.getInstance().showOneButtonDialog(RechargeActivity.this, getString(R.string.recharge_fail), null, null);
+                        Logger.d(TAG, "alipay fail, payResult: " + payResult);}
                     break;
                 }
                 default:
@@ -144,7 +147,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                 ivAlipay.setImageResource(R.mipmap.icon_cart_select);
                 payType = type;
                 break;
-            case WEIXIN_PAY:
+            case WX_PAY:
                 ivAlipay.setImageResource(R.mipmap.icon_cart_unselect);
                 ivWeixin.setImageResource(R.mipmap.icon_cart_select);
                 payType = type;
@@ -191,7 +194,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                                 case ALI_PAY:
                                     request(ResponseConstant.GET_ALIPAY);
                                     break;
-                                case WEIXIN_PAY:
+                                case WX_PAY:
                                     LoadDialog.dismiss(mContext);
                                     break;
                                 default:
@@ -282,7 +285,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                 selectPayType(ALI_PAY);
                 break;
             case R.id.ll_weixin:
-                selectPayType(WEIXIN_PAY);
+                selectPayType(WX_PAY);
                 break;
             case R.id.btn_confirm:
                 String amount = etAmount.getText().toString().trim();
@@ -296,7 +299,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                     if (aIn > 0.00)
                     {
                         money = amount;
-                        requestPermission(amount);
+                        requestPermission();
                     }
                     else
                     {
@@ -307,17 +310,18 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    private void toRecharge(String amount)
+    private void toRecharge()
     {
-        money = amount;
+        LoadDialog.show(mContext);
         request(ResponseConstant.RECHARGE_TO_PAY, true);
     }
 
     /**
-     * 检查支付宝 SDK 所需的权限，并在必要的时候动态获取。 在 targetSDK = 23 以上，READ_PHONE_STATE 和 WRITE_EXTERNAL_STORAGE 权限需要应用在运行时获取。 如果接入支付宝
+     * 检查支付宝 SDK 所需的权限，并在必要的时候动态获取。
+     * 在 targetSDK = 23 以上，READ_PHONE_STATE 和 WRITE_EXTERNAL_STORAGE 权限需要应用在运行时获取。 如果接入支付宝
      * SDK 的应用 targetSdk 在 23 以下，可以省略这个步骤。
      */
-    private void requestPermission(String amount)
+    private void requestPermission()
     {
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
@@ -332,8 +336,8 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
         }
         else
         {
-            NToast.shortToast(this, "支付宝 SDK 已有所需的权限");
-            toRecharge(amount);
+            Logger.d(TAG, "requestPermission, 支付宝 SDK 已有所需的权限");
+            toRecharge();
         }
     }
 
@@ -341,7 +345,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
      * 权限获取回调
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
         switch (requestCode)
         {
@@ -350,7 +354,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                 // 用户取消了权限弹窗
                 if (grantResults.length == 0)
                 {
-                    NToast.shortToast(this, "无法获取支付宝 SDK 所需的权限, 请到系统设置开启");
+                    NToast.shortToast(this, R.string.no_alipay_permission);
                     return;
                 }
 
@@ -359,27 +363,16 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                 {
                     if (x == PackageManager.PERMISSION_DENIED)
                     {
-                        NToast.shortToast(this, "无法获取支付宝 SDK 所需的权限, 请到系统设置开启");
+                        NToast.shortToast(this, R.string.no_alipay_permission);
                         return;
                     }
                 }
 
                 // 所需的权限均正常获取
-                NToast.shortToast(this, "支付宝 SDK 所需的权限已经正常获取");
-                toRecharge(money);
+                Logger.d(TAG, "onRequestPermissionsResult, 支付宝 SDK 所需的权限已经正常获取");
+                toRecharge();
             }
         }
-    }
-
-    private static void showAlert(Context ctx, String info)
-    {
-        showAlert(ctx, info, null);
-    }
-
-    private static void showAlert(Context ctx, String info, DialogInterface.OnDismissListener onDismiss)
-    {
-        new AlertDialog.Builder(ctx).setMessage(info).setPositiveButton("确定", null).setOnDismissListener(onDismiss)
-            .show();
     }
 
 }

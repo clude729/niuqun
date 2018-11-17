@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.CartGoodsInfo;
+import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.util.ImageLoad;
 import com.daoyu.niuqun.util.ViewUtil;
 
@@ -279,6 +280,9 @@ public class CartAdapter extends BaseAdapter
         CartGoodsInfo goodsInfo = listItems.get(position);
         if (null == goodsInfo)
         {
+            listItemView.iv_sub.setOnClickListener(null);
+            listItemView.iv_plus.setOnClickListener(null);
+            listItemView.ibtn_check.setOnClickListener(null);
             return convertView;
         }
 
@@ -307,6 +311,10 @@ public class CartAdapter extends BaseAdapter
         String url = goodsInfo.getThumb_image();
         if (!TextUtils.isEmpty(url) && !"null".equals(url))
         {
+            if (!url.contains(HttpConstant.URL))
+            {
+                url = HttpConstant.URL + url;
+            }
             ImageLoad.getInstance().load(mContext, listItemView.image, url, options);
         }
         else
@@ -359,6 +367,10 @@ public class CartAdapter extends BaseAdapter
                         {
                             att = "0.00";
                         }
+                        if (att.contains(unit) && att.length() > 2)
+                        {
+                            att = att.substring(0, att.length() - 2);
+                        }
                         String pr = map.getGoods_price();
                         if ("null".equals(pr) || TextUtils.isEmpty(pr))
                         {
@@ -407,6 +419,10 @@ public class CartAdapter extends BaseAdapter
                         {
                             att = "0.00";
                         }
+                        if (att.contains(unit) && att.length() > 2)
+                        {
+                            att = att.substring(0, att.length() - 2);
+                        }
                         String pr = map.getGoods_price();
                         if ("null".equals(pr) || TextUtils.isEmpty(pr))
                         {
@@ -447,6 +463,10 @@ public class CartAdapter extends BaseAdapter
                         {
                             att = "0.00";
                         }
+                        if (att.contains(unit) && att.length() > 2)
+                        {
+                            att = att.substring(0, att.length() - 2);
+                        }
                         String pr = map.getGoods_price();
                         if ("null".equals(pr) || TextUtils.isEmpty(pr))
                         {
@@ -477,6 +497,10 @@ public class CartAdapter extends BaseAdapter
                         if (TextUtils.isEmpty(att) || "null".equals(att))
                         {
                             att = "0.00";
+                        }
+                        if (att.contains(unit) && att.length() > 2)
+                        {
+                            att = att.substring(0, att.length() - 2);
                         }
                         String pr = map.getGoods_price();
                         if ("null".equals(pr) || TextUtils.isEmpty(pr))

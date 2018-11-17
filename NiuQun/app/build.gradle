@@ -68,6 +68,6 @@ dependencies {
     implementation files('libs/fastjson-1.2.5.jar')
     implementation files('libs/qiniu-android-sdk-7.1.0.jar')
     implementation files('libs/eventbus.jar')
-    compile (name: 'alipaySdk-15.5.7-20181023110917', ext: 'aar')
+    compile(name: 'alipaySdk-15.5.7-20181023110917', ext: 'aar')
     implementation project(':CallKit')
 }

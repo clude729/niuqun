@@ -21,11 +21,14 @@ import android.widget.TextView;
 import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.CartGoodsResponse;
+import com.daoyu.chat.server.response.OverCartResponse;
 import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.chat.server.widget.LoadDialog;
 import com.daoyu.chat.ui.activity.BaseActivity;
 import com.daoyu.niuqun.R;
+import com.daoyu.niuqun.bean.AddressBean;
 import com.daoyu.niuqun.bean.CartGoodsInfo;
+import com.daoyu.niuqun.bean.SettlementInfo;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.IntentConstant;
 import com.daoyu.niuqun.constant.ResponseConstant;
@@ -122,7 +125,7 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
                     JSONObject js = new JSONObject();
                     try
                     {
-                        js.put("cart_Id", cartGoodsInfo.getCart_id());
+                        js.put("cart_id", cartGoodsInfo.getCart_id());
                         js.put("quantity", cartGoodsInfo.getQuantity());
                         array.put(js);
                     }
@@ -167,10 +170,23 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
     /**
      * 去结算
      */
-    private void goToSettlement()
+    private void goToSettlement(SettlementInfo settlementInfo)
     {
+        if (null == settlementInfo.getList() || null == settlementInfo.getAddress())
+        {
+            Logger.d(TAG, "goToSettlement, List is null return!");
+            return;
+        }
         App app = (App) getApplication();
-        app.setCartGoodsInfos(settlementGoods);
+        app.setCartGoodsInfos(settlementInfo.getList());
+        app.setAddressBean(null);
+        for (AddressBean bean : settlementInfo.getAddress())
+        {
+            if ("1".equals(bean.getStatus()))
+            {
+                app.setAddressBean(bean);
+            }
+        }
         Intent intent = new Intent(this, SettlementActivity.class);
         intent.putExtra(IntentConstant.CART_TO_SETTLEMENT_TOTAL, tvTotal.getText().toString().trim());
         startActivity(intent);
@@ -244,13 +260,18 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
                 break;
             case ResponseConstant.BUY_GOODS_FROM_CART:
                 loadFinish = true;
-                if (result instanceof BaseSealResponse)
+                if (result instanceof OverCartResponse)
                 {
-                    BaseSealResponse response = (BaseSealResponse) result;
+                    OverCartResponse response = (OverCartResponse) result;
                     if (HttpConstant.SUCCESS.equals(response.getCode()))
                     {
                         Logger.d(TAG, "over goods from cart success!");
-                        goToSettlement();
+                        SettlementInfo settlementInfo = response.getData();
+                        if (null != settlementInfo)
+                        {
+
+                            goToSettlement(settlementInfo);
+                        }
                     }
                     else
                     {

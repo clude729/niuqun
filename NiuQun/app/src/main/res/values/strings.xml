@@ -135,6 +135,12 @@
     <string name="confirm_recharge">确定充值</string>
     <string name="recharge_by_alipay">支付宝充值</string>
     <string name="recharge_by_weixin">微信充值</string>
+    <string name="recharge_success">支付成功</string>
+    <string name="recharge_fail">支付失败</string>
+    <string name="no_alipay_permission">缺少支付所需权限，请到系统设置开启</string>
+    <string name="goods_buy_success">您已经成功支付，请耐心等待商家发货，谢谢</string>
+    <string name="back_to_brands">返回品牌</string>
+    <string name="goods_buy_over">购买完成</string>
 
     <string name="hello_blank_fragment">Hello brand fragment</string>
     <string name="hello_center_fragment">Hello my center fragment</string>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.request.RequestOptions;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.BrandInfo;
+import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.IntentConstant;
 import com.daoyu.niuqun.ui.brand.GoodsDetailActivity;
 import com.daoyu.niuqun.util.ImageLoad;
@@ -99,6 +101,14 @@ public class BrandsListAdapter extends BaseAdapter
         final BrandInfo baseItem = dataList.get(position);
         if (null != baseItem)
         {
+            String url = baseItem.getThumb_image();
+            if (!TextUtils.isEmpty(url) && !"null".equals(url))
+            {
+                if (!url.contains(HttpConstant.URL))
+                {
+                    url = HttpConstant.URL + url;
+                }
+            }
             ImageLoad.getInstance().load(context, viewHolder.item_image, baseItem.getThumb_image(),
                 new RequestOptions().error(R.mipmap.default__avatar).placeholder(R.mipmap.default__avatar));
             convertView.setOnClickListener(new View.OnClickListener()

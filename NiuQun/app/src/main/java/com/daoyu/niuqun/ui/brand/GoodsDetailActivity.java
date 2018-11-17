@@ -18,14 +18,18 @@ import android.widget.TextView;
 import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.GoodsDetailResponse;
+import com.daoyu.chat.server.response.OverCartResponse;
 import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.chat.server.widget.LoadDialog;
 import com.daoyu.chat.ui.activity.BaseActivity;
 import com.daoyu.niuqun.R;
+import com.daoyu.niuqun.bean.AddressBean;
 import com.daoyu.niuqun.bean.GoodsInfo;
+import com.daoyu.niuqun.bean.SettlementInfo;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.IntentConstant;
 import com.daoyu.niuqun.constant.ResponseConstant;
+import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.ui.adapter.GoodsPagerAdapter;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.ViewUtil;
@@ -119,6 +123,8 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 return action.getBrandsScore(goodsId, goodsPrice);
             case ResponseConstant.GOODS_ADD_CART:
                 return action.addGoodsToCart(goodsId);
+            case ResponseConstant.GOODS_BUY_SINGLE:
+                return action.buyGoodsSingle(goodsId);
             default:
                 break;
         }
@@ -184,6 +190,28 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 LoadDialog.dismiss(mContext);
                 break;
+            case ResponseConstant.GOODS_BUY_SINGLE:
+                if (result instanceof OverCartResponse)
+                {
+                    OverCartResponse response = (OverCartResponse) result;
+                    if (HttpConstant.SUCCESS.equals(response.getCode()))
+                    {
+                        Logger.d(TAG, "buy goods single, onSuccess!");
+                        SettlementInfo settlementInfo = response.getData();
+                        if (null != settlementInfo)
+                        {
+
+                            goToSettlement(settlementInfo);
+                        }
+                    }
+                    else
+                    {
+                        Logger.d(TAG, "bug goods single, onSuccess, but code is: " + response.getCode());
+                        NToast.shortToast(mContext, response.getMessage());
+                    }
+                }
+                LoadDialog.dismiss(mContext);
+                break;
             default:
                 break;
         }
@@ -206,9 +234,38 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 LoadDialog.dismiss(mContext);
                 break;
+            case ResponseConstant.GOODS_BUY_SINGLE:
+                NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
+                LoadDialog.dismiss(mContext);
+                break;
             default:
                 break;
         }
+    }
+
+    /**
+     * 单次购买成功去结算
+     */
+    private void goToSettlement(SettlementInfo settlementInfo)
+    {
+        if (null == settlementInfo.getList() || null == settlementInfo.getAddress())
+        {
+            Logger.d(TAG, "goToSettlement, List is null return!");
+            return;
+        }
+        App app = (App) getApplication();
+        app.setCartGoodsInfos(settlementInfo.getList());
+        app.setAddressBean(null);
+        for (AddressBean bean : settlementInfo.getAddress())
+        {
+            if ("1".equals(bean.getStatus()))
+            {
+                app.setAddressBean(bean);
+            }
+        }
+        Intent intent = new Intent(this, SettlementActivity.class);
+        intent.putExtra(IntentConstant.CART_TO_SETTLEMENT_TOTAL, tvPrice.getText().toString().trim());
+        startActivity(intent);
     }
 
     private void showDetail(GoodsInfo goodsInfo)
@@ -299,7 +356,11 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
             case R.id.btn_buy:
-
+                if (!TextUtils.isEmpty(goodsId))
+                {
+                    LoadDialog.show(mContext);
+                    request(ResponseConstant.GOODS_BUY_SINGLE);
+                }
                 break;
             case R.id.iv_share:
 

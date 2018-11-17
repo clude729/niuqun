@@ -236,7 +236,8 @@
             android:name=".ui.brand.SettlementActivity"
             android:screenOrientation="portrait"
             android:theme="@style/moveFinishStyle" />
-        <activity android:name=".ui.center.RechargeActivity"></activity>
+        <activity android:name=".ui.center.RechargeActivity" />
+        <activity android:name=".ui.brand.BuySuccessActivity"></activity>
     </application>
 
 </manifest>

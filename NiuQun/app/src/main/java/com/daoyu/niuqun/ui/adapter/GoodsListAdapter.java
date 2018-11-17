@@ -6,6 +6,7 @@ import java.util.List;
 import com.bumptech.glide.request.RequestOptions;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.CartGoodsInfo;
+import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.util.ImageLoad;
 import com.daoyu.niuqun.util.ViewUtil;
 
@@ -148,11 +149,16 @@ public class GoodsListAdapter extends BaseAdapter
         {
             number = "1";
         }
-        listItemView.tv_number.setText(number);
+        String showNum = "x " + number;
+        listItemView.tv_number.setText(showNum);
 
         String url = goodsInfo.getThumb_image();
         if (!TextUtils.isEmpty(url) && !"null".equals(url))
         {
+            if (!url.contains(HttpConstant.URL))
+            {
+                url = HttpConstant.URL + url;
+            }
             ImageLoad.getInstance().load(mContext, listItemView.image, url, options);
         }
         else

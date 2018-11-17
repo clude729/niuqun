@@ -49,6 +49,8 @@ public class HttpConstant
 
     public static final String GOODS_ADD_SHOPPING_CART = URL + "goods/addcart";
 
+    public static final String GOODS_BUY_SINGLE = URL + "goods/tobuysingle";
+
     public static final String BARNDS_GET_CART_LIST = URL + "goods/cartlist";
 
     public static final String BARNDS_CHOOSE_GOODS_OVER_FROM_CART = URL + "goods/toovercart";

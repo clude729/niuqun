@@ -3,6 +3,7 @@ package com.daoyu.chat.server.widget;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -12,9 +13,12 @@ import android.widget.TextView;
 
 import com.daoyu.niuqun.R;
 import com.daoyu.chat.server.utils.NToast;
+import com.daoyu.niuqun.util.Logger;
 
+public class LoadDialog extends Dialog
+{
 
-public class LoadDialog extends Dialog {
+    private static final String TAG = "LoadDialog";
 
     /**
      * LoadDialog
@@ -34,11 +38,12 @@ public class LoadDialog extends Dialog {
     /**
      * the LoadDialog constructor
      *
-     * @param ctx          Context
+     * @param ctx Context
      * @param canNotCancel boolean
-     * @param tipMsg       String
+     * @param tipMsg String
      */
-    public LoadDialog(final Context ctx, boolean canNotCancel, String tipMsg) {
+    public LoadDialog(final Context ctx, boolean canNotCancel, String tipMsg)
+    {
         super(ctx);
 
         this.canNotCancel = canNotCancel;
@@ -46,7 +51,8 @@ public class LoadDialog extends Dialog {
         this.getContext().setTheme(android.R.style.Theme_InputMethod);
         setContentView(R.layout.layout_dialog_loading);
 
-        if (!TextUtils.isEmpty(this.tipMsg)) {
+        if (!TextUtils.isEmpty(this.tipMsg))
+        {
             mShowMessage = (TextView) findViewById(R.id.show_message);
             mShowMessage.setText(this.tipMsg);
         }
@@ -61,9 +67,12 @@ public class LoadDialog extends Dialog {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (canNotCancel) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            if (canNotCancel)
+            {
                 NToast.shortToast(getContext(), tipMsg);
                 return true;
             }
@@ -74,9 +83,10 @@ public class LoadDialog extends Dialog {
     /**
      * show the mDialogTextView
      *
-     * @param context
+     * @param context 上下文
      */
-    public static void show(Context context) {
+    public static void show(Context context)
+    {
         show(context, null, false);
     }
 
@@ -86,24 +96,29 @@ public class LoadDialog extends Dialog {
      * @param context Context
      * @param message String
      */
-    public static void show(Context context, String message) {
+    public static void show(Context context, String message)
+    {
         show(context, message, false);
     }
 
     /**
      * show the mDialogTextView
      *
-     * @param context  Context
-     * @param message  String, show the message to user when isCancel is true.
+     * @param context Context
+     * @param message String, show the message to user when isCancel is true.
      * @param isCancel boolean, true is can't dimiss，false is can dimiss
      */
-    private static void show(Context context, String message, boolean isCancel) {
-        if (context instanceof Activity) {
-            if (((Activity) context).isFinishing()) {
+    private static void show(Context context, String message, boolean isCancel)
+    {
+        if (context instanceof Activity)
+        {
+            if (((Activity) context).isFinishing())
+            {
                 return;
             }
         }
-        if (loadDialog != null && loadDialog.isShowing()) {
+        if (loadDialog != null && loadDialog.isShowing())
+        {
             return;
         }
         loadDialog = new LoadDialog(context, isCancel, message);
@@ -113,19 +128,26 @@ public class LoadDialog extends Dialog {
     /**
      * dismiss the mDialogTextView
      */
-    public static void dismiss(Context context) {
-        try {
-            if (context instanceof Activity) {
-                if (((Activity) context).isFinishing()) {
+    public static void dismiss(Context context)
+    {
+        try
+        {
+            if (context instanceof Activity)
+            {
+                if (((Activity) context).isFinishing())
+                {
                     loadDialog = null;
                     return;
                 }
             }
 
-            if (loadDialog != null && loadDialog.isShowing()) {
+            if (loadDialog != null && loadDialog.isShowing())
+            {
                 Context loadContext = loadDialog.getContext();
-                if (loadContext != null && loadContext instanceof Activity) {
-                    if (((Activity) loadContext).isFinishing()) {
+                if (loadContext instanceof Activity)
+                {
+                    if (((Activity) loadContext).isFinishing())
+                    {
                         loadDialog = null;
                         return;
                     }
@@ -133,8 +155,10 @@ public class LoadDialog extends Dialog {
                 loadDialog.dismiss();
                 loadDialog = null;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            Logger.d(TAG, "dismiss, Exception: " + e);
             loadDialog = null;
         }
     }

@@ -64,6 +64,7 @@ import com.daoyu.chat.server.response.JoinGroupResponse;
 import com.daoyu.chat.server.response.LoginResponse;
 import com.daoyu.chat.server.response.MyAddressListResponse;
 import com.daoyu.chat.server.response.MyCenterResponse;
+import com.daoyu.chat.server.response.OverCartResponse;
 import com.daoyu.chat.server.response.QiNiuTokenResponse;
 import com.daoyu.chat.server.response.QuitGroupResponse;
 import com.daoyu.chat.server.response.RechargeResponse;
@@ -664,13 +665,36 @@ public class SealAction extends BaseAction
     }
 
     /**
+     * 单次购买
+     *
+     * @param goodsId 商品id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public OverCartResponse buyGoodsSingle(String goodsId) throws HttpException
+    {
+        String url = HttpConstant.GOODS_BUY_SINGLE;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("goods_id", goodsId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "overCartGoods, result: " + result);
+        OverCartResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, OverCartResponse.class);
+        }
+        return response;
+    }
+
+    /**
      * 购物数据结算
      *
      * @param value 购物数据
      * @return 响应
      * @throws HttpException exception
      */
-    public BaseSealResponse overCartGoods(String value) throws HttpException
+    public OverCartResponse overCartGoods(String value) throws HttpException
     {
         String url = HttpConstant.BARNDS_CHOOSE_GOODS_OVER_FROM_CART;
         RequestParams params = new RequestParams();
@@ -678,10 +702,10 @@ public class SealAction extends BaseAction
         params.add("value", value);
         String result = httpManager.post(url, params);
         Logger.d(TAG, "overCartGoods, result: " + result);
-        BaseSealResponse response = null;
+        OverCartResponse response = null;
         if (!TextUtils.isEmpty(result))
         {
-            response = jsonToBean(result, BaseSealResponse.class);
+            response = jsonToBean(result, OverCartResponse.class);
         }
         return response;
     }

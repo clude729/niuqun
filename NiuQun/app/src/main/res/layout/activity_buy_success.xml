@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color8"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="com.daoyu.niuqun.ui.brand.BuySuccessActivity">
+
+    <ImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:contentDescription="@string/goods_buy_over"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/icon_buy_over" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="@string/goods_buy_success"
+        android:textColor="@color/color2"
+        android:textSize="@dimen/h4" />
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="100dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_btn_empty_black"
+        android:text="@string/back_to_brands"
+        android:textColor="@color/color2"
+        android:textSize="@dimen/h4" />
+</LinearLayout>

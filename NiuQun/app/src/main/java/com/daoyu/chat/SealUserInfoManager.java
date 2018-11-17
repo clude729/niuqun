@@ -1191,8 +1191,8 @@ public class SealUserInfoManager implements OnDataListener {
     {
         if (null == mWorkHandler)
         {
-            Logger.d(TAG, "mWorkHandler is null!");
-            mWorkHandler = new Handler(mWorkThread.getLooper());
+            Logger.d(TAG, "mWorkHandler is null!", new Exception());
+            return;
         }
         mWorkHandler.post(new Runnable()
         {
