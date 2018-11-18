@@ -42,6 +42,7 @@ import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.CartGoodsResponse;
 import com.daoyu.chat.server.response.CartToOrderResponse;
+import com.daoyu.chat.server.response.ChangeListResponse;
 import com.daoyu.chat.server.response.ChangePasswordResponse;
 import com.daoyu.chat.server.response.CheckPhoneResponse;
 import com.daoyu.chat.server.response.CreateGroupResponse;
@@ -64,7 +65,9 @@ import com.daoyu.chat.server.response.JoinGroupResponse;
 import com.daoyu.chat.server.response.LoginResponse;
 import com.daoyu.chat.server.response.MyAddressListResponse;
 import com.daoyu.chat.server.response.MyCenterResponse;
+import com.daoyu.chat.server.response.OrderListResponse;
 import com.daoyu.chat.server.response.OverCartResponse;
+import com.daoyu.chat.server.response.PersonChangeResponse;
 import com.daoyu.chat.server.response.QiNiuTokenResponse;
 import com.daoyu.chat.server.response.QuitGroupResponse;
 import com.daoyu.chat.server.response.RechargeResponse;
@@ -83,6 +86,7 @@ import com.daoyu.chat.server.response.UserRelationshipResponse;
 import com.daoyu.chat.server.response.VerifyCodeResponse;
 import com.daoyu.chat.server.response.SetGroupNameResponse;
 import com.daoyu.chat.server.response.VersionResponse;
+import com.daoyu.chat.server.response.WXpayTokenResponse;
 import com.daoyu.chat.server.response.WebContentResponse;
 import com.daoyu.chat.server.utils.NLog;
 import com.daoyu.chat.server.utils.json.JsonMananger;
@@ -949,6 +953,94 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, AlipayTokenResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 通过充值订单号获取微信充值token
+     *
+     * @param logId 充值订单id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public WXpayTokenResponse getWXPay(String logId) throws HttpException
+    {
+        String url = HttpConstant.RECHARGE_BY_WEIXIN;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("log_id", logId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getWXPay, result: " + result);
+        WXpayTokenResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, WXpayTokenResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 我的零钱
+     *
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public PersonChangeResponse getMyChange() throws HttpException
+    {
+        String url = HttpConstant.GET_MY_CHANGE;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getMyChange, result: " + result);
+        PersonChangeResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, PersonChangeResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 零钱明细
+     *
+     * @param page 页码
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public ChangeListResponse getChangeList(int page) throws HttpException
+    {
+        String url = HttpConstant.GET_MY_CHANGE_DETAIL_LIST + "/page/" + page;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getChangeList, result: " + result);
+        ChangeListResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, ChangeListResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 订单列表
+     *
+     * @param page 页码
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public OrderListResponse getOrderList(int page) throws HttpException
+    {
+        String url = HttpConstant.GET_MY_ORDER_LIST + "/page/" + page;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getOrderList, result: " + result);
+        OrderListResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, OrderListResponse.class);
         }
         return response;
     }

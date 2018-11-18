@@ -311,7 +311,7 @@ public class CartAdapter extends BaseAdapter
         String url = goodsInfo.getThumb_image();
         if (!TextUtils.isEmpty(url) && !"null".equals(url))
         {
-            if (!url.contains(HttpConstant.URL))
+            if (!url.contains(HttpConstant.URL) && !url.contains("http") && !url.contains("https"))
             {
                 url = HttpConstant.URL + url;
             }

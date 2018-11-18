@@ -104,12 +104,12 @@ public class BrandsListAdapter extends BaseAdapter
             String url = baseItem.getThumb_image();
             if (!TextUtils.isEmpty(url) && !"null".equals(url))
             {
-                if (!url.contains(HttpConstant.URL))
+                if (!url.contains(HttpConstant.URL) && !url.contains("http") && !url.contains("https"))
                 {
                     url = HttpConstant.URL + url;
                 }
             }
-            ImageLoad.getInstance().load(context, viewHolder.item_image, baseItem.getThumb_image(),
+            ImageLoad.getInstance().load(context, viewHolder.item_image, url,
                 new RequestOptions().error(R.mipmap.default__avatar).placeholder(R.mipmap.default__avatar));
             convertView.setOnClickListener(new View.OnClickListener()
             {

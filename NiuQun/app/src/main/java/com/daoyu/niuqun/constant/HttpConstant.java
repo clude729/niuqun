@@ -65,6 +65,8 @@ public class HttpConstant
 
     public static final String RECHARGE_BY_ALIPAY = URL + "pay/alipay";
 
+    public static final String RECHARGE_BY_WEIXIN = URL + "pay/wxpay";
+
     public static final String RECHARGE_RESULT_BY_PAY = URL + "pay/payresult";
 
     public static final String GET_ADDRESS_LIST = URL + "user/myaddress";
@@ -74,4 +76,10 @@ public class HttpConstant
     public static final String SET_DEFAULT_ADDRESS = URL + "user/setdefault";
 
     public static final String GET_ADDREDD_DETAIL = URL + "user/getaddress";
+
+    public static final String GET_MY_CHANGE = URL + "user/usermoney";
+
+    public static final String GET_MY_CHANGE_DETAIL_LIST = URL + "user/userpaylog";
+
+    public static final String GET_MY_ORDER_LIST = URL + "user/order";
 }

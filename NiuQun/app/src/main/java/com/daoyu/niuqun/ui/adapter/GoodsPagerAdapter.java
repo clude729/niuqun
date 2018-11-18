@@ -73,7 +73,7 @@ public class GoodsPagerAdapter extends PagerAdapter
         String imag = listItems[position];
         if (!TextUtils.isEmpty(imag) && !"null".equals(imag))
         {
-            if (!imag.contains(HttpConstant.URL))
+            if (!imag.contains(HttpConstant.URL) && !imag.contains("http") && !imag.contains("https"))
             {
                 imag = HttpConstant.URL + imag;
             }
@@ -90,7 +90,7 @@ public class GoodsPagerAdapter extends PagerAdapter
             @Override
             public void onClick(View v)
             {
-				Logger.d(TAG, "onClick, position: " + p);
+                Logger.d(TAG, "onClick, position: " + p);
                 switch (p)
                 {
                     case 0:

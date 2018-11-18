@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.view.View;
 
 import com.daoyu.niuqun.R;
-import com.daoyu.niuqun.ui.center.RechargeActivity;
+import com.daoyu.niuqun.ui.center.MyChanerActivity;
 import com.daoyu.niuqun.util.Logger;
 
 /**
@@ -28,7 +28,7 @@ public class SymbolItem extends MyBaseItem
             public void onClick(View v)
             {
                 Logger.d(TAG, "onClick!");
-                Intent intent = new Intent(mContext, RechargeActivity.class);
+                Intent intent = new Intent(mContext, MyChanerActivity.class);
                 mContext.startActivity(intent);
             }
         };

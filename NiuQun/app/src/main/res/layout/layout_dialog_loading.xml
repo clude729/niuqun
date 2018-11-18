@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/layout_dialog_loading"
+        android:layout_marginBottom="12dp"
         android:textColor="@android:color/white"
         android:textSize="@dimen/h6"
         android:visibility="visible" />

@@ -128,8 +128,12 @@
     <string name="address_detail_by_one_empty_hint">请填写详细地址</string>
     <string name="to_cancel">取消</string>
     <string name="to_recharge">充值</string>
+    <string name="to_getmoney_out">提现</string>
     <string name="not_enough_money_to_order">您的牛币余额不足，请点击充值</string>
     <string name="change_recharge">零钱充值</string>
+    <string name="change_balance">零钱余额</string>
+    <string name="the_change">零钱</string>
+    <string name="change_detail">零钱明细</string>
     <string name="unit_rmb">¥</string>
     <string name="amount_recharge">充值金额</string>
     <string name="confirm_recharge">确定充值</string>
@@ -141,7 +145,6 @@
     <string name="goods_buy_success">您已经成功支付，请耐心等待商家发货，谢谢</string>
     <string name="back_to_brands">返回品牌</string>
     <string name="goods_buy_over">购买完成</string>
-
-    <string name="hello_blank_fragment">Hello brand fragment</string>
-    <string name="hello_center_fragment">Hello my center fragment</string>
+    <string name="red_package_reward">红包奖励</string>
+    <string name="shopping_consumption">购物消费</string>
 </resources>

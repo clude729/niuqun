@@ -23,6 +23,7 @@ import com.alipay.sdk.app.PayTask;
 import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.response.AlipayTokenResponse;
 import com.daoyu.chat.server.response.RechargeResponse;
+import com.daoyu.chat.server.response.WXpayTokenResponse;
 import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.chat.server.widget.DialogWithYesOrNoUtils;
 import com.daoyu.chat.server.widget.LoadDialog;
@@ -31,7 +32,13 @@ import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.alipay.PayResult;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.ResponseConstant;
+import com.daoyu.niuqun.util.EventManager;
 import com.daoyu.niuqun.util.Logger;
+import com.daoyu.niuqun.wxapi.ToWXpay;
+import com.daoyu.niuqun.wxapi.WXToPayInterface;
+import com.daoyu.niuqun.wxapi.WxpayTokenInterface;
+
+import io.rong.eventbus.EventBus;
 
 /**
  * 充值
@@ -72,6 +79,17 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
 
     private String lodId = "";
 
+    private WXToPayInterface toPayInterface;
+
+    private WxpayTokenInterface tokenInterface = new WxpayTokenInterface()
+    {
+        @Override
+        public void getWXpayToken(String logId)
+        {
+            request(ResponseConstant.GET_WXPAY);
+        }
+    };
+
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler()
     {
@@ -93,15 +111,19 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                     if (TextUtils.equals(resultStatus, "9000"))
                     {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        DialogWithYesOrNoUtils.getInstance().showOneButtonDialog(RechargeActivity.this, getString(R.string.recharge_success), null, null);
+                        DialogWithYesOrNoUtils.getInstance().showOneButtonDialog(RechargeActivity.this,
+                            getString(R.string.recharge_success), null, null);
+                        EventBus.getDefault().post(new EventManager.AlipaySuccess());
                         etAmount.setText(null);
                         request(ResponseConstant.GET_PAY_RESULT, true);
                     }
                     else
                     {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        DialogWithYesOrNoUtils.getInstance().showOneButtonDialog(RechargeActivity.this, getString(R.string.recharge_fail), null, null);
-                        Logger.d(TAG, "alipay fail, payResult: " + payResult);}
+                        DialogWithYesOrNoUtils.getInstance().showOneButtonDialog(RechargeActivity.this,
+                            getString(R.string.recharge_fail), null, null);
+                        Logger.d(TAG, "alipay fail, payResult: " + payResult);
+                    }
                     break;
                 }
                 default:
@@ -116,8 +138,16 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
         EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge);
+        EventBus.getDefault().register(this);
         initView();
         initListener();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     private void initView()
@@ -157,6 +187,11 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    public void setWxToPayInterface(WXToPayInterface wxToPayInterface)
+    {
+        toPayInterface = wxToPayInterface;
+    }
+
     @Override
     public Object doInBackground(int requestCode, String id) throws HttpException
     {
@@ -166,6 +201,8 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                 return action.rechargeToPay(money);
             case ResponseConstant.GET_ALIPAY:
                 return action.getAliPay(lodId);
+            case ResponseConstant.GET_WXPAY:
+                return action.getWXPay(lodId);
             case ResponseConstant.GET_PAY_RESULT:
                 return action.getPayResult(lodId);
             default:
@@ -195,7 +232,8 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                                     request(ResponseConstant.GET_ALIPAY);
                                     break;
                                 case WX_PAY:
-                                    LoadDialog.dismiss(mContext);
+                                    ToWXpay toWXpay = new ToWXpay(RechargeActivity.this, lodId, tokenInterface);
+                                    toWXpay.toPay();
                                     break;
                                 default:
                                     LoadDialog.dismiss(mContext);
@@ -250,6 +288,26 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                     }
                 }
                 break;
+            case ResponseConstant.GET_WXPAY:
+                LoadDialog.dismiss(mContext);
+                if (result instanceof WXpayTokenResponse)
+                {
+                    WXpayTokenResponse response = (WXpayTokenResponse) result;
+                    if (HttpConstant.SUCCESS.equals(response.getCode()))
+                    {
+                        Logger.d(TAG, "get wxpay success!");
+                        String orderInfo = response.getData();
+                        if (null != toPayInterface)
+                        {
+                            toPayInterface.toWXpay(orderInfo);
+                        }
+                    }
+                    else
+                    {
+                        NToast.shortToast(mContext, response.getMessage());
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -265,6 +323,10 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;
             case ResponseConstant.GET_ALIPAY:
+                LoadDialog.dismiss(mContext);
+                NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
+                break;
+            case ResponseConstant.GET_WXPAY:
                 LoadDialog.dismiss(mContext);
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;
@@ -317,8 +379,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     }
 
     /**
-     * 检查支付宝 SDK 所需的权限，并在必要的时候动态获取。
-     * 在 targetSDK = 23 以上，READ_PHONE_STATE 和 WRITE_EXTERNAL_STORAGE 权限需要应用在运行时获取。 如果接入支付宝
+     * 检查支付宝 SDK 所需的权限，并在必要的时候动态获取。 在 targetSDK = 23 以上，READ_PHONE_STATE 和 WRITE_EXTERNAL_STORAGE 权限需要应用在运行时获取。 如果接入支付宝
      * SDK 的应用 targetSdk 在 23 以下，可以省略这个步骤。
      */
     private void requestPermission()
@@ -373,6 +434,12 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
                 toRecharge();
             }
         }
+    }
+
+    public void onEventMainThread(EventManager.WxpaySuccess wxpaySuccess)
+    {
+        etAmount.setText(null);
+        request(ResponseConstant.GET_PAY_RESULT, true);
     }
 
 }

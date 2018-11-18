@@ -28,8 +28,11 @@ import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.ui.adapter.GoodsListAdapter;
 import com.daoyu.niuqun.ui.center.AddressListActivity;
 import com.daoyu.niuqun.ui.center.RechargeActivity;
+import com.daoyu.niuqun.util.EventManager;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.view.MyListView;
+
+import io.rong.eventbus.EventBus;
 
 /**
  * 结算
@@ -177,6 +180,10 @@ public class SettlementActivity extends BaseActivity implements View.OnClickList
                     if (HttpConstant.SUCCESS.equals(response.getCode()))
                     {
                         Logger.d(TAG, "to pay order success!");
+                        Intent intent = new Intent(mContext, BuySuccessActivity.class);
+                        startActivity(intent);
+                        EventBus.getDefault().post(new EventManager.CartListFinish());
+                        finish();
                     }
                     else if (HttpConstant.MONEY_NOT_ENOUGH.equals(response.getCode()))
                     {

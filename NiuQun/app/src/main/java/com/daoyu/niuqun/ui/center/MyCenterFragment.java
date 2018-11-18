@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -62,7 +63,7 @@ public class MyCenterFragment extends Fragment
 
     private TextView tv_number;
 
-    private ImageView iv_info;
+    private LinearLayout ll_info;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -88,7 +89,7 @@ public class MyCenterFragment extends Fragment
         gridApp = view.findViewById(R.id.grid_app);
         gridOther = view.findViewById(R.id.grid_others);
         iv_avatar = view.findViewById(R.id.iv_avatar);
-        iv_info = view.findViewById(R.id.iv_info);
+        ll_info = view.findViewById(R.id.ll_info);
         tv_nickname = view.findViewById(R.id.tv_nickname);
         tv_number = view.findViewById(R.id.tv_number);
     }
@@ -129,7 +130,7 @@ public class MyCenterFragment extends Fragment
             new RequestOptions().error(R.drawable.default_useravatar).placeholder(R.drawable.default_useravatar));
         tv_nickname.setText(SharePreferenceManager.getCachedUsername());
         tv_number.setText(SharePreferenceManager.getCacheMobile());
-        iv_info.setOnClickListener(new View.OnClickListener()
+        ll_info.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)

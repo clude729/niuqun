@@ -21,11 +21,22 @@ android {
     }
 
     signingConfigs {
-        config {
+        debug {
             storeFile file("niuqun.jks")
             storePassword "19880124he"
             keyAlias "clude"
             keyPassword "19880124he"
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+
+        release {
+            storeFile file("niuqun.jks")
+            storePassword "19880124he"
+            keyAlias "clude"
+            keyPassword "19880124he"
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
 
@@ -55,6 +66,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -68,6 +80,6 @@ dependencies {
     implementation files('libs/fastjson-1.2.5.jar')
     implementation files('libs/qiniu-android-sdk-7.1.0.jar')
     implementation files('libs/eventbus.jar')
-    compile(name: 'alipaySdk-15.5.7-20181023110917', ext: 'aar')
+    implementation(name: 'alipaySdk-15.5.7-20181023110917', ext: 'aar')
     implementation project(':CallKit')
 }

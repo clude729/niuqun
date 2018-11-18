@@ -1,0 +1,4 @@
+<resources>
+    <string name="wx_pay_result">支付结果</string>
+    <string name="wx_to_app">返回应用</string>
+</resources>

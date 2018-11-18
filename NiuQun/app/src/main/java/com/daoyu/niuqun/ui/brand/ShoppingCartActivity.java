@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -22,6 +21,7 @@ import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.CartGoodsResponse;
 import com.daoyu.chat.server.response.OverCartResponse;
+import com.daoyu.chat.server.utils.CommonUtils;
 import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.chat.server.widget.LoadDialog;
 import com.daoyu.chat.ui.activity.BaseActivity;
@@ -64,8 +64,6 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
     private boolean loadFinish = true;
 
     private String orderValue;
-
-    private List<CartGoodsInfo> settlementGoods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -116,12 +114,10 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
         int size = cartGoodsInfos.size();
         if (size > 0)
         {
-            settlementGoods = new ArrayList<>();
             for (CartGoodsInfo cartGoodsInfo : cartGoodsInfos)
             {
                 if (cartGoodsInfo.isHasCheck())
                 {
-                    settlementGoods.add(cartGoodsInfo);
                     JSONObject js = new JSONObject();
                     try
                     {
@@ -400,6 +396,21 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
         }
     }
 
+    private void settlementRefresh()
+    {
+        if (!CommonUtils.isNetworkConnected(mContext))
+        {
+            if (null != cartAdapter)
+            {
+                cartAdapter.toDelete();
+            }
+        }
+        else
+        {
+            request(ResponseConstant.GET_CART_LIST, true);
+        }
+    }
+
     @Override
     protected void onDestroy()
     {
@@ -410,7 +421,7 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
     public void onEventMainThread(EventManager.CartListFinish cartListFinish)
     {
         Logger.d(TAG, "onEventMainThread, cartListFinish!");
-        finish();
+        settlementRefresh();
     }
 
 }

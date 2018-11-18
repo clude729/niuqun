@@ -54,4 +54,10 @@ public class ResponseConstant {
 
     public static final int GOODS_BUY_SINGLE = BASE + 23;
 
+    public static final int GET_WXPAY = BASE + 24;
+
+    public static final int GET_CHANGE_BALANCE = BASE + 25;
+
+    public static final int GET_CHANGE_DETAIL = BASE + 25;
+
 }

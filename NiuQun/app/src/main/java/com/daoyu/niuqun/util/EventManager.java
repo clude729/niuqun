@@ -15,6 +15,22 @@ public class EventManager
     }
 
     /**
+     * 微信支付成功
+     */
+    public static class WxpaySuccess
+    {
+
+    }
+
+    /**
+     * 支付宝支付成功
+     */
+    public static class AlipaySuccess
+    {
+
+    }
+
+    /**
      * 个人中心设置是否忙碌
      */
     public static class BusyEvent
