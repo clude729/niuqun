@@ -172,10 +172,7 @@ public class BrandFragment extends Fragment implements OnRefreshListener
             return;
         }
         page = brandsData.getNowpage();
-        if (page == brandsData.getCountpage())
-        {
-            isAll = true;
-        }
+        isAll = page == brandsData.getCountpage();
         if (1 == page)
         {
             brandsListAdapter.clear();

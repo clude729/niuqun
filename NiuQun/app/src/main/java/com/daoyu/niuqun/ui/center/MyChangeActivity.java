@@ -23,10 +23,10 @@ import io.rong.eventbus.EventBus;
 /**
  * 我的零钱
  */
-public class MyChanerActivity extends BaseActivity implements View.OnClickListener
+public class MyChangeActivity extends BaseActivity implements View.OnClickListener
 {
 
-    private static final String TAG = "MyChanerActivity";
+    private static final String TAG = "MyChangeActivity";
 
     private TextView tvBalance;
 
@@ -164,7 +164,8 @@ public class MyChanerActivity extends BaseActivity implements View.OnClickListen
 
     private void goToDetail()
     {
-
+        Intent intent = new Intent(this, ChangeDetailActivity.class);
+        startActivity(intent);
     }
 
     public void onEventMainThread(EventManager.AlipaySuccess alipaySuccess)

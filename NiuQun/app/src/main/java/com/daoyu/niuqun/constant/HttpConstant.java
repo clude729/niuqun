@@ -82,4 +82,10 @@ public class HttpConstant
     public static final String GET_MY_CHANGE_DETAIL_LIST = URL + "user/userpaylog";
 
     public static final String GET_MY_ORDER_LIST = URL + "user/order";
+
+    public static final String ORDER_DEL = URL + "user/delorder";
+
+    public static final String ORDER_CANCEL = URL + "user/toover";
+
+    public static final String ORDER_RECEIVE = URL + "user/toreceive";
 }

@@ -18,7 +18,7 @@ public class PhotosItem extends MyBaseItem
     {
         mContext = context;
         stringId = R.string.my_photos;
-        imageId = R.mipmap.icon_item_play;
+        imageId = R.mipmap.icon_item_photos;
         listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {

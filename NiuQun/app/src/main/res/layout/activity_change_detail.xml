@@ -3,20 +3,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/color8"
+    android:orientation="vertical"
     tools:context="com.daoyu.niuqun.ui.center.ChangeDetailActivity">
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/srl"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
         <ListView
             android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:dividerHeight="1dp"
             android:listSelector="@color/transparent"
-            android:scrollbars="none"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:scrollbars="none" />
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/footview"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="28dp"
+            android:layout_height="28dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/load_more"
+            android:textColor="@color/color4"
+            android:textSize="@dimen/h6" />
+    </LinearLayout>
 </LinearLayout>

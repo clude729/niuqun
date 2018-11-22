@@ -44,7 +44,6 @@ public class ChangeDetailListAdapter extends BaseAdapter
      */
     public void addAllItem(List<ChangeInfo> newDataList)
     {
-        clear();
         if (null != newDataList)
         {
             dataList.addAll(newDataList);

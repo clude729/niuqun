@@ -61,6 +61,19 @@ public class GoodsListAdapter extends BaseAdapter
         unit = mContext.getResources().getString(R.string.my_symbol_app);
     }
 
+    public GoodsListAdapter(Context context, List<CartGoodsInfo> listItems)
+    {
+        this.mContext = context;
+        if (null != listItems)
+        {
+            this.listItems = listItems;
+        }
+        sInflater = LayoutInflater.from(mContext);
+        width = (ViewUtil.getIntance().getDisplayWidth(mContext) - ViewUtil.getIntance().dip2px(mContext, 40)) * 2 / 7;
+        options = new RequestOptions().error(R.drawable.default_useravatar).placeholder(R.drawable.default_useravatar);
+        unit = mContext.getResources().getString(R.string.my_symbol_app);
+    }
+
     /**
      * 添加数据
      *

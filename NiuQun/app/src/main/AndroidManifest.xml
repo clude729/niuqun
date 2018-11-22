@@ -250,8 +250,18 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/moveFinishStyle" />
-        <activity android:name=".ui.center.MyChanerActivity" />
-        <activity android:name=".ui.center.ChangeDetailActivity"></activity>
+        <activity
+            android:name=".ui.center.MyChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.ChangeDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.brand.OrderListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
     </application>
 
 </manifest>

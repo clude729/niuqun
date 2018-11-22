@@ -2,7 +2,6 @@ package com.daoyu.niuqun.view;
 
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 
 import com.daoyu.niuqun.util.Logger;
@@ -42,7 +41,7 @@ public class AutoLoadListener implements OnScrollListener
                 Logger.d("x" + location[0], "y" + location[1]);
                 if (view.getLastVisiblePosition() != getLastVisiblePosition && lastVisiblePositionY != y)//第一次拖至底部
                 {
-                    Toast.makeText(view.getContext(), "已经拖动至底部，再次拖动即可翻页", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(view.getContext(), "已经拖动至底部，再次拖动即可翻页", Toast.LENGTH_LONG).show();
                     getLastVisiblePosition = view.getLastVisiblePosition();
                     lastVisiblePositionY = y;
                     return;

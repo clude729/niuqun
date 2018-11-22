@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.alipay.sdk.app.EnvUtils;
 import com.alipay.sdk.app.PayTask;
 import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.response.AlipayTokenResponse;
@@ -135,7 +134,7 @@ public class RechargeActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
+        //EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge);
         EventBus.getDefault().register(this);

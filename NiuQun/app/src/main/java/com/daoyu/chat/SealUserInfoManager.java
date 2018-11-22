@@ -40,12 +40,14 @@ import com.daoyu.chat.server.response.GetGroupMemberResponse;
 import com.daoyu.chat.server.response.GetGroupResponse;
 import com.daoyu.chat.server.response.GetTokenResponse;
 import com.daoyu.chat.server.response.MyCenterResponse;
+import com.daoyu.chat.server.response.OrderListResponse;
 import com.daoyu.chat.server.response.UserFriendsResponse;
 import com.daoyu.chat.server.response.WebContentResponse;
 import com.daoyu.chat.server.utils.NLog;
 import com.daoyu.chat.server.utils.RongGenerate;
 import com.daoyu.niuqun.bean.BrandsData;
 import com.daoyu.niuqun.bean.MySelfBean;
+import com.daoyu.niuqun.bean.OrderData;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
 import com.daoyu.niuqun.util.Logger;
@@ -458,6 +460,33 @@ public class SealUserInfoManager implements OnDataListener {
         catch (JSONException e)
         {
             NLog.d(TAG, "getBrandsList occurs JSONException e=" + e.toString());
+            return null;
+        }
+        if (null != response && HttpConstant.SUCCESS.equals(response.getCode()))
+        {
+            bean = response.getData();
+        }
+        return bean;
+    }
+
+    /**
+     * 获取订单列表数据
+     * @param status 订单状态
+     * @param page  当前页码
+     * @return bean
+     * @throws HttpException exception
+     */
+    private OrderData getOrderList(String status, int page) throws HttpException
+    {
+        OrderData bean = null;
+        OrderListResponse response;
+        try
+        {
+            response = action.getOrderList(status, page);
+        }
+        catch (JSONException e)
+        {
+            NLog.d(TAG, "getOrderList occurs JSONException e=" + e.toString());
             return null;
         }
         if (null != response && HttpConstant.SUCCESS.equals(response.getCode()))
@@ -1175,7 +1204,7 @@ public class SealUserInfoManager implements OnDataListener {
                 catch (HttpException e)
                 {
                     onCallBackFail(callback);
-                    NLog.d(TAG, "getMyCenter occurs HttpException e=" + e.toString());
+                    NLog.d(TAG, "updataUserName occurs HttpException e=" + e.toString());
                     return;
                 }
                 Logger.d(TAG, "updataUserName, respone: " + bean);
@@ -1216,6 +1245,219 @@ public class SealUserInfoManager implements OnDataListener {
                     return;
                 }
                 Logger.d(TAG, "getBrandsList, BrandsData: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    public void getOrderList(final String status, final int page, final ResultCallback<OrderData> callback)
+    {
+        if (null == mWorkHandler)
+        {
+            Logger.d(TAG, "mWorkHandler is null!", new Exception());
+            return;
+        }
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                OrderData bean;
+                try
+                {
+                    bean = getOrderList(status, page);
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "getOrderList occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "getOrderList, orderData: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    /**
+     * 删除订单
+     *
+     * @param orderId 订单号
+     * @param callback 回调
+     */
+    public void toDelOrder(final String orderId, final ResultCallback<BaseSealResponse> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                BaseSealResponse bean;
+                try
+                {
+                    bean = action.toDelOrder(orderId);
+                }
+                catch (JSONException je)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "toDelOrder occurs JSONException e=" + je.toString());
+                    return;
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "toDelOrder occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "toDelOrder, respone: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param orderId 订单号
+     * @param callback 回调
+     */
+    public void toCancelOrder(final String orderId, final ResultCallback<BaseSealResponse> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                BaseSealResponse bean;
+                try
+                {
+                    bean = action.toCancelOrder(orderId);
+                }
+                catch (JSONException je)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "toCancelOrder occurs JSONException e=" + je.toString());
+                    return;
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "toCancelOrder occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "toCancelOrder, respone: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    /**
+     * 支付订单
+     *
+     * @param orderId 订单号
+     * @param callback 回调
+     */
+    public void toPayOrder(final String orderId, final ResultCallback<BaseSealResponse> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                BaseSealResponse bean;
+                try
+                {
+                    bean = action.toPayOrder(orderId);
+                }
+                catch (JSONException je)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "toPayOrder occurs JSONException e=" + je.toString());
+                    return;
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "toPayOrder occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "toPayOrder, respone: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    /**
+     * 确认收货
+     *
+     * @param orderId 订单号
+     * @param callback 回调
+     */
+    public void toReceiveOrder(final String orderId, final ResultCallback<BaseSealResponse> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                BaseSealResponse bean;
+                try
+                {
+                    bean = action.toReceiveOrder(orderId);
+                }
+                catch (JSONException je)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "toReceiveOrder occurs JSONException e=" + je.toString());
+                    return;
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "toReceiveOrder occurs HttpException e=" + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "toReceiveOrder, respone: " + bean);
                 if (null != callback)
                 {
                     callback.onCallback(bean);

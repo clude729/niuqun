@@ -53,6 +53,7 @@ public class DialogWithYesOrNoUtils
             {
                 if (null != callBack)
                 {
+                    dialog.cancel();
                     callBack.executeEvent();
                 }
                 else

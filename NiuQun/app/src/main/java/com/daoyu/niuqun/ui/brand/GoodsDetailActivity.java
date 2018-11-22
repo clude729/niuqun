@@ -33,6 +33,8 @@ import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.ui.adapter.GoodsPagerAdapter;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.ViewUtil;
+import com.daoyu.niuqun.view.AdDialog;
+import com.daoyu.niuqun.view.AdResultCallBack;
 import com.viewpagerindicator.CirclePageIndicator;
 
 /**
@@ -60,6 +62,25 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private String goodsId;
 
     private String goodsPrice;
+    
+    private String adWords;
+    
+    private AdResultCallBack callBack = new AdResultCallBack()
+    {
+        @Override
+        public void clickRight()
+        {
+            Logger.d(TAG, "adwords is right!");
+            request(ResponseConstant.BRANDS_SCORE);
+        }
+
+        @Override
+        public void clickWrong()
+        {
+            Logger.d(TAG, "adwords is wrong!");
+            NToast.shortToast(mContext, getResources().getString(R.string.goods_ad_wrong_hint));
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -275,6 +296,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             Logger.d(TAG, "showDetail, goodsInfo is null, return!");
             return;
         }
+        adWords = goodsInfo.getAdv_word();
         String cateId = goodsInfo.getCate_id();
         if ("0".equals(cateId))
         {
@@ -346,7 +368,11 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId())
         {
             case R.id.btn_get:
-
+                if (!TextUtils.isEmpty(adWords))
+                {
+                    AdDialog dialog = new AdDialog(mContext, adWords, callBack);
+                    dialog.show();
+                }
                 break;
             case R.id.btn_add:
                 if (!TextUtils.isEmpty(goodsId))

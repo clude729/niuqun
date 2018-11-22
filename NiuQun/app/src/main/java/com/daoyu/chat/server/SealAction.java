@@ -1026,21 +1026,92 @@ public class SealAction extends BaseAction
     /**
      * 订单列表
      *
+     * @param status 状态
      * @param page 页码
      * @return 响应
      * @throws HttpException exception
      */
-    public OrderListResponse getOrderList(int page) throws HttpException
+    public OrderListResponse getOrderList(String status, int page) throws HttpException
     {
         String url = HttpConstant.GET_MY_ORDER_LIST + "/page/" + page;
         RequestParams params = new RequestParams();
         params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("otype", status);
         String result = httpManager.post(url, params);
         Logger.d(TAG, "getOrderList, result: " + result);
         OrderListResponse response = null;
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, OrderListResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 删除订单
+     *
+     * @param orderId 订单号
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse toDelOrder(String orderId) throws HttpException
+    {
+        String url = HttpConstant.ORDER_DEL;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("order_id", orderId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "toDelOrder, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param orderId 订单号
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse toCancelOrder(String orderId) throws HttpException
+    {
+        String url = HttpConstant.ORDER_CANCEL;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("order_id", orderId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "toCancelOrder, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 确认收货
+     *
+     * @param orderId 订单号
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public BaseSealResponse toReceiveOrder(String orderId) throws HttpException
+    {
+        String url = HttpConstant.ORDER_RECEIVE;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("order_id", orderId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "toReceiveOrder, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
         }
         return response;
     }

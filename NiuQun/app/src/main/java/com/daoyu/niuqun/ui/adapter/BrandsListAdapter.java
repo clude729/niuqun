@@ -44,8 +44,8 @@ public class BrandsListAdapter extends BaseAdapter
         {
             this.dataList.addAll(dataList);
         }
-        height = (int) ((ViewUtil.getIntance().getDisplayWidth(context) - ViewUtil.getIntance().dip2px(context, 24)) * 4
-            / 17);
+        height = (int) ((ViewUtil.getIntance().getDisplayWidth(context) - ViewUtil.getIntance().dip2px(context, 24))
+            / 2);
     }
 
     public void addAllItem(List<BrandInfo> newDataList)

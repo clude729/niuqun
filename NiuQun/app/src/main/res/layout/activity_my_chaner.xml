@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/color8"
-    tools:context="com.daoyu.niuqun.ui.center.MyChanerActivity">
+    tools:context="com.daoyu.niuqun.ui.center.MyChangeActivity">
 
     <ImageView
         android:scaleType="fitCenter"

@@ -85,6 +85,7 @@
     <string name="buy_rightnow">立即购买</string>
     <string name="to_makesure">确定</string>
     <string name="goods_ad_hint">按顺序点击广告语文字获取牛币</string>
+    <string name="goods_ad_wrong_hint">广告点击错误</string>
     <string name="goods_detail">详情</string>
     <string name="get_score_success">您成功获得</string>
     <string name="goods_add_cart_success">成功加入购物车</string>
@@ -147,4 +148,17 @@
     <string name="goods_buy_over">购买完成</string>
     <string name="red_package_reward">红包奖励</string>
     <string name="shopping_consumption">购物消费</string>
+    <string name="order_number">订单号：</string>
+    <string name="remind_the_shipment">提醒发货</string>
+    <string name="view_logistics">查看物流</string>
+    <string name="confirm_receipt">确认收货</string>
+    <string name="delete_order">删除订单</string>
+    <string name="wait_to_pay">&#160;&#160;待支付&#160;&#160;</string>
+    <string name="order_cancel">取消订单</string>
+    <string name="the_all">全部</string>
+    <string name="wait_receipt">待发货</string>
+    <string name="had_receipt">待收货</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
