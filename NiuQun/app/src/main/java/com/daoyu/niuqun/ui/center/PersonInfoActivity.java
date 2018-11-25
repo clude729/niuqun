@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,15 +23,19 @@ import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.chat.server.utils.photo.PhotoUtils;
 import com.daoyu.chat.server.widget.BottomMenuDialog;
 import com.daoyu.chat.server.widget.LoadDialog;
+import com.daoyu.chat.server.widget.SelectableRoundedImageView;
 import com.daoyu.chat.ui.activity.BaseActivity;
 import com.daoyu.niuqun.R;
+import com.daoyu.niuqun.constant.ActivityResultConstant;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.IntentConstant;
 import com.daoyu.niuqun.constant.ResponseConstant;
+import com.daoyu.niuqun.util.EventManager;
 import com.daoyu.niuqun.util.ImageLoad;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.SharePreferenceManager;
 
+import io.rong.eventbus.EventBus;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 
@@ -46,7 +49,7 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
 
     private static final String TAG = "PersonInfoActivity";
 
-    private ImageView imageAvatar;
+    private SelectableRoundedImageView imageAvatar;
 
     private TextView tvName;
 
@@ -78,6 +81,7 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
         initView();
         initListenter();
         initData();
+        EventBus.getDefault().register(this);
     }
 
     private void initView()
@@ -109,7 +113,12 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
         ImageLoad.getInstance().load(this, imageAvatar, SharePreferenceManager.getCachedAvatarPath(),
             new RequestOptions().error(R.drawable.default_useravatar).placeholder(R.drawable.default_useravatar));
         tvName.setText(SharePreferenceManager.getCachedUsername());
-        tvNumber.setText(SharePreferenceManager.getCacheMobile());
+        String number = SharePreferenceManager.getCacheHerdNo();
+        if (TextUtils.isEmpty(number))
+        {
+            number = SharePreferenceManager.getCacheMobile();
+        }
+        tvNumber.setText(number);
         setPortraitChangeListener();
     }
 
@@ -205,16 +214,16 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
         switch (v.getId())
         {
             case R.id.ll_name:
-
+                goToTextEdit(TextEditActivity.NICKNAME);
                 break;
             case R.id.ll_number:
-
+                goToTextEdit(TextEditActivity.APP_NUMBER);
                 break;
             case R.id.ll_code:
 
                 break;
             case R.id.ll_sign:
-
+                goToTextEdit(TextEditActivity.SIGN);
                 break;
             case R.id.ll_address:
                 goToAddressList();
@@ -241,6 +250,20 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    private void goToTextEdit(int type)
+    {
+        Intent intent = new Intent(this, TextEditActivity.class);
+        intent.putExtra(IntentConstant.UPDATA_TYPE, type);
+        startActivity(intent);
     }
 
     private void goToAddressList()
@@ -315,6 +338,34 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
             }
         });
         dialog.show();
+    }
+
+    public void onEventMainThread(EventManager.PersonInfoSuccess event)
+    {
+        Logger.d(TAG, "onEventMainThread, PersonInfoSuccess!");
+        if (ActivityResultConstant.UPDATA_USERNAME == event.getType())
+        {
+            tvName.setText(SharePreferenceManager.getCachedUsername());
+        }
+        else if (ActivityResultConstant.UPDATA_NIUQUN_NUMBER == event.getType())
+        {
+            String number = SharePreferenceManager.getCacheHerdNo();
+            if (TextUtils.isEmpty(number))
+            {
+                number = SharePreferenceManager.getCacheMobile();
+            }
+            tvNumber.setText(number);
+        }
+        else
+        {
+            tvName.setText(SharePreferenceManager.getCachedUsername());
+            String number = SharePreferenceManager.getCacheHerdNo();
+            if (TextUtils.isEmpty(number))
+            {
+                number = SharePreferenceManager.getCacheMobile();
+            }
+            tvNumber.setText(number);
+        }
     }
 
 }

@@ -31,6 +31,25 @@ public class EventManager
     }
 
     /**
+     * 个人信息刷新成功
+     */
+    public static class PersonInfoSuccess
+    {
+
+        private int type = -1;
+
+        public int getType()
+        {
+            return type;
+        }
+
+        public void setType(int type)
+        {
+            this.type = type;
+        }
+    }
+
+    /**
      * 个人中心设置是否忙碌
      */
     public static class BusyEvent

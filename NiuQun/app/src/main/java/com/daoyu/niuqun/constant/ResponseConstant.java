@@ -14,7 +14,7 @@ public class ResponseConstant {
 
     public static final int UPDATA_NAME = BASE + 3;
 
-    public static final int UPDATA_SING = BASE + 4;
+    public static final int UPDATA_SIGN= BASE + 4;
 
     public static final int UPDATA_NUMBER = BASE + 5;
 
@@ -58,6 +58,16 @@ public class ResponseConstant {
 
     public static final int GET_CHANGE_BALANCE = BASE + 25;
 
-    public static final int GET_CHANGE_DETAIL = BASE + 25;
+    public static final int GET_CHANGE_DETAIL = BASE + 26;
+
+    public static final int UPDATA_NICKNAME = BASE + 27;
+
+    public static final int UPDATA_NIUQUN_NUM = BASE + 28;
+
+    public static final int UPDATA_PERSON_SIGN = BASE + 29;
+
+    public static final int APP_MESSAGE_LIST = BASE + 30;
+
+    public static final int APP_MESSAGE_DETAIL = BASE + 31;
 
 }

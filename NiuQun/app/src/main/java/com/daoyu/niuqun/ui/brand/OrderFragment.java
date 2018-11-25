@@ -136,10 +136,7 @@ public class OrderFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         listView.setAdapter(adapter);
         AutoLoadListener loadListener = new AutoLoadListener(autoLoadCallBack);
         listView.setOnScrollListener(loadListener);
-        if (getType() == 0)
-        {
-            getOrderList(1);
-        }
+        getOrderList(1);
     }
 
     @Override

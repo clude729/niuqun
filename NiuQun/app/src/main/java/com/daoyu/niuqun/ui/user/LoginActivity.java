@@ -16,6 +16,7 @@ import com.archie.netlibrary.okhttp.request.RequestParams;
 import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.AccountInfo;
+import com.daoyu.niuqun.bean.ReuserInfo;
 import com.daoyu.niuqun.constant.ActivityResultConstant;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.MessageConstant;
@@ -198,6 +199,11 @@ public class LoginActivity extends MyBaseActivity implements View.OnClickListene
                 SharePreferenceManager.setKeyCachedPassword(et_password.getText().toString().trim());
                 SharePreferenceManager.setKeyCachedUserid(userId);
                 SharePreferenceManager.setKeyStringValue(SharePreferenceConstant.IM_TOKEN, token);
+                ReuserInfo reuserInfo = accountInfo.getReuser();
+                if (null != reuserInfo)
+                {
+                    SharePreferenceManager.setKeyCachedReUserid(reuserInfo.getUser_id());
+                }
                 goToMain(token);
                 return;
             }

@@ -8,7 +8,10 @@ public class AccountInfo
 {
 
     private String user_id;
+    
     private String token;
+    
+    private ReuserInfo reuser;
 
     public String getUser_id()
     {
@@ -30,8 +33,18 @@ public class AccountInfo
         this.token = token;
     }
 
+    public ReuserInfo getReuser()
+    {
+        return reuser;
+    }
+
+    public void setReuser(ReuserInfo reuser)
+    {
+        this.reuser = reuser;
+    }
+
     public String toString()
     {
-        return "AccountInfo{ user_id = " + user_id + " ,token = " + token + "}";
+        return "AccountInfo{ user_id = " + user_id + " ,token = " + token + "reuser: " + reuser + "}";
     }
 }

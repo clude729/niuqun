@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color8"
+    android:orientation="vertical"
+    tools:context="com.daoyu.niuqun.ui.center.TextEditActivity">
+
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:hint="@string/person_name"
+        android:inputType="text"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:singleLine="true"
+        android:textColor="@color/color2"
+        android:textColorHint="@color/color9"
+        android:textSize="@dimen/h4"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/et_num"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:hint="@string/niuqun_number"
+        android:inputType="textVisiblePassword"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:singleLine="true"
+        android:textColor="@color/color2"
+        android:textColorHint="@color/color9"
+        android:textSize="@dimen/h4"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/et_sign"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/colorWhite"
+        android:gravity="start"
+        android:hint="@string/person_sign"
+        android:inputType="text"
+        android:padding="12dp"
+        android:textColor="@color/color2"
+        android:textColorHint="@color/color9"
+        android:textSize="@dimen/h4"
+        android:visibility="gone" />
+</LinearLayout>

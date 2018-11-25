@@ -64,7 +64,7 @@ public class SettingActivity extends MyBaseActivity implements OnClickListener
                 goToPrivacy();
                 break;
             case R.id.ll_feedback:
-
+                goToFeedBack();
                 break;
             case R.id.ll_about:
                 goToAbout();
@@ -100,6 +100,12 @@ public class SettingActivity extends MyBaseActivity implements OnClickListener
     private void goToAbout()
     {
         Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
+    }
+
+    private void goToFeedBack()
+    {
+        Intent intent = new Intent(this, FeedbackActivity.class);
         startActivity(intent);
     }
 

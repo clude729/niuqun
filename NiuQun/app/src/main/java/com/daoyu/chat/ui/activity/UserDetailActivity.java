@@ -39,6 +39,7 @@ import com.daoyu.chat.server.utils.RongGenerate;
 import com.daoyu.chat.server.widget.DialogWithYesOrNoUtils;
 import com.daoyu.chat.server.widget.LoadDialog;
 import com.daoyu.chat.ui.widget.SinglePopWindow;
+import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.SharePreferenceManager;
 
 //CallKit start 1
@@ -63,6 +64,7 @@ import io.rong.imlib.model.UserOnlineStatusInfo;
 public class UserDetailActivity extends BaseActivity implements OnClickListener
 {
 
+    private static final String TAG = "UserDetailActivity";
     private static final int SYNC_FRIEND_INFO = 129;
     private ImageView mUserPortrait;
     private TextView mUserNickName;
@@ -115,6 +117,7 @@ public class UserDetailActivity extends BaseActivity implements OnClickListener
 
     private void initData()
     {
+        Logger.d(TAG, "initData!");
         mType = getIntent().getIntExtra("type", 0);
         if (mType == CLICK_CONVERSATION_USER_PORTRAIT)
         {
@@ -447,12 +450,15 @@ public class UserDetailActivity extends BaseActivity implements OnClickListener
             switch (requestCode)
             {
                 case ADD_FRIEND:
-                    FriendInvitationResponse response = (FriendInvitationResponse) result;
-                    if (HttpConstant.SUCCESS.equals(response.getCode()))
+                    if (result instanceof FriendInvitationResponse)
                     {
-                        LoadDialog.dismiss(mContext);
-                        NToast.shortToast(mContext, getString(R.string.request_success));
-                        this.finish();
+                        FriendInvitationResponse response = (FriendInvitationResponse) result;
+                        if (HttpConstant.SUCCESS.equals(response.getCode()))
+                        {
+                            LoadDialog.dismiss(mContext);
+                            NToast.shortToast(mContext, getString(R.string.request_success));
+                            this.finish();
+                        }
                     }
                     break;
                 case SYN_USER_INFO:
@@ -485,79 +491,155 @@ public class UserDetailActivity extends BaseActivity implements OnClickListener
                     }
                     break;
                 case SYNC_FRIEND_INFO:
-                    GetFriendInfoByIDResponse friendInfoByIDResponse = (GetFriendInfoByIDResponse) result;
-                    if (friendInfoByIDResponse.getCode() == 200)
+                    if (result instanceof GetUserInfoByIdResponse)
                     {
-                        mUserPhone.setVisibility(View.VISIBLE);
-                        mPhoneString = friendInfoByIDResponse.getResult().getUser().getPhone();
-                        mUserPhone.setText("手机号:" + friendInfoByIDResponse.getResult().getUser().getPhone());
-                        GetFriendInfoByIDResponse.ResultEntity resultEntity = friendInfoByIDResponse.getResult();
-                        GetFriendInfoByIDResponse.ResultEntity.UserEntity userEntity = resultEntity.getUser();
-                        if (mFriend.getUserId().equals(userEntity.getId()))
+                        Logger.d(TAG, "GetUserInfoByIdResponse, success!");
+                        GetUserInfoByIdResponse response = (GetUserInfoByIdResponse) result;
+                        if (HttpConstant.SUCCESS.equals(response.getCode()))
                         {
-                            if (hasFriendInfoChanged(resultEntity))
+//                            mUserPhone.setVisibility(View.VISIBLE);
+//                            mPhoneString = friendInfoByIDResponse.getResult().getUser().getPhone();
+//                            mUserPhone.setText("手机号:" + friendInfoByIDResponse.getResult().getUser().getPhone());
+                            GetUserInfoByIdResponse.ResultEntity resultEntity = response.getResult();
+//                            GetFriendInfoByIDResponse.ResultEntity.UserEntity userEntity = resultEntity.getUser();
+                            if (mFriend.getUserId().equals(resultEntity.getUser_id()))
                             {
-                                String nickName = userEntity.getNickname();
-                                String portraitUri = userEntity.getPortraitUri();
-                                //当前app server返回的displayName为空,先不使用
-                                String displayName = resultEntity.getdisplayName();
-                                //如果没有设置头像,好友数据库的头像地址和用户信息提供者的头像处理不一致,这个不一致是seal app代码处理的问题,未来应该矫正回来
-                                String userInfoPortraitUri = mFriend.getPortraitUri().toString();
-                                //更新UI
-                                //if (TextUtils.isEmpty(displayName) && hasDisplayNameChanged(displayName)) {
-                                if (!TextUtils.isEmpty(mFriend.getDisplayName()))
+                                if (hasFriendInfoChanged(resultEntity))
                                 {
-                                    mUserNickName.setVisibility(View.VISIBLE);
-                                    mUserNickName.setText(getString(R.string.ac_contact_nick_name) + " " + nickName);
-                                    mUserDisplayName.setText(mFriend.getDisplayName());
-                                }
-                                else if (hasNickNameChanged(nickName))
-                                {
-                                    if (mFriend.isExitsDisplayName())
+                                    String nickName = resultEntity.getUser_name();
+                                    String portraitUri = resultEntity.getAvatar();
+                                    //当前app server返回的displayName为空,先不使用
+                                    String displayName = resultEntity.getUser_name();
+                                    //如果没有设置头像,好友数据库的头像地址和用户信息提供者的头像处理不一致,这个不一致是seal app代码处理的问题,未来应该矫正回来
+                                    String userInfoPortraitUri = mFriend.getPortraitUri().toString();
+                                    //更新UI
+                                    //if (TextUtils.isEmpty(displayName) && hasDisplayNameChanged(displayName)) {
+                                    if (!TextUtils.isEmpty(mFriend.getDisplayName()))
                                     {
-                                        mUserNickName
-                                            .setText(getString(R.string.ac_contact_nick_name) + " " + nickName);
+                                        mUserNickName.setVisibility(View.VISIBLE);
+                                        mUserNickName.setText(getString(R.string.ac_contact_nick_name) + " " + nickName);
+                                        mUserDisplayName.setText(mFriend.getDisplayName());
                                     }
-                                    else
+                                    else if (hasNickNameChanged(nickName))
                                     {
-                                        mUserDisplayName.setText(nickName);
+                                        if (mFriend.isExitsDisplayName())
+                                        {
+                                            mUserNickName
+                                                    .setText(getString(R.string.ac_contact_nick_name) + " " + nickName);
+                                        }
+                                        else
+                                        {
+                                            mUserDisplayName.setText(nickName);
+                                        }
                                     }
-                                }
-                                if (hasPortraitUriChanged(portraitUri))
-                                {
-                                    ImageLoader.getInstance().displayImage(portraitUri, mUserPortrait,
-                                        App.getOptions());
-                                    userInfoPortraitUri = portraitUri;
-                                }
-                                //更新好友数据库
-                                SealUserInfoManager.getInstance()
-                                    .addFriend(new Friend(mFriend.getUserId(), nickName, Uri.parse(portraitUri),
-                                        mFriend.getDisplayName(), null, null, null, null,
-                                        CharacterParser.getInstance().getSpelling(nickName),
-                                        TextUtils.isEmpty(mFriend.getDisplayName()) ? null
-                                            : CharacterParser.getInstance().getSpelling(mFriend.getDisplayName())));
-                                //更新好友列表
-                                BroadcastManager.getInstance(mContext).sendBroadcast(SealAppContext.UPDATE_FRIEND);
-                                //更新用户信息提供者
-                                if ((!mFriend.isExitsDisplayName() && hasNickNameChanged(nickName))
-                                    || hasPortraitUriChanged(portraitUri))
-                                {
-                                    //如果备注存在,UserInfo设置备注
-                                    if (mFriend.isExitsDisplayName())
-                                        nickName = mFriend.getDisplayName();
-                                    if (TextUtils.isEmpty(userInfoPortraitUri))
+                                    if (hasPortraitUriChanged(portraitUri))
                                     {
-                                        userInfoPortraitUri = RongGenerate.generateDefaultAvatar(nickName,
-                                            mFriend.getUserId());
+                                        ImageLoader.getInstance().displayImage(portraitUri, mUserPortrait,
+                                                App.getOptions());
+                                        userInfoPortraitUri = portraitUri;
                                     }
-                                    UserInfo newUserInfo = new UserInfo(mFriend.getUserId(), nickName,
-                                        Uri.parse(userInfoPortraitUri));
-                                    RongIM.getInstance().refreshUserInfoCache(newUserInfo);
+                                    //更新好友数据库
+                                    SealUserInfoManager.getInstance()
+                                            .addFriend(new Friend(mFriend.getUserId(), nickName, Uri.parse(portraitUri),
+                                                    mFriend.getDisplayName(), null, null, null, null,
+                                                    CharacterParser.getInstance().getSpelling(nickName),
+                                                    TextUtils.isEmpty(mFriend.getDisplayName()) ? null
+                                                            : CharacterParser.getInstance().getSpelling(mFriend.getDisplayName())));
+                                    //更新好友列表
+                                    BroadcastManager.getInstance(mContext).sendBroadcast(SealAppContext.UPDATE_FRIEND);
+                                    //更新用户信息提供者
+                                    if ((!mFriend.isExitsDisplayName() && hasNickNameChanged(nickName))
+                                            || hasPortraitUriChanged(portraitUri))
+                                    {
+                                        //如果备注存在,UserInfo设置备注
+                                        if (mFriend.isExitsDisplayName())
+                                            nickName = mFriend.getDisplayName();
+                                        if (TextUtils.isEmpty(userInfoPortraitUri))
+                                        {
+                                            userInfoPortraitUri = RongGenerate.generateDefaultAvatar(nickName,
+                                                    mFriend.getUserId());
+                                        }
+                                        UserInfo newUserInfo = new UserInfo(mFriend.getUserId(), nickName,
+                                                Uri.parse(userInfoPortraitUri));
+                                        RongIM.getInstance().refreshUserInfoCache(newUserInfo);
+                                    }
                                 }
                             }
                         }
-
                     }
+//                    GetFriendInfoByIDResponse friendInfoByIDResponse = (GetFriendInfoByIDResponse) result;
+//                    if (friendInfoByIDResponse.getCode() == 200)
+//                    {
+//                        mUserPhone.setVisibility(View.VISIBLE);
+//                        mPhoneString = friendInfoByIDResponse.getResult().getUser().getPhone();
+//                        mUserPhone.setText("手机号:" + friendInfoByIDResponse.getResult().getUser().getPhone());
+//                        GetFriendInfoByIDResponse.ResultEntity resultEntity = friendInfoByIDResponse.getResult();
+//                        GetFriendInfoByIDResponse.ResultEntity.UserEntity userEntity = resultEntity.getUser();
+//                        if (mFriend.getUserId().equals(userEntity.getId()))
+//                        {
+//                            if (hasFriendInfoChanged(resultEntity))
+//                            {
+//                                String nickName = userEntity.getNickname();
+//                                String portraitUri = userEntity.getPortraitUri();
+//                                //当前app server返回的displayName为空,先不使用
+//                                String displayName = resultEntity.getdisplayName();
+//                                //如果没有设置头像,好友数据库的头像地址和用户信息提供者的头像处理不一致,这个不一致是seal app代码处理的问题,未来应该矫正回来
+//                                String userInfoPortraitUri = mFriend.getPortraitUri().toString();
+//                                //更新UI
+//                                //if (TextUtils.isEmpty(displayName) && hasDisplayNameChanged(displayName)) {
+//                                if (!TextUtils.isEmpty(mFriend.getDisplayName()))
+//                                {
+//                                    mUserNickName.setVisibility(View.VISIBLE);
+//                                    mUserNickName.setText(getString(R.string.ac_contact_nick_name) + " " + nickName);
+//                                    mUserDisplayName.setText(mFriend.getDisplayName());
+//                                }
+//                                else if (hasNickNameChanged(nickName))
+//                                {
+//                                    if (mFriend.isExitsDisplayName())
+//                                    {
+//                                        mUserNickName
+//                                            .setText(getString(R.string.ac_contact_nick_name) + " " + nickName);
+//                                    }
+//                                    else
+//                                    {
+//                                        mUserDisplayName.setText(nickName);
+//                                    }
+//                                }
+//                                if (hasPortraitUriChanged(portraitUri))
+//                                {
+//                                    ImageLoader.getInstance().displayImage(portraitUri, mUserPortrait,
+//                                        App.getOptions());
+//                                    userInfoPortraitUri = portraitUri;
+//                                }
+//                                //更新好友数据库
+//                                SealUserInfoManager.getInstance()
+//                                    .addFriend(new Friend(mFriend.getUserId(), nickName, Uri.parse(portraitUri),
+//                                        mFriend.getDisplayName(), null, null, null, null,
+//                                        CharacterParser.getInstance().getSpelling(nickName),
+//                                        TextUtils.isEmpty(mFriend.getDisplayName()) ? null
+//                                            : CharacterParser.getInstance().getSpelling(mFriend.getDisplayName())));
+//                                //更新好友列表
+//                                BroadcastManager.getInstance(mContext).sendBroadcast(SealAppContext.UPDATE_FRIEND);
+//                                //更新用户信息提供者
+//                                if ((!mFriend.isExitsDisplayName() && hasNickNameChanged(nickName))
+//                                    || hasPortraitUriChanged(portraitUri))
+//                                {
+//                                    //如果备注存在,UserInfo设置备注
+//                                    if (mFriend.isExitsDisplayName())
+//                                        nickName = mFriend.getDisplayName();
+//                                    if (TextUtils.isEmpty(userInfoPortraitUri))
+//                                    {
+//                                        userInfoPortraitUri = RongGenerate.generateDefaultAvatar(nickName,
+//                                            mFriend.getUserId());
+//                                    }
+//                                    UserInfo newUserInfo = new UserInfo(mFriend.getUserId(), nickName,
+//                                        Uri.parse(userInfoPortraitUri));
+//                                    RongIM.getInstance().refreshUserInfoCache(newUserInfo);
+//                                }
+//                            }
+//                        }
+//
+//                    }
 
                     break;
             }
@@ -607,12 +689,11 @@ public class UserDetailActivity extends BaseActivity implements OnClickListener
         }
     }
 
-    private boolean hasFriendInfoChanged(GetFriendInfoByIDResponse.ResultEntity resultEntity)
+    private boolean hasFriendInfoChanged(GetUserInfoByIdResponse.ResultEntity resultEntity)
     {
-        GetFriendInfoByIDResponse.ResultEntity.UserEntity userEntity = resultEntity.getUser();
-        String nickName = userEntity.getNickname();
-        String portraitUri = userEntity.getPortraitUri();
-        String displayName = resultEntity.getdisplayName();
+        String nickName = resultEntity.getUser_name();
+        String portraitUri = resultEntity.getAvatar();
+        String displayName = resultEntity.getUser_name();
         return hasNickNameChanged(nickName) || hasPortraitUriChanged(portraitUri) || hasDisplayNameChanged(displayName);
     }
 

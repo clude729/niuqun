@@ -38,6 +38,7 @@ import com.daoyu.chat.server.response.AddToBlackListResponse;
 import com.daoyu.chat.server.response.AddressDetailResponse;
 import com.daoyu.chat.server.response.AgreeFriendsResponse;
 import com.daoyu.chat.server.response.AlipayTokenResponse;
+import com.daoyu.chat.server.response.AppMessageResponse;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.CartGoodsResponse;
@@ -63,6 +64,7 @@ import com.daoyu.chat.server.response.GetUserInfosResponse;
 import com.daoyu.chat.server.response.GoodsDetailResponse;
 import com.daoyu.chat.server.response.JoinGroupResponse;
 import com.daoyu.chat.server.response.LoginResponse;
+import com.daoyu.chat.server.response.MessageListResponse;
 import com.daoyu.chat.server.response.MyAddressListResponse;
 import com.daoyu.chat.server.response.MyCenterResponse;
 import com.daoyu.chat.server.response.OrderListResponse;
@@ -406,6 +408,27 @@ public class SealAction extends BaseAction
     }
 
     /**
+     * 根据userId去服务器查询好友信息
+     *
+     * @throws HttpException exception
+     */
+    public GetUserInfoByIdResponse getFriendInfoByID(String userid) throws HttpException
+    {
+        String url = HttpConstant.CHAT_SEARCH_PERSON;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("keywords", userid);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getFriendInfoByID, result: " + result);
+        GetUserInfoByIdResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, GetUserInfoByIdResponse.class);
+        }
+        return response;
+    }
+
+    /**
      * 根据 id 去服务端查询用户信息
      *
      * @param userid 用户ID
@@ -415,8 +438,10 @@ public class SealAction extends BaseAction
     {
         String url = HttpConstant.CHAT_SEARCH_PERSON;
         RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
         params.add("keywords", userid);
         String result = httpManager.post(url, params);
+        Logger.d(TAG, "getUserInfoById, result: " + result);
         GetUserInfoByIdResponse response = null;
         if (!TextUtils.isEmpty(result))
         {
@@ -436,6 +461,7 @@ public class SealAction extends BaseAction
     {
         String url = HttpConstant.CHAT_SEARCH_PERSON;
         RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
         params.add("keywords", phone);
         String result = httpManager.post(url, params);
         Logger.d(TAG, "getUserInfoFromPhone, result: " + result);
@@ -530,6 +556,95 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 更新牛群号
+     *
+     * @param herdno 新牛群号
+     * @throws HttpException exception
+     */
+    public BaseSealResponse updataNiuqunNumber(String herdno) throws HttpException
+    {
+        String url = HttpConstant.USER_UPDATE_NIUQUN_NUMBER;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("herdno", herdno);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "updataNiuqunNumber, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 更新签名
+     *
+     * @param sign 新签名
+     * @throws HttpException exception
+     */
+    public BaseSealResponse updataSign(String sign) throws HttpException
+    {
+        String url = HttpConstant.USER_UPDATE_SIGN;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("signature", sign);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "updataSign, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 根据用户id系统消息
+     *
+     * @param page 页码
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public MessageListResponse getAppMessageList(int page) throws HttpException
+    {
+        String url = HttpConstant.APP_NOTIFY + "/page/" + page;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getAppMessageList, result: " + result);
+        MessageListResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, MessageListResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 根据用户id系统消息
+     *
+     * @param msgId 消息id
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public AppMessageResponse getAppMessageById(String msgId) throws HttpException
+    {
+        String url = HttpConstant.APP_NOTIFY_DETAIL;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("ms_id", msgId);
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getAppMessageById, result: " + result);
+        AppMessageResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, AppMessageResponse.class);
         }
         return response;
     }
@@ -1136,23 +1251,6 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, WebContentResponse.class);
-        }
-        return response;
-    }
-
-    /**
-     * 根据userId去服务器查询好友信息
-     *
-     * @throws HttpException exception
-     */
-    public GetFriendInfoByIDResponse getFriendInfoByID(String userid) throws HttpException
-    {
-        String url = getURL("friendship/" + userid + "/profile");
-        String result = httpManager.get(url);
-        GetFriendInfoByIDResponse response = null;
-        if (!TextUtils.isEmpty(result))
-        {
-            response = jsonToBean(result, GetFriendInfoByIDResponse.class);
         }
         return response;
     }

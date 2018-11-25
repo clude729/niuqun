@@ -29,4 +29,11 @@ public class ActivityResultConstant {
     //编辑地址
     public static final int ADDRESS_EDIT = BASE + 7;
 
+    //名字修改
+    public static final int UPDATA_USERNAME = BASE + 8;
+    //牛群号修改
+    public static final int UPDATA_NIUQUN_NUMBER = BASE + 9;
+    //签名修改
+    public static final int UPDATA_SIGN = BASE + 10;
+
 }

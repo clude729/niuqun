@@ -25,6 +25,10 @@ public class HttpConstant
 
     public static final String USER_UPDATE_USERNAME = URL + "user/updateusername";
 
+    public static final String USER_UPDATE_NIUQUN_NUMBER = URL + "user/updateherdno";
+
+    public static final String USER_UPDATE_SIGN = URL + "user/updatesign";
+
     public static final String USER_UPDATE_AVATAR = URL + "user/updateavatar";
 
     public static final String USER_GET_PASSWORD = URL + "user/getpsw";
@@ -88,4 +92,8 @@ public class HttpConstant
     public static final String ORDER_CANCEL = URL + "user/toover";
 
     public static final String ORDER_RECEIVE = URL + "user/toreceive";
+
+    public static final String APP_NOTIFY = URL + "user/message";
+
+    public static final String APP_NOTIFY_DETAIL = URL + "user/msdetail";
 }

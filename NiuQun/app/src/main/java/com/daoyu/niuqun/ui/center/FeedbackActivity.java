@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.daoyu.chat.server.network.http.HttpException;
+import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.chat.server.widget.LoadDialog;
 import com.daoyu.chat.ui.activity.BaseActivity;
 import com.daoyu.niuqun.R;
@@ -22,8 +23,6 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
 
     private EditText etFeedback;
 
-    private Button btnSubmit;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -31,7 +30,8 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_feedback);
         setTitle(R.string.help_and_feedback);
         etFeedback = findViewById(R.id.et_feedback);
-        btnSubmit = findViewById(R.id.btn_submit);
+        Button btnSubmit = findViewById(R.id.btn_submit);
+        btnSubmit.setOnClickListener(this);
     }
 
     @Override
@@ -67,8 +67,9 @@ public class FeedbackActivity extends BaseActivity implements View.OnClickListen
                 String fbStr = etFeedback.getText().toString().trim();
                 if (!TextUtils.isEmpty(fbStr))
                 {
-                    LoadDialog.show(mContext);
-                    request(ResponseConstant.FEED_BACK, true);
+                    NToast.shortToast(mContext, "尚未提供接口");
+//                    LoadDialog.show(mContext);
+//                    request(ResponseConstant.FEED_BACK, true);
                 }
                 break;
             default:

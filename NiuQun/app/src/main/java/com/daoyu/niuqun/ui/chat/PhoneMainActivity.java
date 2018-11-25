@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,6 +42,7 @@ import com.daoyu.niuqun.util.Logger;
 import com.daoyu.chat.ui.widget.DragPointView;
 import com.daoyu.chat.ui.widget.DragPointView.OnDragListener;
 import com.daoyu.chat.ui.widget.MorePopWindow;
+import com.daoyu.niuqun.util.SharePreferenceManager;
 import com.daoyu.niuqun.util.ViewUtil;
 
 public class PhoneMainActivity extends FragmentActivity
@@ -55,6 +57,8 @@ public class PhoneMainActivity extends FragmentActivity
     private long secondClick = 0;
 
     private Toast mToast;
+
+    private TextView tvApp;
 
     private TextView tvAddress;
 
@@ -128,6 +132,7 @@ public class PhoneMainActivity extends FragmentActivity
         llMy = findViewById(R.id.ll_my);
         tvMy = findViewById(R.id.text_my);
         ivMy = findViewById(R.id.iv_my);
+        tvApp = findViewById(R.id.tv_app);
         tvAddress = findViewById(R.id.tv_book);
         tvCircle = findViewById(R.id.tv_circle);
         ivAdd = findViewById(R.id.iv_add);
@@ -174,6 +179,24 @@ public class PhoneMainActivity extends FragmentActivity
         viewParent.setOffscreenPageLimit(3);
         viewParent.addOnPageChangeListener(this);
         RongIM.getInstance().addUnReadMessageCountChangedObserver(this, mConversationsTypes);
+        if (!TextUtils.isEmpty(SharePreferenceManager.getKeyCachedReUserid()))
+        {
+            RongIM.getInstance().setConversationToTop(Conversation.ConversationType.PRIVATE,
+                    SharePreferenceManager.getKeyCachedReUserid(), true, new RongIMClient.ResultCallback<Boolean>()
+                    {
+                        @Override
+                        public void onSuccess(Boolean aBoolean)
+                        {
+                            Logger.d(TAG, "setConversationToTop success, boolean: " + aBoolean);
+                        }
+
+                        @Override
+                        public void onError(RongIMClient.ErrorCode errorCode)
+                        {
+                            Logger.d(TAG, "setConversationToTop error, errorCode: " + errorCode);
+                        }
+                    });
+        }
     }
 
     private Fragment initConversationList()
@@ -251,6 +274,7 @@ public class PhoneMainActivity extends FragmentActivity
         tvBrands.setTextColor(getResources().getColor(R.color.color3));
         ivMy.setImageResource(R.mipmap.my);
         tvMy.setTextColor(getResources().getColor(R.color.color3));
+        tvApp.setVisibility(View.GONE);
         tvAddress.setVisibility(View.GONE);
         tvCircle.setVisibility(View.GONE);
         tvNewGoods.setVisibility(View.GONE);
@@ -259,10 +283,10 @@ public class PhoneMainActivity extends FragmentActivity
         tvAddress.setTextColor(getResources().getColor(R.color.colorWhite));
         tvCircle.setBackgroundResource(R.drawable.bg_right_white_empty);
         tvCircle.setTextColor(getResources().getColor(R.color.colorWhite));
-        tvNewGoods.setBackgroundResource(R.drawable.bg_right_white_empty);
-        tvNewGoods.setTextColor(getResources().getColor(R.color.colorWhite));
-        tvBrandsGoods.setBackgroundResource(R.drawable.bg_left_white_full);
-        tvBrandsGoods.setTextColor(getResources().getColor(R.color.color4));
+//        tvNewGoods.setBackgroundResource(R.drawable.bg_right_white_empty);
+//        tvNewGoods.setTextColor(getResources().getColor(R.color.colorWhite));
+//        tvBrandsGoods.setBackgroundResource(R.drawable.bg_left_white_full);
+//        tvBrandsGoods.setTextColor(getResources().getColor(R.color.color4));
     }
 
     //是否显示聊天列表（必须作为左后一个false赋值）
@@ -399,6 +423,7 @@ public class PhoneMainActivity extends FragmentActivity
                 tvNewGoods.setVisibility(View.VISIBLE);
                 break;
             case 2:
+                tvApp.setVisibility(View.VISIBLE);
                 tvMy.setTextColor(getResources().getColor(R.color.color1));
                 ivMy.setImageResource(R.mipmap.my_press);
                 break;

@@ -107,7 +107,7 @@ public class GetUserInfoByPhoneResponse
 
     public String toString()
     {
-        return TAG + "{code = " + code + " ,message " + message + " ,data = " + data.toArray() + "}";
+        return TAG + "{code = " + code + " ,message " + message + " ,data = " + data + "}";
     }
 
 }

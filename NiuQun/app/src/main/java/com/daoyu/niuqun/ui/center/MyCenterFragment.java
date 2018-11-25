@@ -12,14 +12,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.bumptech.glide.request.RequestOptions;
 import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.chat.SealUserInfoManager.ResultCallback;
+import com.daoyu.chat.server.widget.SelectableRoundedImageView;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.ClothesItem;
 import com.daoyu.niuqun.bean.CollectionItem;
@@ -40,11 +39,16 @@ import com.daoyu.niuqun.bean.SettingItem;
 import com.daoyu.niuqun.bean.ShoppingCartItem;
 import com.daoyu.niuqun.bean.SymbolItem;
 import com.daoyu.niuqun.bean.TravelItem;
+import com.daoyu.niuqun.constant.ActivityResultConstant;
+import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.ui.adapter.MyItemListAdapter;
-import com.daoyu.niuqun.util.ImageLoad;
+import com.daoyu.niuqun.util.EventManager;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.SharePreferenceManager;
 import com.daoyu.niuqun.view.MyGridView;
+
+import io.rong.eventbus.EventBus;
+import io.rong.imageloader.core.ImageLoader;
 
 public class MyCenterFragment extends Fragment
 {
@@ -57,7 +61,7 @@ public class MyCenterFragment extends Fragment
 
     private MyGridView gridOther;
 
-    private ImageView iv_avatar;
+    private SelectableRoundedImageView iv_avatar;
 
     private TextView tv_nickname;
 
@@ -81,6 +85,7 @@ public class MyCenterFragment extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
         updateUI();
+        EventBus.getDefault().register(this);
     }
 
     private void initView(View view)
@@ -126,10 +131,15 @@ public class MyCenterFragment extends Fragment
         MyItemListAdapter otherAdapter = new MyItemListAdapter(getActivity(), others);
         gridOther.setAdapter(otherAdapter);
 
-        ImageLoad.getInstance().load(getActivity(), iv_avatar, SharePreferenceManager.getCachedAvatarPath(),
-            new RequestOptions().error(R.drawable.default_useravatar).placeholder(R.drawable.default_useravatar));
+        ImageLoader.getInstance().displayImage(SharePreferenceManager.getCachedAvatarPath(), iv_avatar, App.getOptions());
         tv_nickname.setText(SharePreferenceManager.getCachedUsername());
-        tv_number.setText(SharePreferenceManager.getCacheMobile());
+        String number = SharePreferenceManager.getCacheHerdNo();
+        if (TextUtils.isEmpty(number))
+        {
+            number = SharePreferenceManager.getCacheMobile();
+        }
+        String num = getActivity().getResources().getString(R.string.niuqun_number_hint) + number;
+        tv_number.setText(num);
         ll_info.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -168,8 +178,7 @@ public class MyCenterFragment extends Fragment
             Logger.d(TAG, "updataInfo, bean has value!");
             if (!TextUtils.isEmpty(bean.getAvatar()))
             {
-                ImageLoad.getInstance().load(getActivity(), iv_avatar, bean.getAvatar(),
-                    new RequestOptions().error(R.mipmap.default__avatar).placeholder(R.mipmap.default__avatar));
+                ImageLoader.getInstance().displayImage(SharePreferenceManager.getCachedAvatarPath(), iv_avatar, App.getOptions());
             }
             if (!TextUtils.isEmpty(bean.getUser_name()))
             {
@@ -177,9 +186,45 @@ public class MyCenterFragment extends Fragment
             }
             if (!TextUtils.isEmpty(bean.getHerdno()))
             {
-                tv_number.setText(bean.getHerdno());
+                SharePreferenceManager.setCacheHerdNo(bean.getHerdno());
+                String num = getActivity().getResources().getString(R.string.niuqun_number_hint) + bean.getHerdno();
+                tv_number.setText(num);
             }
         }
     }
 
+    public void onEventMainThread(EventManager.PersonInfoSuccess event)
+    {
+        Logger.d(TAG, "onEventMainThread, PersonInfoSuccess!");
+        if (ActivityResultConstant.UPDATA_USERNAME == event.getType())
+        {
+            tv_nickname.setText(SharePreferenceManager.getCachedUsername());
+        }
+        else if (ActivityResultConstant.UPDATA_NIUQUN_NUMBER == event.getType())
+        {
+            String number = SharePreferenceManager.getCacheHerdNo();
+            if (TextUtils.isEmpty(number))
+            {
+                number = SharePreferenceManager.getCacheMobile();
+            }
+            tv_nickname.setText(number);
+        }
+        else
+        {
+            tv_nickname.setText(SharePreferenceManager.getCachedUsername());
+            String number = SharePreferenceManager.getCacheHerdNo();
+            if (TextUtils.isEmpty(number))
+            {
+                number = SharePreferenceManager.getCacheMobile();
+            }
+            tv_number.setText(number);
+        }
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }

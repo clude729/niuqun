@@ -83,6 +83,28 @@ public class SharePreferenceManager
     }
 
     /**
+     * 特助id
+     */
+    private static final String KEY_CACHED_REUSERID = "cached_reuserid";
+
+    public static void setKeyCachedReUserid(String userid)
+    {
+        if (null != sp)
+        {
+            sp.edit().putString(KEY_CACHED_REUSERID, userid).apply();
+        }
+    }
+
+    public static String getKeyCachedReUserid()
+    {
+        if (null != sp)
+        {
+            return sp.getString(KEY_CACHED_REUSERID, "");
+        }
+        return "";
+    }
+
+    /**
      * 用户头像
      */
     private static final String KEY_CACHED_AVATAR_PATH = "cached_avatar_path";
@@ -122,6 +144,50 @@ public class SharePreferenceManager
         if (null != sp)
         {
             return sp.getString(KEY_CACHED_MOBILE, "");
+        }
+        return "";
+    }
+
+    /**
+     * 牛群号
+     */
+    private static final String KEY_CACHED_HERDNO = "cached_user_app_number";
+
+    public static void setCacheHerdNo(String path)
+    {
+        if (null != sp)
+        {
+            sp.edit().putString(KEY_CACHED_HERDNO, path).apply();
+        }
+    }
+
+    public static String getCacheHerdNo()
+    {
+        if (null != sp)
+        {
+            return sp.getString(KEY_CACHED_HERDNO, "");
+        }
+        return "";
+    }
+
+    /**
+     * 签名
+     */
+    private static final String KEY_CACHED_SIGN = "cached_user_sign";
+
+    public static void setCacheSign(String path)
+    {
+        if (null != sp)
+        {
+            sp.edit().putString(KEY_CACHED_SIGN, path).apply();
+        }
+    }
+
+    public static String getCacheSign()
+    {
+        if (null != sp)
+        {
+            return sp.getString(KEY_CACHED_SIGN, "");
         }
         return "";
     }

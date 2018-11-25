@@ -195,6 +195,7 @@ public class OrderListAdapter extends BaseAdapter
         {
             orderNo = "";
         }
+        orderNo = mContext.getResources().getString(R.string.order_number) + orderNo;
         listItemView.tvOrder.setText(orderNo);
 
         String statusTxt = order.getStatus_txt();

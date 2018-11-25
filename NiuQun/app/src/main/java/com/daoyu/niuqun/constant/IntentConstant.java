@@ -20,4 +20,10 @@ public class IntentConstant
     //购物车去结算时总价格
     public static final String CART_TO_SETTLEMENT_TOTAL = "settlement_total";
 
+    //修改类型(1 昵称，2 牛群号，3 签名)
+    public static final String UPDATA_TYPE = "updata_type";
+
+    //系统消息id
+    public static final String MESSAGE_ID = "message_id";
+
 }

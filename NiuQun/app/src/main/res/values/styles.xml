@@ -34,10 +34,10 @@
     </style>
 
     <!--normal-->
-    <style name="moveFinishStyle" parent="android:Theme.Holo.Light.NoActionBar">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@style/myActivityAnimation</item>
-    </style>
+    <!--<style name="moveFinishStyle" parent="android:Theme.Holo.Light.NoActionBar">-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowAnimationStyle">@style/myActivityAnimation</item>-->
+    <!--</style>-->
 
     <style name="moveFinishStyleNoTitle" parent="@android:style/Theme.Translucent.NoTitleBar">
         <item name="android:windowIsTranslucent">true</item>

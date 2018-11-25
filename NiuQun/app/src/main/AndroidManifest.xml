@@ -262,6 +262,18 @@
             android:name=".ui.brand.OrderListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.TextEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.MessageListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
+        <activity
+            android:name=".ui.center.MessageDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/moveFinishStyle" />
     </application>
 
 </manifest>
