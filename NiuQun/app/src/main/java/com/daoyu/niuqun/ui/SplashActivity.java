@@ -3,6 +3,7 @@ package com.daoyu.niuqun.ui;
 import java.io.IOException;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -10,6 +11,8 @@ import android.text.TextUtils;
 import com.archie.netlibrary.okhttp.listener.DisposeDataListener;
 import com.archie.netlibrary.okhttp.request.RequestParams;
 import com.daoyu.chat.SealUserInfoManager;
+import com.daoyu.chat.db.Friend;
+import com.daoyu.chat.server.pinyin.CharacterParser;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.AccountInfo;
 import com.daoyu.niuqun.bean.ReuserInfo;
@@ -163,6 +166,8 @@ public class SplashActivity extends MyBaseActivity
                 if (null != reuserInfo)
                 {
                     SharePreferenceManager.setKeyCachedReUserid(reuserInfo.getUser_id());
+                    App app = (App) getApplication();
+                    app.setReuserInfo(reuserInfo);
                 }
                 goToMain(token);
                 return;

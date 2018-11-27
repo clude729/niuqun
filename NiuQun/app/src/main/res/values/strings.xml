@@ -45,7 +45,7 @@
     <string name="scan_it">扫一扫&#160;&#160;&#160;&#160;</string>
     <string name="receive_payment">收付款&#160;&#160;&#160;&#160;</string>
     <string name="my_receive_payment">收付款</string>
-    <string name="my_symbol_app">牛币</string>
+    <string name="my_symbol_app">￥</string>
     <string name="my_financial">理财</string>
     <string name="my_collection">收藏</string>
     <string name="my_shopping_cart">购物车</string>
@@ -81,11 +81,11 @@
     <string name="new_version">当前版本：v</string>
     <string name="to_submit">提交</string>
     <string name="feedback_submit_hint">请输入您要反馈的内容…</string>
-    <string name="get_niuqun_symbol">获取牛币</string>
+    <string name="get_niuqun_symbol">获取红包</string>
     <string name="add_to_shopping_cart">加入购物车</string>
     <string name="buy_rightnow">立即购买</string>
     <string name="to_makesure">确定</string>
-    <string name="goods_ad_hint">按顺序点击广告语文字获取牛币</string>
+    <string name="goods_ad_hint">按顺序点击广告语文字获取红包</string>
     <string name="goods_ad_wrong_hint">广告点击错误</string>
     <string name="goods_detail">详情</string>
     <string name="get_score_success">您成功获得</string>
@@ -131,7 +131,7 @@
     <string name="to_cancel">取消</string>
     <string name="to_recharge">充值</string>
     <string name="to_getmoney_out">提现</string>
-    <string name="not_enough_money_to_order">您的牛币余额不足，请点击充值</string>
+    <string name="not_enough_money_to_order">您的余额不足，请点击充值</string>
     <string name="change_recharge">零钱充值</string>
     <string name="change_balance">零钱余额</string>
     <string name="the_change">零钱</string>

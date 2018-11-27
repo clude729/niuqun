@@ -718,7 +718,7 @@ public class SealAction extends BaseAction
      * 获取品牌广告积分
      *
      * @param goodsId 商品id
-     * @param goodsPrice 品牌牛币
+     * @param goodsPrice 品牌红包
      * @return 响应
      * @throws HttpException exception
      */

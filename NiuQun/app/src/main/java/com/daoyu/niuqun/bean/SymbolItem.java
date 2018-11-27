@@ -9,7 +9,7 @@ import com.daoyu.niuqun.ui.center.MyChangeActivity;
 import com.daoyu.niuqun.util.Logger;
 
 /**
- * 牛币
+ * 零钱
  */
 
 public class SymbolItem extends MyBaseItem
@@ -20,7 +20,7 @@ public class SymbolItem extends MyBaseItem
     public SymbolItem(Context context)
     {
         mContext = context;
-        stringId = R.string.my_symbol_app;
+        stringId = R.string.the_change;
         imageId = R.mipmap.icon_item_symbol_app;
         listener = new View.OnClickListener()
         {

@@ -133,7 +133,7 @@ public class CartAdapter extends BaseAdapter
                     Double total = t.add(p.multiply(n)).doubleValue();
                     att = Double.toString(total);
                 }
-                String totalString = att + unit;
+                String totalString = unit + att;
                 tv_total.setText(totalString);
             }
             else
@@ -159,7 +159,7 @@ public class CartAdapter extends BaseAdapter
             }
             if (tv_total != null)
             {
-                String totalString = "0.00" + unit;
+                String totalString = unit + "0.00";
                 tv_total.setText(totalString);
             }
         }
@@ -217,7 +217,7 @@ public class CartAdapter extends BaseAdapter
                 listItems.remove(i);
             }
         }
-        String totalString = "0.00" + unit;
+        String totalString = unit + "0.00";
         tv_total.setText(totalString);
         int size = listItems.size();
         if (size > 0)
@@ -298,7 +298,7 @@ public class CartAdapter extends BaseAdapter
         {
             price = "0";
         }
-        price = price + unit;
+        price = unit + price;
         listItemView.tv_price.setText(price);
 
         String number = goodsInfo.getQuantity();
@@ -379,7 +379,7 @@ public class CartAdapter extends BaseAdapter
                         BigDecimal t = new BigDecimal(att);
                         BigDecimal p = new BigDecimal(pr);
                         double total = t.subtract(p).doubleValue();
-                        String totalString = Double.toString(total) + unit;
+                        String totalString = unit + Double.toString(total);
                         tv_total.setText(totalString);
                     }
                 }
@@ -431,7 +431,7 @@ public class CartAdapter extends BaseAdapter
                         BigDecimal t = new BigDecimal(att);
                         BigDecimal p = new BigDecimal(pr);
                         double total = t.add(p).doubleValue();
-                        String totalString = Double.toString(total) + unit;
+                        String totalString = unit + Double.toString(total);
                         tv_total.setText(totalString);
                     }
                 }
@@ -481,7 +481,7 @@ public class CartAdapter extends BaseAdapter
                         BigDecimal p = new BigDecimal(pr);
                         BigDecimal n = new BigDecimal(num);
                         double total = t.subtract(p.multiply(n)).doubleValue();
-                        String totalString = Double.toString(total) + unit;
+                        String totalString = unit + Double.toString(total);
                         tv_total.setText(totalString);
                     }
                 }
@@ -516,7 +516,7 @@ public class CartAdapter extends BaseAdapter
                         BigDecimal p = new BigDecimal(pr);
                         BigDecimal n = new BigDecimal(num);
                         double total = t.add(p.multiply(n)).doubleValue();
-                        String totalString = Double.toString(total) + unit;
+                        String totalString = unit + Double.toString(total);
                         tv_total.setText(totalString);
                     }
                 }

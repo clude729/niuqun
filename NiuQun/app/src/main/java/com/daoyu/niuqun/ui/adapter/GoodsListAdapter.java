@@ -154,7 +154,7 @@ public class GoodsListAdapter extends BaseAdapter
         {
             price = "0";
         }
-        price = price + unit;
+        price = unit + price;
         listItemView.tv_price.setText(price);
 
         String number = goodsInfo.getQuantity();

@@ -204,7 +204,8 @@ public class MessageListActivity extends BaseActivity
         switch (view.getId())
         {
             case R.id.tv_help:
-                startChat();
+                finish();
+                //startChat();
                 break;
             case R.id.tv_message:
 

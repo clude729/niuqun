@@ -59,7 +59,52 @@
         <FrameLayout
             android:id="@+id/rong_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:background="@color/color8"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+
+        <LinearLayout
+            android:id="@+id/ll_help"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/colorWhite"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_help"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@mipmap/icon_tezu_on"
+                android:gravity="center"
+                android:paddingTop="4dp"
+                android:text="@string/person_help"
+                android:textColor="@color/color1"
+                android:textSize="@dimen/h4" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="16dp"
+                android:background="@color/color8" />
+
+            <TextView
+                android:id="@+id/tv_message"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@mipmap/icon_message"
+                android:gravity="center"
+                android:paddingTop="4dp"
+                android:text="@string/app_system_message"
+                android:textColor="@color/color6"
+                android:textSize="@dimen/h4" />
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView

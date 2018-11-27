@@ -12,6 +12,7 @@ import com.daoyu.niuqun.BuildConfig;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.AddressBean;
 import com.daoyu.niuqun.bean.CartGoodsInfo;
+import com.daoyu.niuqun.bean.ReuserInfo;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
 import com.daoyu.niuqun.util.FileHelper;
 import com.daoyu.niuqun.util.Logger;
@@ -31,6 +32,8 @@ public class App extends Application
     private AddressBean addressBean;
 
     private List<CartGoodsInfo> cartGoodsInfos;
+    
+    private ReuserInfo reuserInfo;
 
     @Override
     public void onCreate()
@@ -102,5 +105,15 @@ public class App extends Application
     public void setCartGoodsInfos(List<CartGoodsInfo> cartGoodsInfos)
     {
         this.cartGoodsInfos = cartGoodsInfos;
+    }
+
+    public ReuserInfo getReuserInfo()
+    {
+        return reuserInfo;
+    }
+
+    public void setReuserInfo(ReuserInfo reuserInfo)
+    {
+        this.reuserInfo = reuserInfo;
     }
 }

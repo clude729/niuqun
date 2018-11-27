@@ -98,12 +98,12 @@ public class MyChangeActivity extends BaseActivity implements View.OnClickListen
                         {
                             balance = "0";
                         }
-                        balance = balance + getResources().getString(R.string.my_symbol_app);
+                        balance = getResources().getString(R.string.my_symbol_app) + balance;
                         tvBalance.setText(balance);
                         return;
                     }
                 }
-                String last = "0" + getResources().getString(R.string.my_symbol_app);
+                String last = getResources().getString(R.string.my_symbol_app) + "0";
                 tvBalance.setText(last);
                 break;
             default:
@@ -118,7 +118,7 @@ public class MyChangeActivity extends BaseActivity implements View.OnClickListen
         {
             case ResponseConstant.GET_CHANGE_BALANCE:
                 LoadDialog.dismiss(mContext);
-                String last = "0" + getResources().getString(R.string.my_symbol_app);
+                String last = getResources().getString(R.string.my_symbol_app) + "0";
                 tvBalance.setText(last);
                 NToast.shortToast(mContext, getResources().getString(R.string.http_client_false));
                 break;

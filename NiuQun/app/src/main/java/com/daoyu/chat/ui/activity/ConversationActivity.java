@@ -22,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ import com.daoyu.chat.server.utils.NToast;
 import com.daoyu.chat.ui.fragment.ConversationFragmentEx;
 import com.daoyu.chat.ui.widget.LoadingDialog;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
+import com.daoyu.niuqun.ui.center.MessageListActivity;
 import com.daoyu.niuqun.ui.chat.PhoneMainActivity;
 import com.daoyu.niuqun.ui.user.LoginActivity;
 import com.daoyu.niuqun.util.Logger;
@@ -127,10 +129,28 @@ public class ConversationActivity extends BaseActivity implements OnClickListene
             startActivity(new Intent(ConversationActivity.this, NewFriendListActivity.class));
             return;
         }
+        title = intent.getData().getQueryParameter("title");
+        String tId = SharePreferenceManager.getKeyCachedReUserid();
+        if (!TextUtils.isEmpty(tId) && tId.equals(mTargetId))
+        {
+            //私人特助
+            LinearLayout llHelp = findViewById(R.id.ll_help);
+            llHelp.setVisibility(View.VISIBLE);
+            TextView tvMessage = findViewById(R.id.tv_message);
+            tvMessage.setOnClickListener(new OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    Intent intent1 = new Intent(mContext, MessageListActivity.class);
+                    startActivity(intent1);
+                }
+            });
+            Logger.d(TAG, "title: " + title);
+            title = mContext.getResources().getString(R.string.person_help);
+        }
         mConversationType = Conversation.ConversationType
             .valueOf(intent.getData().getLastPathSegment().toUpperCase(Locale.US));
-
-        title = intent.getData().getQueryParameter("title");
 
         setActionBarTitle(mConversationType, mTargetId);
 
@@ -143,7 +163,15 @@ public class ConversationActivity extends BaseActivity implements OnClickListene
             || mConversationType.equals(Conversation.ConversationType.APP_PUBLIC_SERVICE)
             || mConversationType.equals(Conversation.ConversationType.DISCUSSION))
         {
-            mRightButton.setBackground(getResources().getDrawable(R.drawable.icon1_menu));
+            if (!TextUtils.isEmpty(tId) && tId.equals(mTargetId))
+            {
+                //特助隐藏设置界面，防止取消置顶
+                mRightButton.setVisibility(View.GONE);
+            }
+            else
+            {
+                mRightButton.setBackground(getResources().getDrawable(R.drawable.icon1_menu));
+            }
         }
         else
         {

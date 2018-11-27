@@ -33,8 +33,13 @@ import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
+import com.daoyu.chat.SealUserInfoManager;
+import com.daoyu.chat.db.Friend;
+import com.daoyu.chat.server.pinyin.CharacterParser;
 import com.daoyu.chat.ui.fragment.ContactsFragment;
 import com.daoyu.niuqun.R;
+import com.daoyu.niuqun.bean.ReuserInfo;
+import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.ui.brand.BrandFragment;
 import com.daoyu.niuqun.ui.center.MyCenterFragment;
 import com.daoyu.niuqun.ui.user.LoginActivity;
@@ -181,6 +186,18 @@ public class PhoneMainActivity extends FragmentActivity
         RongIM.getInstance().addUnReadMessageCountChangedObserver(this, mConversationsTypes);
         if (!TextUtils.isEmpty(SharePreferenceManager.getKeyCachedReUserid()))
         {
+            App app = (App) getApplication();
+            if (null != app.getReuserInfo())
+            {
+                ReuserInfo reuserInfo = app.getReuserInfo();
+                //更新好友数据库
+                SealUserInfoManager.getInstance().addFriend(new Friend(reuserInfo.getUser_id(),
+                    getResources().getString(R.string.person_help), Uri.parse(reuserInfo.getAvatar()),
+                    getResources().getString(R.string.person_help), null, null, null, null,
+                    CharacterParser.getInstance().getSpelling(getResources().getString(R.string.person_help)),
+                    TextUtils.isEmpty(getResources().getString(R.string.person_help)) ? null
+                        : CharacterParser.getInstance().getSpelling(getResources().getString(R.string.person_help))));
+            }
             RongIM.getInstance().setConversationToTop(Conversation.ConversationType.PRIVATE,
                     SharePreferenceManager.getKeyCachedReUserid(), true, new RongIMClient.ResultCallback<Boolean>()
                     {

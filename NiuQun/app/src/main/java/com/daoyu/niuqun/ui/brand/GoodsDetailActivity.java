@@ -181,8 +181,8 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                     if (HttpConstant.SUCCESS.equals(response.getCode()))
                     {
                         Logger.d(TAG, "brandsScore, onSuccess!");
-                        String hintStr = getResources().getString(R.string.get_score_success) + goodsPrice
-                            + getResources().getString(R.string.my_symbol_app);
+                        String hintStr = getResources().getString(R.string.get_score_success)
+                            + getResources().getString(R.string.my_symbol_app) + goodsPrice;
                         NToast.shortToast(mContext, hintStr);
                     }
                     else
@@ -317,7 +317,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         {
             goodsPrice = "0";
         }
-        String priceStr = goodsPrice + getResources().getString(R.string.my_symbol_app);
+        String priceStr = getResources().getString(R.string.my_symbol_app) + goodsPrice;
         tvPrice.setText(priceStr);
         setViewPagerData(goodsInfo);
     }
