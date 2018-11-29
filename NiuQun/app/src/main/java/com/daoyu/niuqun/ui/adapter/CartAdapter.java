@@ -367,9 +367,9 @@ public class CartAdapter extends BaseAdapter
                         {
                             att = "0.00";
                         }
-                        if (att.contains(unit) && att.length() > 2)
+                        if (att.contains(unit) && att.length() > 1)
                         {
-                            att = att.substring(0, att.length() - 2);
+                            att = att.substring(1, att.length());
                         }
                         String pr = map.getGoods_price();
                         if ("null".equals(pr) || TextUtils.isEmpty(pr))
@@ -419,9 +419,9 @@ public class CartAdapter extends BaseAdapter
                         {
                             att = "0.00";
                         }
-                        if (att.contains(unit) && att.length() > 2)
+                        if (att.contains(unit) && att.length() > 1)
                         {
-                            att = att.substring(0, att.length() - 2);
+                            att = att.substring(1, att.length());
                         }
                         String pr = map.getGoods_price();
                         if ("null".equals(pr) || TextUtils.isEmpty(pr))
@@ -463,9 +463,9 @@ public class CartAdapter extends BaseAdapter
                         {
                             att = "0.00";
                         }
-                        if (att.contains(unit) && att.length() > 2)
+                        if (att.contains(unit) && att.length() > 1)
                         {
-                            att = att.substring(0, att.length() - 2);
+                            att = att.substring(1, att.length());
                         }
                         String pr = map.getGoods_price();
                         if ("null".equals(pr) || TextUtils.isEmpty(pr))
@@ -498,9 +498,9 @@ public class CartAdapter extends BaseAdapter
                         {
                             att = "0.00";
                         }
-                        if (att.contains(unit) && att.length() > 2)
+                        if (att.contains(unit) && att.length() > 1)
                         {
-                            att = att.substring(0, att.length() - 2);
+                            att = att.substring(1, att.length());
                         }
                         String pr = map.getGoods_price();
                         if ("null".equals(pr) || TextUtils.isEmpty(pr))

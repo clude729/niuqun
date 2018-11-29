@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,10 +37,14 @@ import io.rong.imlib.model.Conversation;
 import com.daoyu.chat.SealUserInfoManager;
 import com.daoyu.chat.db.Friend;
 import com.daoyu.chat.server.pinyin.CharacterParser;
+import com.daoyu.chat.server.widget.DialogWithYesOrNoUtils;
 import com.daoyu.chat.ui.fragment.ContactsFragment;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.ReuserInfo;
+import com.daoyu.niuqun.bean.VersionBean;
+import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.ui.App;
+import com.daoyu.niuqun.ui.DownAPKService;
 import com.daoyu.niuqun.ui.brand.BrandFragment;
 import com.daoyu.niuqun.ui.center.MyCenterFragment;
 import com.daoyu.niuqun.ui.user.LoginActivity;
@@ -51,7 +56,7 @@ import com.daoyu.niuqun.util.SharePreferenceManager;
 import com.daoyu.niuqun.util.ViewUtil;
 
 public class PhoneMainActivity extends FragmentActivity
-    implements OnClickListener , OnPageChangeListener , OnDragListener , IUnReadMessageObserver
+    implements OnClickListener, OnPageChangeListener, OnDragListener, IUnReadMessageObserver
 {
 
     private static final String TAG = "PhoneMainActivity";
@@ -120,6 +125,7 @@ public class PhoneMainActivity extends FragmentActivity
         setTranslucentStatus(true);
         initListener();
         initMainViewPager();
+        getVersion();
     }
 
     private void initView()
@@ -216,6 +222,80 @@ public class PhoneMainActivity extends FragmentActivity
         }
     }
 
+    private void getVersion()
+    {
+        SealUserInfoManager.getInstance().getAppVersion(new SealUserInfoManager.ResultCallback<VersionBean>()
+        {
+            @Override
+            public void onSuccess(VersionBean versionBean)
+            {
+                Logger.d(TAG, "getVersion success!");
+                checkVersion(versionBean);
+            }
+
+            @Override
+            public void onError(String errString)
+            {
+                Logger.d(TAG, "getVersion fail!");
+            }
+        });
+    }
+    
+    private void checkVersion(VersionBean bean)
+    {
+        if (null == bean)
+        {
+            Logger.d(TAG, "checkVersion, bean is null return!");
+            return;
+        }
+        String version = bean.getVersion();
+        final String downloadUrl = bean.getUpgrade();
+        try
+        {
+            if (!TextUtils.isEmpty(downloadUrl) && !TextUtils.isEmpty(version) && !version.equals(getVersionName()))
+            {
+                Logger.d(TAG, "checkVersion, is new version!");
+                if (HttpConstant.URL.equals(downloadUrl))
+                {
+                    Logger.d(TAG, "checkVersion, download url is only Base url!");
+                    return;
+                }
+                DialogWithYesOrNoUtils.getInstance().showOnlyDialog(this,
+                    getResources().getString(R.string.has_new_version_to_updata),
+                    getResources().getString(R.string.updata_version_later),
+                    getResources().getString(R.string.updata_version_rightnow),
+                    new DialogWithYesOrNoUtils.DialogCallBack()
+                    {
+                        @Override
+                        public void executeEvent()
+                        {
+                            Logger.d(TAG, "startService!");
+                            Intent intent = new Intent(PhoneMainActivity.this, DownAPKService.class);
+                            intent.putExtra("apk_url", downloadUrl);
+                            PhoneMainActivity.this.startService(intent);
+                        }
+
+                        @Override
+                        public void executeEditEvent(String editText)
+                        {
+
+                        }
+
+                        @Override
+                        public void updatePassword(String oldPassword, String newPassword)
+                        {
+
+                        }
+                    });
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.d(TAG, "checkVersion, exception: " + e);
+        }
+
+    }
+
     private Fragment initConversationList()
     {
         if (mConversationListFragment == null)
@@ -252,12 +332,13 @@ public class PhoneMainActivity extends FragmentActivity
         {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView()
-                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//            window.getDecorView()
+//                .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+            window.setStatusBarColor(getResources().getColor(R.color.color4));
             params.width = ViewUtil.getIntance().getDisplayWidth(this);
             params.height = ViewUtil.getIntance().getStatusBarHeight(this);
+            barView.setVisibility(View.GONE);
         }
         else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT)
         {
@@ -620,6 +701,13 @@ public class PhoneMainActivity extends FragmentActivity
     {
         RongIM.getInstance().removeUnReadMessageCountChangedObserver(this);
         super.onDestroy();
+    }
+
+    private String getVersionName() throws Exception
+    {
+        PackageManager packageManager = getPackageManager();
+        PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(), 0);
+        return packInfo.versionName;
     }
 
     protected void showToast(String msg)

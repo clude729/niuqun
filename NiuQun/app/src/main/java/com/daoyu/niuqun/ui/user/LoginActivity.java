@@ -1,7 +1,6 @@
 package com.daoyu.niuqun.ui.user;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.InputType;
@@ -15,8 +14,6 @@ import android.widget.TextView;
 import com.archie.netlibrary.okhttp.listener.DisposeDataListener;
 import com.archie.netlibrary.okhttp.request.RequestParams;
 import com.daoyu.chat.SealUserInfoManager;
-import com.daoyu.chat.db.Friend;
-import com.daoyu.chat.server.pinyin.CharacterParser;
 import com.daoyu.niuqun.R;
 import com.daoyu.niuqun.bean.AccountInfo;
 import com.daoyu.niuqun.bean.ReuserInfo;
@@ -26,6 +23,7 @@ import com.daoyu.niuqun.constant.MessageConstant;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
 import com.daoyu.niuqun.response.LoginResponse;
 import com.daoyu.niuqun.request.RequestCenter;
+import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.ui.MyBaseActivity;
 import com.daoyu.niuqun.ui.chat.PhoneMainActivity;
 import com.daoyu.niuqun.util.Logger;
@@ -206,15 +204,8 @@ public class LoginActivity extends MyBaseActivity implements View.OnClickListene
                 if (null != reuserInfo)
                 {
                     SharePreferenceManager.setKeyCachedReUserid(reuserInfo.getUser_id());
-                    //更新好友数据库
-                    SealUserInfoManager.getInstance()
-                        .addFriend(new Friend(reuserInfo.getUser_id(), getResources().getString(R.string.person_help),
-                            Uri.parse(reuserInfo.getAvatar()), getResources().getString(R.string.person_help), null,
-                            null, null, null,
-                            CharacterParser.getInstance().getSpelling(getResources().getString(R.string.person_help)),
-                            TextUtils.isEmpty(getResources().getString(R.string.person_help)) ? null
-                                : CharacterParser.getInstance()
-                                    .getSpelling(getResources().getString(R.string.person_help))));
+                    App app = (App) getApplication();
+                    app.setReuserInfo(reuserInfo);
                 }
                 goToMain(token);
                 return;

@@ -163,7 +163,7 @@ public class UserRelationshipResponse {
         {
             if (TextUtils.isEmpty(status))
             {
-                status = "11";
+                status = "0";
             }
             return status;
         }

@@ -80,8 +80,11 @@ public class NewFriendListAdapter extends BaseAdapters
                     .setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.de_add_friend_selector));
                 break;
             case 0: // 发出了好友邀请
-                holder.mState.setText(R.string.request);
-                holder.mState.setBackgroundDrawable(null);
+                //holder.mState.setText(R.string.request);
+                //holder.mState.setBackgroundDrawable(null);
+                holder.mState.setText(R.string.agree);
+                holder.mState
+                        .setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.de_add_friend_selector));
                 break;
             case 2: // 忽略好友邀请
                 holder.mState.setText(R.string.ignore);

@@ -31,9 +31,14 @@ public class ActivityResultConstant {
 
     //名字修改
     public static final int UPDATA_USERNAME = BASE + 8;
+
     //牛群号修改
     public static final int UPDATA_NIUQUN_NUMBER = BASE + 9;
+
     //签名修改
     public static final int UPDATA_SIGN = BASE + 10;
+
+    //更新头像
+    public static final int UPDATA_AVATAR = BASE + 11;
 
 }

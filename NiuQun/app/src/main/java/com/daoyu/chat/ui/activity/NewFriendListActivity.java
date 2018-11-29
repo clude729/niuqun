@@ -104,19 +104,6 @@ public class NewFriendListActivity extends BaseActivity
                         LoadDialog.dismiss(mContext);
                         return;
                     }
-                    // TODO: 暂时没有添加时间，服务器返回数据已排好序，无需再次排序
-                    //                    Collections.sort(userRelationshipResponse.getResult(), new Comparator<UserRelationshipResponse.ResultEntity>() {
-                    //
-                    //                        @Override
-                    //                        public int compare(UserRelationshipResponse.ResultEntity lhs, UserRelationshipResponse.ResultEntity rhs) {
-                    //                            Date date1 = stringToDate(lhs);
-                    //                            Date date2 = stringToDate(rhs);
-                    //                            if (date1.before(date2)) {
-                    //                                return 1;
-                    //                            }
-                    //                            return -1;
-                    //                        }
-                    //                    });
 
                     adapter.removeAll();
                     adapter.addData(userRelationshipResponse.getResult());
@@ -186,7 +173,15 @@ public class NewFriendListActivity extends BaseActivity
                 friendId = userRelationshipResponse.getResult().get(position).getUser().getId();
                 request(AGREE_FRIENDS);
                 break;
-            case 0: // 发出了好友邀请
+            case 0: // 收到了好友邀请
+                if (!CommonUtils.isNetworkConnected(mContext))
+                {
+                    NToast.shortToast(mContext, R.string.check_network);
+                    break;
+                }
+                LoadDialog.show(mContext);
+                friendId = userRelationshipResponse.getResult().get(position).getUser().getId();
+                request(AGREE_FRIENDS);
                 break;
             case 2: // 忽略好友邀请
                 break;

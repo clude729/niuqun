@@ -60,10 +60,10 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout llGoods;
 
     private String goodsId;
-
-    private String goodsPrice;
     
     private String adWords;
+
+    private String adPrice;
     
     private AdResultCallBack callBack = new AdResultCallBack()
     {
@@ -141,7 +141,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             case ResponseConstant.GOODS_DETAIL:
                 return action.getGoodsDetail(goodsId);
             case ResponseConstant.BRANDS_SCORE:
-                return action.getBrandsScore(goodsId, goodsPrice);
+                return action.getBrandsScore(goodsId, adPrice);
             case ResponseConstant.GOODS_ADD_CART:
                 return action.addGoodsToCart(goodsId);
             case ResponseConstant.GOODS_BUY_SINGLE:
@@ -182,7 +182,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                     {
                         Logger.d(TAG, "brandsScore, onSuccess!");
                         String hintStr = getResources().getString(R.string.get_score_success)
-                            + getResources().getString(R.string.my_symbol_app) + goodsPrice;
+                            + getResources().getString(R.string.my_symbol_app) + adPrice;
                         NToast.shortToast(mContext, hintStr);
                     }
                     else
@@ -297,28 +297,35 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             return;
         }
         adWords = goodsInfo.getAdv_word();
+        adPrice = goodsInfo.getAdv_price();
+        String goodsPrice = goodsInfo.getGoods_price();
+        if (TextUtils.isEmpty(adPrice) || TextUtils.isEmpty(adPrice.trim()) || "null".equals(adPrice))
+        {
+            adPrice = "0";
+        }
+        if (TextUtils.isEmpty(goodsPrice) || TextUtils.isEmpty(goodsPrice.trim()) || "null".equals(goodsPrice))
+        {
+            goodsPrice = "0";
+        }
         String cateId = goodsInfo.getCate_id();
         if ("0".equals(cateId))
         {
             llGoods.setVisibility(View.GONE);
             btnGet.setVisibility(View.VISIBLE);
+            String priceStr = getResources().getString(R.string.my_symbol_app) + adPrice;
+            tvPrice.setText(priceStr);
         }
         else
         {
             btnGet.setVisibility(View.GONE);
             llGoods.setVisibility(View.VISIBLE);
+            String priceStr = getResources().getString(R.string.my_symbol_app) + goodsPrice;
+            tvPrice.setText(priceStr);
         }
         String goodsName = goodsInfo.getGoods_name();
         setTextContent(tvName, goodsName);
         String goodsDesc = goodsInfo.getIntro();
         setTextContent(tvDesc, goodsDesc);
-        goodsPrice = goodsInfo.getGoods_price();
-        if (TextUtils.isEmpty(goodsPrice) || TextUtils.isEmpty(goodsPrice.trim()) || "null".equals(goodsPrice))
-        {
-            goodsPrice = "0";
-        }
-        String priceStr = getResources().getString(R.string.my_symbol_app) + goodsPrice;
-        tvPrice.setText(priceStr);
         setViewPagerData(goodsInfo);
     }
 
@@ -382,10 +389,10 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
             case R.id.btn_buy:
-                if (!TextUtils.isEmpty(goodsId))
+                if (!TextUtils.isEmpty(adWords))
                 {
-                    LoadDialog.show(mContext);
-                    request(ResponseConstant.GOODS_BUY_SINGLE);
+                    AdDialog dialog = new AdDialog(mContext, adWords, callBack);
+                    dialog.show();
                 }
                 break;
             case R.id.iv_share:

@@ -39,6 +39,7 @@ import com.daoyu.chat.server.response.AddressDetailResponse;
 import com.daoyu.chat.server.response.AgreeFriendsResponse;
 import com.daoyu.chat.server.response.AlipayTokenResponse;
 import com.daoyu.chat.server.response.AppMessageResponse;
+import com.daoyu.chat.server.response.AppVersionResponse;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.CartGoodsResponse;
@@ -692,6 +693,25 @@ public class SealAction extends BaseAction
     }
 
     /**
+     * 获取版本信息
+     *
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public AppVersionResponse getAppVersion() throws HttpException
+    {
+        String url = HttpConstant.APP_VERSION;
+        String result = httpManager.get(url);
+        Logger.d(TAG, "getAppVersion, result: " + result);
+        AppVersionResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, AppVersionResponse.class);
+        }
+        return response;
+    }
+
+    /**
      * 获取品牌/新品详情
      *
      * @param goodsId 商品id
@@ -728,7 +748,7 @@ public class SealAction extends BaseAction
         RequestParams params = new RequestParams();
         params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
         params.add("goods_id", goodsId);
-        params.add("goods_price", goodsPrice);
+        params.add("adv_price", goodsPrice);
         String result = httpManager.post(url, params);
         Logger.d(TAG, "getBrandsScore, result: " + result);
         BaseSealResponse response = null;

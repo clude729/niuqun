@@ -303,6 +303,7 @@ public class RegisterActivity extends MyBaseActivity implements OnClickListener
                 SharePreferenceManager.setKeyCachedUserid(accountInfo.getUser_id());
                 SharePreferenceManager.setKeyCachedPassword(etPassword.getText().toString().trim());
                 SharePreferenceManager.setKeyStringValue(SharePreferenceConstant.IM_TOKEN, accountInfo.getToken());
+
                 goToMain(accountInfo.getToken());
             }
         }

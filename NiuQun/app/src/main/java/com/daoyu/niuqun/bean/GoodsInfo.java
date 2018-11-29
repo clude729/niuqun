@@ -21,6 +21,8 @@ public class GoodsInfo
 
     private String adv_word;
 
+    private String adv_price;
+
     private String add_time;
 
     private String is_del;
@@ -144,6 +146,16 @@ public class GoodsInfo
     public void setIsadv(String isadv)
     {
         this.isadv = isadv;
+    }
+
+    public String getAdv_price()
+    {
+        return adv_price;
+    }
+
+    public void setAdv_price(String adv_price)
+    {
+        this.adv_price = adv_price;
     }
 
     public String toString()

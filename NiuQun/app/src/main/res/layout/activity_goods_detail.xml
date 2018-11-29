@@ -113,6 +113,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/color1"
-            android:text="@string/buy_rightnow" />
+            android:text="@string/get_niuqun_symbol" />
     </LinearLayout>
 </LinearLayout>

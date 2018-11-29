@@ -32,6 +32,7 @@ import com.daoyu.chat.server.network.async.AsyncTaskManager;
 import com.daoyu.chat.server.network.async.OnDataListener;
 import com.daoyu.chat.server.network.http.HttpException;
 import com.daoyu.chat.server.pinyin.CharacterParser;
+import com.daoyu.chat.server.response.AppVersionResponse;
 import com.daoyu.chat.server.response.BaseSealResponse;
 import com.daoyu.chat.server.response.BrandsListResponse;
 import com.daoyu.chat.server.response.GetBlackListResponse;
@@ -48,6 +49,7 @@ import com.daoyu.chat.server.utils.RongGenerate;
 import com.daoyu.niuqun.bean.BrandsData;
 import com.daoyu.niuqun.bean.MySelfBean;
 import com.daoyu.niuqun.bean.OrderData;
+import com.daoyu.niuqun.bean.VersionBean;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.constant.SharePreferenceConstant;
 import com.daoyu.niuqun.util.Logger;
@@ -1282,6 +1284,59 @@ public class SealUserInfoManager implements OnDataListener {
                     return;
                 }
                 Logger.d(TAG, "getOrderList, orderData: " + bean);
+                if (null != callback)
+                {
+                    callback.onCallback(bean);
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取版本信息
+     *
+     * @param callback 回调
+     */
+    public void getAppVersion(final ResultCallback<VersionBean> callback)
+    {
+        mWorkHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (!isNetworkConnected())
+                {
+                    onCallBackFail(callback);
+                    return;
+                }
+                VersionBean bean;
+                try
+                {
+                    AppVersionResponse response = action.getAppVersion();
+                    if (null != response && HttpConstant.SUCCESS.equals(response.getCode()))
+                    {
+                        bean = response.getData();
+                    }
+                    else
+                    {
+                        onCallBackFail(callback);
+                        NLog.d(TAG, "getAppVersion occurs response: " + response);
+                        return;
+                    }
+                }
+                catch (JSONException je)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "getAppVersion occurs JSONException e: " + je.toString());
+                    return;
+                }
+                catch (HttpException e)
+                {
+                    onCallBackFail(callback);
+                    NLog.d(TAG, "getAppVersion occurs HttpException e: " + e.toString());
+                    return;
+                }
+                Logger.d(TAG, "getAppVersion, respone: " + bean);
                 if (null != callback)
                 {
                     callback.onCallback(bean);

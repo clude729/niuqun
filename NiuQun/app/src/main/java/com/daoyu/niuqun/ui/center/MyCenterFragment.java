@@ -207,7 +207,12 @@ public class MyCenterFragment extends Fragment
             {
                 number = SharePreferenceManager.getCacheMobile();
             }
-            tv_nickname.setText(number);
+            number = getActivity().getResources().getString(R.string.niuqun_number_hint) + number;
+            tv_number.setText(number);
+        }
+        else if (ActivityResultConstant.UPDATA_AVATAR == event.getType())
+        {
+            ImageLoader.getInstance().displayImage(SharePreferenceManager.getCachedAvatarPath(), iv_avatar, App.getOptions());
         }
         else
         {
@@ -217,6 +222,7 @@ public class MyCenterFragment extends Fragment
             {
                 number = SharePreferenceManager.getCacheMobile();
             }
+            number = getActivity().getResources().getString(R.string.niuqun_number_hint) + number;
             tv_number.setText(number);
         }
     }

@@ -184,6 +184,9 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
                                 new RequestOptions().error(R.drawable.default_useravatar)
                                     .placeholder(R.drawable.default_useravatar));
                             BroadcastManager.getInstance(mContext).sendBroadcast(SealConst.CHANGEINFO);
+                            EventManager.PersonInfoSuccess event = new EventManager.PersonInfoSuccess();
+                            event.setType(ActivityResultConstant.UPDATA_AVATAR);
+                            EventBus.getDefault().post(event);
                         }
                     }
                     LoadDialog.dismiss(mContext);
@@ -356,6 +359,11 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
             }
             tvNumber.setText(number);
         }
+        else if (ActivityResultConstant.UPDATA_AVATAR == event.getType())
+        {
+            Logger.d(TAG, "onEventMainThread, UPDATA_AVATAR, return!");
+            return;
+        }
         else
         {
             tvName.setText(SharePreferenceManager.getCachedUsername());
@@ -366,6 +374,8 @@ public class PersonInfoActivity extends BaseActivity implements OnClickListener
             }
             tvNumber.setText(number);
         }
+        RongIM.getInstance().setCurrentUserInfo(new UserInfo(SharePreferenceManager.getKeyCachedUserid(),
+            SharePreferenceManager.getCachedUsername(), Uri.parse(SharePreferenceManager.getCachedAvatarPath())));
     }
 
 }

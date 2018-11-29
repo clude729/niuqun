@@ -5,6 +5,10 @@ package com.daoyu.niuqun.constant;
  */
 public class HttpConstant
 {
+
+    //下载安装包路径
+    public static final String VERSION_PATH = "/niuqun/download/";
+
     public static final String URL = "http://api.niu.lianbida.com/";
 
     public static final String SUCCESS = "000";
@@ -14,6 +18,8 @@ public class HttpConstant
 
     //WebView解析编码
     public static final String WEB_TYPE="text/html; charset=utf-8";
+
+    public static final String APP_VERSION = URL + "public/version";
 
     public static final String USER_LOGIN = URL + "user/login";
 
