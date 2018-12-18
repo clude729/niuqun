@@ -47,6 +47,7 @@ import com.daoyu.chat.server.response.CartToOrderResponse;
 import com.daoyu.chat.server.response.ChangeListResponse;
 import com.daoyu.chat.server.response.ChangePasswordResponse;
 import com.daoyu.chat.server.response.CheckPhoneResponse;
+import com.daoyu.chat.server.response.CircleListResponse;
 import com.daoyu.chat.server.response.CreateGroupResponse;
 import com.daoyu.chat.server.response.DefaultConversationResponse;
 import com.daoyu.chat.server.response.DeleteFriendResponse;
@@ -94,6 +95,8 @@ import com.daoyu.chat.server.response.WebContentResponse;
 import com.daoyu.chat.server.utils.NLog;
 import com.daoyu.chat.server.utils.json.JsonMananger;
 import com.daoyu.niuqun.bean.AddressBean;
+import com.daoyu.niuqun.bean.CircleNewMessage;
+import com.daoyu.niuqun.bean.CircleReplyMessage;
 import com.daoyu.niuqun.constant.HttpConstant;
 import com.daoyu.niuqun.util.Logger;
 import com.daoyu.niuqun.util.SharePreferenceManager;
@@ -535,6 +538,83 @@ public class SealAction extends BaseAction
         if (!TextUtils.isEmpty(result))
         {
             response = jsonToBean(result, UserFriendsResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 获取朋友圈列表数据
+     *
+     * @param page 当前页码
+     * @return 响应
+     * @throws HttpException exception
+     */
+    public CircleListResponse getCircleList(int page) throws HttpException
+    {
+        String url = HttpConstant.CIRCLE_GET_MESSAGES + "/page/" + page;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "getCircleList, result: " + result);
+        CircleListResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, CircleListResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 发布朋友圈
+     *
+     * @param message 新朋友圈
+     * @throws HttpException exception
+     */
+    public BaseSealResponse addNewCircle(CircleNewMessage message) throws HttpException
+    {
+        String url = HttpConstant.CIRCLE_ADD_MESSAGE;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("content", message.getContent());
+        try
+        {
+            params.put("img", message.getImg());
+        }
+        catch (FileNotFoundException e)
+        {
+            Logger.d(TAG, "addNewCircle, FileNotFoundException: " + e.toString());
+            return null;
+        }
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "addNewCircle, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
+        }
+        return response;
+    }
+
+    /**
+     * 回复朋友圈
+     *
+     * @param message 朋友圈回复的消息
+     * @throws HttpException exception
+     */
+    public BaseSealResponse toReplyCircle(CircleReplyMessage message) throws HttpException
+    {
+        String url = HttpConstant.CIRCLE_TO_REPLY;
+        RequestParams params = new RequestParams();
+        params.add("user_id", SharePreferenceManager.getKeyCachedUserid());
+        params.add("content", message.getContent());
+        params.add("to_user_id", message.getTo_user_id());
+        params.add("fid", message.getFid());
+        String result = httpManager.post(url, params);
+        Logger.d(TAG, "toReplyCircle, result: " + result);
+        BaseSealResponse response = null;
+        if (!TextUtils.isEmpty(result))
+        {
+            response = jsonToBean(result, BaseSealResponse.class);
         }
         return response;
     }

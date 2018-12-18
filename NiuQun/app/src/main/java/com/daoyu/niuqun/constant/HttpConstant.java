@@ -102,4 +102,10 @@ public class HttpConstant
     public static final String APP_NOTIFY = URL + "user/message";
 
     public static final String APP_NOTIFY_DETAIL = URL + "user/msdetail";
+
+    public static final String CIRCLE_TO_REPLY = URL + "forum/toreply";
+
+    public static final String CIRCLE_ADD_MESSAGE = URL + "forum/add";
+
+    public static final String CIRCLE_GET_MESSAGES = URL + "forum/index";
 }
