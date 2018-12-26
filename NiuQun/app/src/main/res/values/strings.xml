@@ -168,4 +168,6 @@
     <string name="change_sign">设置签名</string>
     <string name="person_help">私人特助</string>
     <string name="app_system_message">系统消息</string>
+    <string name="empty_cart_hint">购物车空空如也</string>
+    <string name="no_data_hint">没有相关内容</string>
 </resources>

@@ -36,6 +36,7 @@ import com.daoyu.niuqun.ui.App;
 import com.daoyu.niuqun.ui.adapter.CartAdapter;
 import com.daoyu.niuqun.util.EventManager;
 import com.daoyu.niuqun.util.Logger;
+import com.daoyu.niuqun.view.ErrorLayoutView;
 
 import io.rong.eventbus.EventBus;
 
@@ -46,6 +47,8 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
 {
 
     private static final String TAG = "ShoppingCartActivity";
+
+    private ErrorLayoutView errorView;
 
     private ListView goodsList;
 
@@ -80,6 +83,7 @@ public class ShoppingCartActivity extends BaseActivity implements OnClickListene
         setTitle(R.string.my_shopping_cart);
         mHeadRightText.setText(R.string.to_edit_cart);
         mHeadRightText.setVisibility(View.VISIBLE);
+        errorView = findViewById(R.id.errorView);
         goodsList = findViewById(R.id.goodsList);
         swipeRefreshLayout = findViewById(R.id.srl);
         ivAll = findViewById(R.id.ibtn_check);

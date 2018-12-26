@@ -20,6 +20,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <com.daoyu.niuqun.view.ErrorLayoutView
+        android:id="@+id/errorView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
